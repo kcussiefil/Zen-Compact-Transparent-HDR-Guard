@@ -10,9 +10,9 @@ const meta=JSON.parse(read('theme.json'));
 const prefs=JSON.parse(read('preferences.json'));
 const script=read('sdr-glass.uc.js');
 
-test('independent Sine package version 0.1.5 and expected scripts',()=>{
+test('independent Sine package version 0.1.6 and expected scripts',()=>{
  assert.equal(meta.id,'zen-compact-transparent-hdr-guard');
- assert.equal(meta.version,'0.1.5');
+ assert.equal(meta.version,'0.1.6');
  assert.equal(meta.style.chrome,'chrome.css');
  assert.ok(meta.scripts['video-page.uc.js']);
  assert.ok(meta.scripts['sdr-glass.uc.js']);
@@ -36,11 +36,11 @@ test('Zia video guard persists, SDR true blur requires opt-in and confirmation',
  assert.equal(setting?.type,'checkbox');
 });
 test('SDR detection is event-driven and polling is faster',()=>{
- assert.match(script,/ZcthStreamV014/);
- assert.match(script,/onVideoChange:mediaChanged/);
+ assert.match(script,/ZcthStreamV016/);
+ assert.match(script,/onStreamState:publish/);
  assert.match(script,/},50\)/);
  assert.doesNotMatch(script,/sdrStreak>=2/);
- assert.match(script,/result === 'sdr'/);
- assert.match(script,/queued=false; schedule\(0\)/);
+ assert.match(script,/state==='sdr'/);
+ assert.match(script,/queued=false;schedule\(0\)/);
  assert.match(script,/MutationObserver/);
 });

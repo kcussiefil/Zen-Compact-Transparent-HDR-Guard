@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Near-immediate confirmed SDR glass: no 110ms double-check, 50ms fallback, safely retain HDR solid protection.",
+  "description": "Event-first faster SDR detection with independently corroborated selected-codec evidence; HDR remains fail-closed.",
   "author": "kcussiefil",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-06T00:41:00.000Z"
+  "updatedAt": "2026-11-05T17:05:05.228Z"
 }
