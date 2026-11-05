@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.1.3
+/* Zen Compact Transparent HDR Guard v0.1.4
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -29,7 +29,7 @@
 
   :root[zen-compact-mode="true"]:not([customizing]):not(
       [inDOMFullscreen="true"]
-    ):not([zia-video], [data-zcth-video-page]) {
+    ):is(:not([zia-video], [data-zcth-video-page]), [data-zcth-sdr-glass][zia-video]) {
     @media (-moz-bool-pref: "zen.view.compact.hide-tabbar") or (-moz-bool-pref: "zen.view.use-single-toolbar") {
       &:not([zen-compact-animating]) {
         #navigator-toolbox {
@@ -160,43 +160,36 @@
 }
 
 
-/* v0.1.3 — opt-in Zia glass on confirmed SDR streams only.
- * HDR/unknown and no-visible-video keep v0.1.2's theme-solid behaviour. */
+/* v0.1.4: true glass on confirmed SDR uses EXACTLY the same
+ * #titlebar::before and user-configured blur, transparency and height
+ * as normal pages. No second 28px / 78%-opacity background override. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and (-moz-bool-pref: "mod.compacttpr.sdrrealblur") {
-  :root[data-zcth-sdr-glass][zia-video][zen-compact-mode="true"]
-    #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background {
-    background: transparent !important;
-    backdrop-filter: blur(28px) saturate(1.6) !important;
-  }
-  :root[data-zcth-sdr-glass][zia-video][zen-compact-mode="true"]
-    #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background::after {
-    opacity: calc(var(--zen-background-opacity, 1) * .78) !important;
-  }
-  :root[data-zcth-sdr-glass][zia-video][zen-compact-mode="true"]
-    #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background::before {
-    opacity: calc((1 - var(--zen-background-opacity, 1)) * .78) !important;
-  }
-
-  /* Only promote the selected page while Zia compact flyout is showing.
-   * This mimics Zia's non-video compositor gate, not a permanent GPU layer. */
+  /* As in Zia, promote the selected page only while floating sidebar
+   * actually opens. This remains necessary to see webpage pixels in blur
+   * but may affect video brightness due to Gecko's video overlay path. */
   :root[data-zcth-sdr-glass][zia-video][zen-compact-mode="true"]:is(
     [zen-renaming-tab="true"],
-    :has(#navigator-toolbox:is([zen-has-hover], [zen-user-show], [zen-has-empty-tab],
-      [flash-popup], [has-popup-menu], [movingtab], [zen-compact-mode-active], [animate="true"])),
-    :has(#zen-appcontent-navbar-wrapper:is([zen-has-hover], [has-popup-menu], [zen-compact-mode-active]))
+    :has(#navigator-toolbox:is([zen-has-hover], [zen-user-show],
+      [zen-has-empty-tab], [flash-popup], [has-popup-menu], [movingtab],
+      [zen-compact-mode-active], [animate="true"])),
+    :has(#zen-appcontent-navbar-wrapper:is([zen-has-hover],
+      [has-popup-menu], [zen-compact-mode-active]))
   ) #tabbrowser-tabpanels .browserSidebarContainer {
     will-change: transform !important;
     backface-visibility: hidden !important;
   }
 
-  /* Restore Zia's real frosted hover cards only while SDR is positively known. */
+  /* Zia's normal glass card appearance is restored on confirmed SDR.
+   * No permanent compositor promotion when cards are not shown. */
   :root[data-zcth-sdr-glass][zia-video]
     :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
-    background-color: color-mix(in srgb, var(--zia-tab-card-bg, rgb(38, 38, 38)) 76%, transparent) !important;
+    background-color: color-mix(in srgb,
+      var(--zia-tab-card-bg, rgb(38, 38, 38)) 76%, transparent) !important;
     backdrop-filter: blur(24px) saturate(1.6) !important;
   }
   :root[data-zcth-sdr-glass][zia-video]:has(
-    > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card):not([hidden])
+    > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+          #zsf-folder-hover-card):not([hidden])
   ) #tabbrowser-tabpanels .browserSidebarContainer {
     will-change: transform !important;
     backface-visibility: hidden !important;

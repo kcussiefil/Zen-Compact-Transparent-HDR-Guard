@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Original compact glass and theme-solid HDR protection; opt-in real glass for confirmed YouTube SDR playback.",
+  "description": "Normal and SDR frosted glass share the same user settings; event-driven SDR detector; HDR stays solid.",
   "author": "kcussiefil",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-05T15:49:00.000Z"
+  "updatedAt": "2026-11-06T00:24:00.000Z"
 }

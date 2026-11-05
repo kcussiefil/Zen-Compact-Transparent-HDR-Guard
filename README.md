@@ -1,43 +1,36 @@
-# Zen Compact Transparent HDR Guard v0.1.3
+# Zen Compact Transparent HDR Guard v0.1.4
 
-獨立的 Zen／Sine MOD，改寫自 [Zen Compact Transparent Mode](https://github.com/rasyidrafi/zen-compact-transparent-mode)（Apache-2.0）。
+獨立 Zen／Sine MOD，改寫自 [Zen Compact Transparent Mode](https://github.com/rasyidrafi/zen-compact-transparent-mode)，保留 Apache-2.0 授權。
 
-## 工作模式
+## v0.1.4 更新
 
-- **一般網頁：** 保留原版 Transparent Mode 的毛玻璃、透明度、側欄高度及主題背景。
-- **HDR 或未知影片：** 沿用使用者已實測成功的 v0.1.2，使用 Zen／Zia 原生主題實色背景，避免網頁留言文字透出與 HDR 發灰。
-- **已確認 SDR 的 YouTube 影片：** 新增實驗開關「SDR 影片啟用真正毛玻璃（實驗性；預設關閉）」。開啟後，只在 Zia 偵測到影片可見、且 YouTube 目前選用串流的色彩資訊確認為 SDR 時，啟用真正 backdrop-filter 模糊與 Zia 類似的合成設定，並可讓 Zia／Site Folders 預覽卡片恢復毛玻璃。
-- **影片捲出畫面：** 回到 v0.1.2 的原生背景保護，保留 YouTube 與 Bilibili 播放頁識別。
+1. **更快的 SDR/HDR 分類：** 影片載入、開始播放、更新媒體資料、頁面切換及 Zia 的 `[zia-video]` 改變時優先檢查，另以 **240ms** 間隔保守補查（取代 v0.1.3 的 1350ms）。需要連續兩次確認 SDR 才會強制模糊；HDR、未知格式或辨識失敗立即維持 Zia 原生實色背景。
+2. **真正共用側欄設定：** 已確認 SDR 的影片模式使用與一般網頁完全相同的 `#titlebar::before`，包括 Sine 的「一般模式模糊強度」、「一般模式透明度」和側欄高度。不再硬寫另一組 `28px` 模糊及 `78%` 背景圖層比例。
+3. **HDR 安全保護：** 偵測 AV1 10-bit、VP9 profile 2、PQ、HLG、BT.2020、影片 ID／格式不一致時，採保守策略。只支援 YouTube `/watch` 的目前播放串流。Bilibili 等網站依舊使用 v0.1.2 的實色保護。
+4. **保留實驗開關：** Sine 設定「SDR 影片啟用真正毛玻璃（實驗性；預設關閉）」。更新後會保留你目前的勾選狀態。
 
-## 安裝與更新
+## 重要限制：開啟側欄時影片稍微變暗
 
-1. 在 Sine 停用舊版 Zen Compact Transparent Mode，只保留本 MOD、Zia 與其他既有 MOD。
-2. 從 Sine 安裝或更新 GitHub 來源：kcussiefil/Zen-Compact-Transparent-HDR-Guard
-3. 重新啟動 Zen，確認版本 v0.1.3。
-4. 若要測試，在本 MOD 的齒輪設定中勾選「SDR 影片啟用真正毛玻璃（實驗性；預設關閉）」。
-5. 比較 YouTube SDR、HDR、畫質切換、暫停、留言區，以及 Site Folders 卡片。
+Zia 需要透過 Gecko／WebRender 的 `will-change: transform` 讓網頁進入另一種合成路徑，才能讓側欄真正模糊後方網頁；這也可能讓 SDR 或 HDR 影片的亮度或色彩稍有變化。**目前無法只靠 CSS 同時保證真實動態毛玻璃、完全相同的影片亮度及零合成成本**。
 
-## 偵測條件
+本版不對影片使用 `filter: brightness()` 或改寫色彩管理設定，因為那會使色彩不準確甚至影響 HDR。畫質優先時，請取消「SDR 影片啟用真正毛玻璃」，保留 Zia 影片模式的實色背景。
 
-以 Firefox JSWindowActor 在目前 YouTube 播放分頁讀取 getVideoStats().fmt、getPlayerResponse() 與 getStatsForNerds()，核對目前選用的 itag、影片 ID、色彩中繼資料或可辨識的 8-bit SDR codec；PQ／HLG／BT.2020 或無法辨識的格式不會強制模糊。
+## 安裝／測試
 
-**這不是保證零誤判的公開 YouTube API**。在變更畫質時可能有約 1.35 秒的狀態延遲，SDR 也可能因 Gecko 合成方式而發灰。為降低風險，實驗功能預設關閉；僅目前可見影片與已確認 SDR 時啟用，切換頁面或變成未知格式會取消模糊。
+1. 先在 Sine 停用原版 **Zen Compact Transparent Mode**，避免兩份相同 CSS 同時執行。
+2. 保留 Zia 與 Zen Site Folders，從 Sine 更新 `kcussiefil/Zen-Compact-Transparent-HDR-Guard` 到 **v0.1.4**。
+3. **完整重新啟動 Zen**，新版本使用新命名的 Firefox JSWindowActor。
+4. 在一般網頁設定你想要的模糊與透明度，例如 `10px` 和 `50%`；開啟實驗選項後，確認 YouTube SDR 側欄使用相同設定。
+5. 測試 HDR YouTube、SDR YouTube、切換畫質、捲到留言區、分頁切換與群組預覽。
 
-Bilibili 或其他網站的 SDR 判斷未實作，依舊使用 v0.1.2 的安全實色背景。關閉實驗開關時不查詢 YouTube 播放器。
+注意：「透明度 100%」代表背景色完全透明，並不是不透明度 100%；如果沒有成功模糊後方網頁，文字可能變得難以閱讀。
 
 ## 測試與回退
 
-在 Node.js 22 執行：
-- node --check sdr-glass.uc.js
-- node --check actors/ZcthStreamChild.sys.mjs
-- node --test tests/*.test.mjs
+在 Node 22 可執行 `node --test tests/*.{test.cjs,test.mjs}`。含分類器、瀏覽器事件模擬、CSS 結構與預設設定測試；這不是 macOS／OLED 實際 HDR 色彩測試。
 
-已建立 SDR、HDR、未知格式、播放廣告、影片切換、網頁切換、可見性與開關的單元測試。**尚未在使用者的 macOS Zen 上進行新版本的 HDR 實機測試。**
+若畫質或效能不理想，可先取消 SDR 實驗開關，立即回到 v0.1.2 影片模式；完整回退時：
+- v0.1.3 commit: `9a7933963c9989978632eea7338350ba342acf2f`
+- 已實機確認穩定的 v0.1.2 commit: `ebb192b4b630b0e842fa3238ce4e859d957e2478`
 
-若發現 SDR 或 HDR 畫面異常，首先取消勾選實驗開關，即回到 v0.1.2 的介面行為。需要完整回退時，v0.1.2 的 Git 提交為 ebb192b4b630b0e842fa3238ce4e859d957e2478。
-
-本專案不修改 Zia、Zen-Site-Folders 或 Black Sheep POS。
-
-## 授權
-
-保留上游 Apache License 2.0，詳見 LICENSE。
+不修改 Zia、Zen Site Folders 或 POS 專案。
