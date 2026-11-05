@@ -10,9 +10,9 @@ const meta=JSON.parse(read('theme.json'));
 const prefs=JSON.parse(read('preferences.json'));
 const script=read('sdr-glass.uc.js');
 
-test('independent Sine package version 0.1.6 and expected scripts',()=>{
+test('independent Sine package version 0.1.7 and expected scripts',()=>{
  assert.equal(meta.id,'zen-compact-transparent-hdr-guard');
- assert.equal(meta.version,'0.1.6');
+ assert.equal(meta.version,'0.1.7');
  assert.equal(meta.style.chrome,'chrome.css');
  assert.ok(meta.scripts['video-page.uc.js']);
  assert.ok(meta.scripts['sdr-glass.uc.js']);
@@ -43,4 +43,37 @@ test('SDR detection is event-driven and polling is faster',()=>{
  assert.match(script,/state==='sdr'/);
  assert.match(script,/queued=false;schedule\(0\)/);
  assert.match(script,/MutationObserver/);
+});
+
+test('Zia extended video-glass surfaces are all SDR-only', () => {
+ const extra = css.slice(css.indexOf('/* v0.1.7: restore Zia'));
+ assert.ok(extra.length > 1000);
+ for(const name of ['zia.urlbar.pop-up-blur','zia.features.find-bar',
+    'zia.cards.blur','[zia-swipe-arrow]','screenshots-buttons']) {
+   assert.ok(extra.includes(name),name);
+ }
+ for(const piece of extra.split(/\}\s*(?=:root)/)) {
+   if(piece.includes('backdrop-filter: blur(')) {
+     assert.match(piece,/data-zcth-sdr-glass/);
+   }
+ }
+ assert.match(extra,/zen-floating-urlbar="true"/);
+ assert.match(extra,/--zia-urlbar-open-bg/);
+ assert.match(extra,/--zia-shot-card/);
+ assert.match(extra,/rgba\(248, 248, 250, 0\.82\)/);
+ assert.match(extra,/\.browserSidebarContainer:has\(findbar:not\(\[hidden\]\)\)/);
+ assert.match(extra,/\.browserSidebarContainer:has\(screenshots-buttons\)/);
+});
+test('Zia popup exceptions and folder tint are preserved',()=>{
+ assert.match(css, /zia-pop-site="dark"/);
+ assert.match(css, /zia-pop-site="light"/);
+ assert.match(css, /zia\.folders\.tint-card/);
+ assert.match(css, /--zia-folder-card-bg/);
+});
+test('experiment defaults remain opt-in and stream logic unchanged',()=>{
+ const p=JSON.parse(read('preferences.json'));
+ const setting=p.find(x=>x.property==='mod.compacttpr.sdrrealblur');
+ assert.equal(setting.defaultValue,false);
+ assert.match(script,/ZcthStreamV016/);
+ assert.match(script,/setInterval\(\(\)=>\{void check\(\);\},50\)/);
 });

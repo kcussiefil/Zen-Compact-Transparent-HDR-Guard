@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.1.4
+/* Zen Compact Transparent HDR Guard v0.1.7
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -179,18 +179,114 @@
     backface-visibility: hidden !important;
   }
 
-  /* Zia's normal glass card appearance is restored on confirmed SDR.
-   * No permanent compositor promotion when cards are not shown. */
-  :root[data-zcth-sdr-glass][zia-video]
-    :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
+  /* Mirror Zia's optional hover-card glass only when its setting is enabled.
+   * Site Folders' custom preview is included without changing its geometry. */
+  @media -moz-pref("zia.cards.blur") {
+    :root[data-zcth-sdr-glass][zia-video]
+      :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
+      background-color: color-mix(in srgb,
+        var(--zia-tab-card-bg, rgb(38, 38, 38)) 76%, transparent) !important;
+      backdrop-filter: blur(24px) saturate(1.6) !important;
+    }
+    :root[data-zcth-sdr-glass][zia-video]:has(
+      > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+            #zsf-folder-hover-card):not([hidden])
+    ) #tabbrowser-tabpanels .browserSidebarContainer {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
+    }
+    @media -moz-pref("zia.folders.tint-card") {
+      :root[data-zcth-sdr-glass][zia-video]
+        #zia-folder-card[zia-folder-color]:not([zia-folder-color="white"]) {
+        background-color: color-mix(in srgb,
+          var(--zia-folder-card-bg, var(--zia-tab-card-bg)) 76%, transparent) !important;
+      }
+    }
+  }
+}
+
+
+/* v0.1.7: restore Zia's other frosted surfaces for CONFIRMED SDR only.
+ * The root marker is set by the v0.1.6 streamer validator, never by a
+ * browser HDR-capable monitor query. HDR and unknown remain Zia-solid.
+ * Importantly all compositor promotions follow Zia's own visibility gates. */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+       (-moz-bool-pref: "mod.compacttpr.sdrrealblur") {
+
+  /* 1. Search suggestions, URL popup and new-tab floating URL popup.
+   * Follow the user's native Zia popup-glass preference and existing
+   * --zia-urlbar-open-bg, including website/light/space-specific colours. */
+  @media -moz-pref("zia.urlbar.pop-up-blur") {
+    :root[data-zcth-sdr-glass][zia-video]:not(#zia-none):not(#zia-none-2)
+      #urlbar#urlbar:is([breakout-extend], [zen-floating-urlbar="true"]):not([zia-classic])
+      > .urlbar-background {
+      background: color-mix(in srgb,
+        var(--zia-urlbar-open-bg, rgb(38, 38, 38)) 78%, transparent) !important;
+      backdrop-filter: blur(24px) saturate(1.6) !important;
+    }
+
+    /* Zia intentionally keeps opposite-palette popups solid within single
+       toolbar mode. Don't undo its readability guard. */
+    :root[data-zcth-sdr-glass][zia-video][zen-single-toolbar="true"][zia-light]
+      #urlbar#urlbar[breakout-extend][zia-pop-site="dark"]:not([zia-classic])
+      > .urlbar-background,
+    :root[data-zcth-sdr-glass][zia-video][zen-single-toolbar="true"]:not([zia-light])
+      #urlbar#urlbar[breakout-extend][zia-pop-site="light"]:not([zia-classic])
+      > .urlbar-background {
+      background: var(--zia-urlbar-open-bg) !important;
+      backdrop-filter: none !important;
+    }
+
+    :root[data-zcth-sdr-glass][zia-video]:has(
+      #urlbar:is([breakout-extend], [zen-floating-urlbar="true"]):not([zia-classic])
+    ) #tabbrowser-tabpanels .browserSidebarContainer {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
+    }
+  }
+
+  /* 2. Cmd+F floating find bar: retain Zia's light/dark palette. */
+  @media -moz-pref("zia.features.find-bar") {
+    :root[data-zcth-sdr-glass][zia-video] findbar:not([hidden]) {
+      background: rgba(38, 38, 38, 0.78) !important;
+      backdrop-filter: blur(18px) saturate(1.4) !important;
+    }
+    :root[data-zcth-sdr-glass][zia-video][zia-light] findbar:not([hidden]) {
+      background: rgba(248, 248, 250, 0.82) !important;
+    }
+    :root[data-zcth-sdr-glass][zia-video]
+      #tabbrowser-tabpanels .browserSidebarContainer:has(findbar:not([hidden])) {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
+    }
+  }
+
+  /* 3. Arc-like navigation/swipe arrow; only while Zia reports it visible. */
+  @media -moz-pref("zia.cards.blur") {
+    :root[data-zcth-sdr-glass][zia-video][zia-swipe-arrow] #zia-swipe {
+      background: color-mix(in srgb,
+        var(--zia-tab-card-bg, rgb(38, 38, 38)) 76%, transparent) !important;
+      backdrop-filter: blur(24px) saturate(1.6) !important;
+    }
+    :root[data-zcth-sdr-glass][zia-video][zia-swipe-arrow]
+      #tabbrowser-tabpanels .browserSidebarContainer:has(#zia-swipe) {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
+    }
+  }
+
+  /* 4. Screenshot toolbar: respect Zia's screenshot-card theme colour. */
+  :root[data-zcth-sdr-glass][zia-video]:not(#zia-none)
+    screenshots-buttons:not([hidden]) {
     background-color: color-mix(in srgb,
-      var(--zia-tab-card-bg, rgb(38, 38, 38)) 76%, transparent) !important;
+      var(--zia-shot-card, var(--zia-tab-card-bg, rgb(38, 38, 38)))
+      78%, transparent) !important;
     backdrop-filter: blur(24px) saturate(1.6) !important;
   }
-  :root[data-zcth-sdr-glass][zia-video]:has(
-    > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
-          #zsf-folder-hover-card):not([hidden])
-  ) #tabbrowser-tabpanels .browserSidebarContainer {
+  :root[data-zcth-sdr-glass][zia-video]:not(#zia-none)
+    #tabbrowser-tabpanels .browserSidebarContainer:has(screenshots-buttons):not(
+      :has([hidden] screenshots-buttons)
+    ) {
     will-change: transform !important;
     backface-visibility: hidden !important;
   }

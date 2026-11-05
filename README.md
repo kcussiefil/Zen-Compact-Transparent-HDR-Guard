@@ -1,6 +1,45 @@
-# Zen Compact Transparent HDR Guard v0.1.6
+# Zen Compact Transparent HDR Guard v0.1.7
 
 獨立 Zen／Sine MOD，改寫自 [Zen Compact Transparent Mode](https://github.com/rasyidrafi/zen-compact-transparent-mode)，保留 Apache-2.0 授權。
+
+## v0.1.7：完整對應 Zia 的影片毛玻璃限制
+
+Zia v2.117.6 除側欄與預覽卡片以外，也會在可見影片上取消網址列彈出、尋找列、滑動箭頭與截圖按鈕的毛玻璃。本版沿用 **同一組 v0.1.6 的 SDR/HDR 串流確認結果**，只在 `[zia-video][data-zcth-sdr-glass]` 同時存在且使用者開啟「SDR 影片啟用真正毛玻璃」時，恢復相關樣式：
+
+| 介面 | SDR 已確認 | HDR 或未知格式 |
+|---|---|---|
+| Zen 緊湊側欄／頂部工具列 | 原有真毛玻璃；沿用 Sine 模糊和透明設定 | Zen/Zia 原生實色 |
+| Zia 分頁、群組、提示 Hover 卡片 | Zia 原生 24px 真毛玻璃 | Zia 原生實色 |
+| Zen Site Folders 預覽卡片 | 與 Zia 卡片同一毛玻璃機制 | 由 Zia／Site Folders 的安全樣式接手 |
+| 網址搜尋、搜尋建議與新增分頁浮動網址列 | 沿用 Zia 的 24px 毛玻璃及網站／工作區顏色 | Zia 原生實色 |
+| Cmd+F 尋找列 | 沿用 Zia 的 18px 毛玻璃與明暗配色 | Zia 原生實色 |
+| 手勢前進／返回浮動箭頭 | Zia 原生 24px 真毛玻璃 | Zia 原生實色 |
+| 擷取畫面時的浮動操作按鈕 | 沿用 Zia 24px 毛玻璃及 `--zia-shot-card` | Zia 原生實色 |
+
+所有合成提升只在對應 UI 真正出現時才啟用，避免常駐對影片強制合成。
+
+### 尊重 Zia 設定
+
+- Zia 的 `zia.cards.blur` 關閉時，不會強制模糊預覽卡片和手勢箭頭。
+- Zia 的 `zia.urlbar.pop-up-blur` 關閉時，不會強制模糊網址列彈出。
+- Zia 的 `zia.features.find-bar` 關閉時，不會覆寫原生尋找列。
+- 單一工具列中，搜尋彈出配色與側欄相反時，沿用 Zia 原本的實色可讀性例外。
+- Zia 的彩色群組卡片繼續沿用 `--zia-folder-card-bg`。
+- 一般網頁沒有變動；本版不修改 SDR/HDR 偵測器，也不增加新的查詢。
+
+**安全限制：** 「只有 HDR 沒有毛玻璃」是理想效果，但目前只在 **YouTube 已確認為 SDR** 時強制模糊。未能確認的 YouTube、Bilibili 或其他網站仍按 HDR 保護處理，這是避免誤判 HDR 的必要安全策略。
+
+**色彩限制：** 真毛玻璃仍需要 Gecko 讓網頁進入 Firefox 的合成路徑，即使已確認 SDR，仍可能稍微改變影片亮度；本 MOD 不會以亮度濾鏡補償。尚未在使用者 macOS Zen／OLED 上完成本版實機驗證。
+
+### 安裝與回退
+
+Sine 更新 `kcussiefil/Zen-Compact-Transparent-HDR-Guard` 至 **v0.1.7**，重新啟動 Zen。維持 Zia／Site Folders 既有版本，並先停用原版 Transparent Mode，避免重複 CSS。
+
+建議實測 YouTube SDR 與 HDR 各一次：側欄、網址搜尋、新分頁浮動網址列、Cmd+F、卡片、返回箭頭及截圖操作。檢查是否維持原本 Zia 動畫，以及 HDR 色彩不發灰。
+
+若不符合需求，可直接在 Sine 取消「SDR 影片啟用真正毛玻璃」；完整回退至 v0.1.6 提交 `df37281fee97b162caf961ad66a6999a02a0ce50`。先前已通過使用者實機測試的 v0.1.2 提交為 `ebb192b4b630b0e842fa3238ce4e859d957e2478`。
+
+本次只更動 HDR Guard 的 CSS、版本說明與測試，不修改 Zia、Zen Site Folders 或 POS。
 
 ## v0.1.6 — 快速、保守的 YouTube SDR 真毛玻璃
 

@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Event-first faster SDR detection with independently corroborated selected-codec evidence; HDR remains fail-closed.",
+  "description": "SDR-only true glass on Zia's floating sidebar, hover cards, URL/new-tab popup, findbar, swipe arrow and screenshot buttons; HDR/unknown remain solid.",
   "author": "kcussiefil",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-05T17:05:05.228Z"
+  "updatedAt": "2026-11-06T01:20:00.000Z"
 }
