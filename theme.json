@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Independent Sine mod: transparent compact glass normally; restore native Zia theme paint on video pages.",
+  "description": "Normal compact glass; on Zia videos show Zen's native workspace-coloured solid sidebar, not text bleed.",
   "author": "kcussiefil",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "style": {
     "chrome": "chrome.css"
   },
@@ -27,5 +27,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-05T14:58:30.000Z"
+  "updatedAt": "2026-11-05T15:19:00.000Z"
 }

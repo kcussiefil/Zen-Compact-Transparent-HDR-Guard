@@ -44,11 +44,5 @@
   {
     "type": "separator",
     "label": "Zia 影片保護"
-  },
-  {
-    "property": "mod.compacttpr.disablevideoguard",
-    "label": "停用影片保護（預設關閉；不建議）",
-    "type": "checkbox",
-    "defaultValue": false
   }
 ]
