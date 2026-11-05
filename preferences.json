@@ -44,5 +44,11 @@
   {
     "type": "separator",
     "label": "Zia 影片保護"
+  },
+  {
+    "property": "mod.compacttpr.sdrrealblur",
+    "label": "SDR 影片啟用真正毛玻璃（實驗性；預設關閉）",
+    "type": "checkbox",
+    "defaultValue": false
   }
 ]

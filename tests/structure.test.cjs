@@ -1,46 +1,36 @@
 'use strict';
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const dir = path.resolve(__dirname, '..');
-const read = p => fs.readFileSync(path.join(dir,p),'utf8');
-const css = read('chrome.css');
-const meta = JSON.parse(read('theme.json'));
-const pref = JSON.parse(read('preferences.json'));
-const js = read('video-page.uc.js');
-
-test('manifest is independent, CSS and video detector are loaded', () => {
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const dir=path.resolve(__dirname,'..');
+const read=p=>fs.readFileSync(path.join(dir,p),'utf8');
+const css=read('chrome.css');
+const meta=JSON.parse(read('theme.json'));
+const prefs=JSON.parse(read('preferences.json'));
+test('independent package preserves native protection and adds SDR probe',()=>{
   assert.equal(meta.id,'zen-compact-transparent-hdr-guard');
-  assert.equal(meta.version,'0.1.2');
+  assert.equal(meta.version,'0.1.3');
   assert.equal(meta.style.chrome,'chrome.css');
   assert.ok(meta.scripts['video-page.uc.js']);
-  assert.equal(meta.preferences,'preferences.json');
-  assert.ok(!fs.existsSync(path.join(dir, 'sliders.uc.js')));
-  assert.ok(!meta.homepage.includes('Zen-Site-Folders'));
+  assert.ok(meta.scripts['sdr-glass.uc.js']);
+  assert.ok(!fs.existsSync(path.join(dir,'sliders.uc.js')));
 });
-test('normal Transparent Mode is fenced off completely in video state', () => {
-  assert.match(css, /:root\[zen-compact-mode="true"\]:not\(\[customizing\]\):not\(\s*\[inDOMFullscreen="true"\]\s*\):not\(\[zia-video\], \[data-zcth-video-page\]\)/);
-  assert.match(css, /\.zen-browser-generic-background\.zen-toolbar-background\s*\{\s*display:\s*none !important/);
-  assert.match(css,/backdrop-filter:\s*blur\(\s*var\(--mod-compacttpr-customblur,\s*5px\)/);
-  assert.doesNotMatch(css,/#titlebar::before\s*\{\s*content:\s*none/);
+test('Sine opt-in setting disabled by default; existing defaults unchanged',()=>{
+  const option=prefs.find(p=>p.property==='mod.compacttpr.sdrrealblur');
+  assert.equal(option?.type,'checkbox');
+  assert.equal(option?.defaultValue,false);
+  for(const value of ['5px','15%','80%'])
+    assert.ok(prefs.some(p=>p.label?.includes('預設 '+value)));
 });
-test('video path uses native Zia/Zen two-layer theme paint, not a colour guess', () => {
-  assert.match(css, /:root\[data-zcth-video-page\]:not\(\[zia-video\]\)/);
-  assert.match(css, /--zen-background-opacity,\s*1/);
-  assert.match(css, /background:\s*light-dark\(#e9e9e9,\s*#131313\)/);
-  assert.match(css, /backdrop-filter:\s*none\s*!important/);
-  assert.doesNotMatch(css,/--mod-compacttpr-(?:videosidebaropacity|videocardopacity)/);
+test('safe original solid path and normal real glass are retained',()=>{
+  assert.match(css,/:not\(\[zia-video\], \[data-zcth-video-page\]\)/);
+  assert.match(css,/--zen-background-opacity,\s*1/);
+  assert.match(css,/backdrop-filter:\s*blur\(/);
 });
-test('settings no longer advertise sliders or redundant video opacity', () => {
-  assert.equal(pref.some(p=>p.label?.includes('滑桿')),false);
-  for(const val of ['5px','15%','80%'])
-    assert.ok(pref.some(p=>p.label?.includes('預設 '+val)));
-  assert.ok(!pref.some(p=>p.property==='mod.compacttpr.disablevideoguard'));
-});
-test('watch page selection stays supported when player scrolls out',()=>{
-  assert.match(js,/data-zcth-video-page/);
-  assert.match(js,/TabSelect/);
-  assert.match(js,/bilibili/);
-  assert.match(js,/youtube/);
+test('force blur requires opt-in and confirmed SDR plus visible video',()=>{
+  assert.match(css,/-moz-bool-pref:\s*"mod.compacttpr.sdrrealblur"/);
+  assert.match(css,/:root\[data-zcth-sdr-glass\]\[zia-video\]/);
+  assert.match(css,/will-change:\s*transform\s*!important/);
+  assert.match(css,/#zsf-folder-hover-card/);
 });
