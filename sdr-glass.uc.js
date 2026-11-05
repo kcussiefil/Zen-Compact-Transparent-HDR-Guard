@@ -1,12 +1,12 @@
-// Zen Compact Transparent HDR Guard v0.1.4.
-// Opt-in SDR glass. Two matched stream samples before any compositor change.
+// Zen Compact Transparent HDR Guard v0.1.5.
+// Opt-in SDR glass. Immediate classification for confirmed SDR; 50ms fallback checks.
 (() => {
   'use strict';
   const KEY='__zcthSdrGlassV014', ACTOR='ZcthStreamV014';
   if (window[KEY]) return;
   const BASE='chrome://sine/content/zen-compact-transparent-hdr-guard/actors/';
   const root=document.documentElement;
-  let generation=0, pending=null, inFlight=false, stopped=false, sdrStreak=0;
+  let generation=0, pending=null, inFlight=false, stopped=false, queued=false;
   try {
     const events={};
     for (const name of ['loadeddata','loadedmetadata','playing','emptied','resize','loadstart'])
@@ -22,7 +22,7 @@
       console.warn('[HDR Guard] Cannot register SDR actor:',e);
   }
   function reset() {
-    generation++;sdrStreak=0;root.removeAttribute('data-zcth-sdr-glass');
+    generation++;root.removeAttribute('data-zcth-sdr-glass');
   }
   function enabled() {return Services.prefs.getBoolPref('mod.compacttpr.sdrrealblur',false);}
   function schedule(delay=0) {
@@ -40,10 +40,10 @@
     if (url.protocol!=='https:' || !/(^|\.)youtube\.com$/i.test(url.hostname) ||
         url.pathname!=='/watch' || !url.searchParams.get('v') ||
         !root.hasAttribute('zia-video')) {
-      if (sdrStreak || root.hasAttribute('data-zcth-sdr-glass')) reset();
+      if (root.hasAttribute('data-zcth-sdr-glass')) reset();
       return;
     }
-    if (inFlight) return;
+    if (inFlight) { queued=true; return; }
     let actor;
     try {actor=browser.browsingContext?.currentWindowGlobal?.getActor(ACTOR);}catch(_){}
     if (!actor) {reset();return;}
@@ -53,21 +53,14 @@
       const result=await actor.sendQuery('ZcthStreamV014:Classify');
       if (stopped || token!==generation || browser!==window.gBrowser?.selectedBrowser ||
           uri!==browser.currentURI?.spec || !root.hasAttribute('zia-video') || !enabled()) return;
-      if (result==='sdr') {
-        sdrStreak=Math.min(2,sdrStreak+1);
-        root.toggleAttribute('data-zcth-sdr-glass',sdrStreak>=2);
-        if (sdrStreak===1) schedule(110);
-      } else {
-        sdrStreak=0;
-        root.removeAttribute('data-zcth-sdr-glass');
-      }
+      root.toggleAttribute('data-zcth-sdr-glass', result === 'sdr');
     } catch(_) {reset();}
-    finally {inFlight=false;}
+    finally {inFlight=false; if (queued && !stopped) { queued=false; schedule(0); } }
   }
   function navigation() {reset();schedule(0);}
   function mediaChanged(browser) {
     if (browser!==window.gBrowser?.selectedBrowser) return;
-    reset();schedule(90);
+    reset();schedule(0);
   }
   const tabs=window.gBrowser?.tabContainer;
   tabs?.addEventListener('TabSelect',navigation);
@@ -79,8 +72,8 @@
     if (mutations.some(m=>m.attributeName==='zia-video')) {reset();schedule(0);}
   });
   observer.observe(root,{attributes:true,attributeFilter:['zia-video']});
-  const interval=window.setInterval(()=>{void check();},240);
-  schedule(120);
+  const interval=window.setInterval(()=>{void check();},50);
+  schedule(0);
   const cleanup=()=>{
     if (stopped) return;
     stopped=true;reset();

@@ -38,15 +38,15 @@ function setup(pref=true) {
  return {attrs,root,browser,win,events,flush,observer,
    setStatus:s=>status=s,setPref:p=>pref=p};
 }
-test('two quick SDR confirmations permit real glass',async()=>{
+test('single positive SDR classification permits real glass',async()=>{
  const x=setup();await x.flush();x.events.interval();await x.flush();
  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
 });
 test('HDR and unknown remove any previous real glass',async()=>{
  const x=setup();await x.flush();x.events.interval();await x.flush();
- x.setStatus('hdr');x.events.interval();await x.flush();
+ x.setStatus('hdr');x.events.interval();await new Promise(setImmediate);await x.flush();
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
- x.setStatus('unknown');x.events.interval();await x.flush();
+ x.setStatus('unknown');x.events.interval();await new Promise(setImmediate);await x.flush();
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
 });
 test('video-change and navigation events clear glass immediately',async()=>{
@@ -62,6 +62,6 @@ test('Zia marker disappearing, or option off, cannot leave blur active',async()=
  x.root.removeAttribute('zia-video');
  x.observer.callback([{attributeName:'zia-video'}]);
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
- x.setPref(false);x.events.interval();await x.flush();
+ x.setPref(false);x.events.interval();await new Promise(setImmediate);await x.flush();
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
 });

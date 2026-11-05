@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Normal and SDR frosted glass share the same user settings; event-driven SDR detector; HDR stays solid.",
+  "description": "Near-immediate confirmed SDR glass: no 110ms double-check, 50ms fallback, safely retain HDR solid protection.",
   "author": "kcussiefil",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-06T00:24:00.000Z"
+  "updatedAt": "2026-11-06T00:41:00.000Z"
 }
