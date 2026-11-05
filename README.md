@@ -1,6 +1,25 @@
-# Zen Compact Transparent HDR Guard v0.1.7
+# Zen Compact Transparent HDR Guard v0.1.8
 
 獨立 Zen／Sine MOD，改寫自 [Zen Compact Transparent Mode](https://github.com/rasyidrafi/zen-compact-transparent-mode)，保留 Apache-2.0 授權。
+
+## v0.1.8：修復毛玻璃始終無法啟用
+
+**原因：** v0.1.6／v0.1.7 的 SDR 分類器將 YouTube 自適應串流中常見的 `vp9` MIME 型式與即時技術資訊中的 `vp09.00.51.08` 錯誤當成不同編碼，導致許多 SDR 影片被判成 `unknown`，Zia 因而始終顯示實色背景。本次已透過舊版／新版相同測資確認此差異。
+
+**修正：**
+- 正規化 `vp9` 與 `vp09` 編碼家族，同時要求目前解碼的 8-bit 格式、串流格式編號與播放器回應一致；不因只有一筆泛用 `vp9` MIME 就假定 SDR。
+- 若 `getVideoStats().fmt` 缺失，從 YouTube `Stats for Nerds` 目前實際播放的編碼資訊提取格式編號；格式不一致仍回傳 `unknown`。
+- 影片事件推播比對 YouTube 的影片 ID，而不是要求整個 URL 字串完全一致；可容忍播放清單、時間、索引等非影片本體參數差異。
+- 獨立使用新版 Firefox `ZcthStreamV018` Actor，避免前版快取；50ms 補充檢查、Zia 全部浮動介面的原有毛玻璃配色與設定均保留。
+- 在瀏覽器 chrome 根元素標示 `data-zcth-stream-state="sdr|hdr|unknown"` 作為可檢查的偵測狀態，不會對網頁注入個人資訊。
+
+**驗證：** 9 組分類器測資（VP9 別名、缺失 fmt、AV1／VP9 HDR、格式錯誤、AVC 等）全部通過；8 項瀏覽器事件與顯示狀態模擬通過。尚未在使用者的 macOS Zen 實際測試，不宣稱已保證實機毛玻璃正常。
+
+### 更新／回退
+
+在 Sine 更新至 **v0.1.8** 並完整重新啟動 Zen，保留「SDR 影片啟用真正毛玻璃」開關；在 SDR 影片測試側欄、網址搜尋彈出、群組卡片、Cmd+F。HDR／未知格式仍維持實色保護。
+
+完整回退：v0.1.7 commit `9845f1d0d0530a0caa6c37a6201c0b23cfe39578`；若只要安全的實色模式，取消勾選 SDR 真毛玻璃即可。曾由使用者實機確認的 v0.1.2 commit：`ebb192b4b630b0e842fa3238ce4e859d957e2478`。
 
 ## v0.1.7：完整對應 Zia 的影片毛玻璃限制
 

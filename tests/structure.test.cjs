@@ -10,9 +10,9 @@ const meta=JSON.parse(read('theme.json'));
 const prefs=JSON.parse(read('preferences.json'));
 const script=read('sdr-glass.uc.js');
 
-test('independent Sine package version 0.1.7 and expected scripts',()=>{
+test('independent Sine package version 0.1.8 and expected scripts',()=>{
  assert.equal(meta.id,'zen-compact-transparent-hdr-guard');
- assert.equal(meta.version,'0.1.7');
+ assert.equal(meta.version,'0.1.8');
  assert.equal(meta.style.chrome,'chrome.css');
  assert.ok(meta.scripts['video-page.uc.js']);
  assert.ok(meta.scripts['sdr-glass.uc.js']);
@@ -36,7 +36,7 @@ test('Zia video guard persists, SDR true blur requires opt-in and confirmation',
  assert.equal(setting?.type,'checkbox');
 });
 test('SDR detection is event-driven and polling is faster',()=>{
- assert.match(script,/ZcthStreamV016/);
+ assert.match(script,/ZcthStreamV018/);
  assert.match(script,/onStreamState:publish/);
  assert.match(script,/},50\)/);
  assert.doesNotMatch(script,/sdrStreak>=2/);
@@ -46,7 +46,7 @@ test('SDR detection is event-driven and polling is faster',()=>{
 });
 
 test('Zia extended video-glass surfaces are all SDR-only', () => {
- const extra = css.slice(css.indexOf('/* v0.1.7: restore Zia'));
+ const extra = css.slice(css.indexOf('/* v0.1.8: restore Zia'));
  assert.ok(extra.length > 1000);
  for(const name of ['zia.urlbar.pop-up-blur','zia.features.find-bar',
     'zia.cards.blur','[zia-swipe-arrow]','screenshots-buttons']) {
@@ -74,6 +74,17 @@ test('experiment defaults remain opt-in and stream logic unchanged',()=>{
  const p=JSON.parse(read('preferences.json'));
  const setting=p.find(x=>x.property==='mod.compacttpr.sdrrealblur');
  assert.equal(setting.defaultValue,false);
- assert.match(script,/ZcthStreamV016/);
+ assert.match(script,/ZcthStreamV018/);
  assert.match(script,/setInterval\(\(\)=>\{void check\(\);\},50\)/);
+});
+
+test('v0.1.8 stream status exists and SDR actor module is connected',()=>{
+ const actor=read('actors/ZcthStreamV018Child.sys.mjs');
+ const parent=read('actors/ZcthStreamV018Parent.sys.mjs');
+ assert.match(actor,/parseLiveItag/);
+ assert.match(actor,/vp9\|vp09/);
+ assert.match(actor,/ZcthStreamV018:Classify/);
+ assert.match(parent,/__zcthSdrGlassV018/);
+ assert.match(script,/data-zcth-stream-state/);
+ assert.match(script,/ZcthStreamV018/);
 });

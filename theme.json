@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "SDR-only true glass on Zia's floating sidebar, hover cards, URL/new-tab popup, findbar, swipe arrow and screenshot buttons; HDR/unknown remain solid.",
+  "description": "Fix YouTube generic VP9 versus VP09 codec matching, selected itag fallback and playback-event URL identity; SDR glass restores on all supported Zia surfaces.",
   "author": "kcussiefil",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-06T01:20:00.000Z"
+  "updatedAt": "2026-11-05T18:34:17.774Z"
 }
