@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.1.0
+/* Zen Compact Transparent HDR Guard v0.1.1
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -115,23 +115,38 @@
 }
 
 
-/* HDR Guard v0.1.0: Zia's zia-video state is the only video signal.
- * Do not reintroduce browserSidebarContainer compositor promotion. */
+/* v0.1.1 — video pages use the CURRENT Zen/Zia theme-painted sidebar.
+   This mod must not introduce another paint over the video or a new
+   compositor promotion. data-zcth-video-page extends protection when
+   YouTube/Bilibili scroll the player off screen and Zia clears zia-video. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
   @media not (-moz-bool-pref: "mod.compacttpr.disablevideoguard") {
-    :root[zia-video][zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"])
+    :root:is([zia-video], [data-zcth-video-page])[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"])
       #navigator-toolbox:not([animate="true"]) #titlebar::before {
+      content: none !important;
+      display: none !important;
       backdrop-filter: none !important;
-      background: linear-gradient(
-        160deg, rgba(255, 255, 255, .028), rgba(0, 0, 0, .032)
-      ), color-mix(in srgb, var(--mod-compacttpr-customcolor-final) var(--mod-compacttpr-videosidebaropacity, 97%), transparent) !important;
-      box-shadow: inset 0 1px rgba(255, 255, 255, 0.075) !important;
+      background: none !important;
+      box-shadow: none !important;
     }
-    /* Style only card paint; leave Zia and Site Folders geometry, events
-       and animations untouched. Video protection must not blur the page. */
-    :root[zia-video] :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
+
+    /* The original Transparent Mode hides Zen's own toolbar background.
+       Put the SAME native paint element back; it already follows the
+       user's Zia/Zen theme and workspace colours, including transitions.
+       Do not invent a fixed dark colour or use a transparent overlay. */
+    :root:is([zia-video], [data-zcth-video-page])[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"])
+      #navigator-toolbox:not([animate="true"]) .zen-browser-generic-background.zen-toolbar-background {
+      display: flex !important;
       backdrop-filter: none !important;
-      background-color: color-mix(in srgb, var(--zia-tab-card-bg, rgb(38, 38, 42)) var(--mod-compacttpr-videocardopacity, 96%), transparent) !important;
+    }
+
+    /* Zia v2.117.6 already makes native cards solid on zia-video.
+       For recognised video pages without a visible player, use Zia's
+       OWN card colour, not the old 96%-opacity custom layer. */
+    :root[data-zcth-video-page]:not([zia-video])
+      :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
+      backdrop-filter: none !important;
+      background-color: var(--zia-folder-card-bg, var(--zia-tab-card-bg, rgb(38, 38, 38))) !important;
     }
   }
 }

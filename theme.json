@@ -1,14 +1,14 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Independent Sine mod: original compact glass on normal pages, HDR-safe Zia video mode and adjustable sliders.",
+  "description": "Independent Sine mod: transparent compact glass normally; restore native Zia theme paint on video pages.",
   "author": "kcussiefil",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "style": {
     "chrome": "chrome.css"
   },
   "scripts": {
-    "sliders.uc.js": {
+    "video-page.uc.js": {
       "include": [
         "chrome://browser/content/browser.xhtml"
       ],
@@ -27,5 +27,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-05T14:25:00.000Z"
+  "updatedAt": "2026-11-05T14:58:30.000Z"
 }

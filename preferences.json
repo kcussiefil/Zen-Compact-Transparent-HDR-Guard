@@ -7,31 +7,31 @@
   },
   {
     "property": "mod.compacttpr.usefromzen",
-    "label": "使用 Zen 主題背景色",
+    "label": "一般模式使用 Zen 主題背景色",
     "type": "checkbox",
     "defaultValue": true
   },
   {
     "property": "mod.compacttpr.customcolor",
-    "label": "自訂背景色（CSS 色彩值）",
+    "label": "一般模式自訂背景色（預設 rgba(23, 23, 26, 1)）",
     "type": "string",
     "defaultValue": "rgba(23, 23, 26, 1)"
   },
   {
     "property": "mod.compacttpr.customblur",
-    "label": "一般模式模糊強度（滑桿）",
+    "label": "一般模式模糊強度（預設 5px）",
     "type": "string",
     "defaultValue": "5px"
   },
   {
     "property": "mod.compacttpr.transparentvalue",
-    "label": "一般模式透明度（滑桿）",
+    "label": "一般模式透明度（預設 15%）",
     "type": "string",
     "defaultValue": "15%"
   },
   {
     "property": "mod.compacttpr.leftsidebarheight",
-    "label": "浮動側欄高度（滑桿）",
+    "label": "浮動側欄高度（預設 80%）",
     "type": "string",
     "defaultValue": "80%"
   },
@@ -47,20 +47,8 @@
   },
   {
     "property": "mod.compacttpr.disablevideoguard",
-    "label": "停用影片保護（不建議）",
+    "label": "停用影片保護（預設關閉；不建議）",
     "type": "checkbox",
     "defaultValue": false
-  },
-  {
-    "property": "mod.compacttpr.videosidebaropacity",
-    "label": "影片模式側欄背景不透明度（滑桿）",
-    "type": "string",
-    "defaultValue": "97%"
-  },
-  {
-    "property": "mod.compacttpr.videocardopacity",
-    "label": "影片模式卡片背景不透明度（滑桿）",
-    "type": "string",
-    "defaultValue": "96%"
   }
 ]

@@ -1,46 +1,74 @@
 'use strict';
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const dir = path.resolve(__dirname, '..');
-const source = name => fs.readFileSync(path.join(dir, name), 'utf8');
-const css = source('chrome.css');
-const js = source('sliders.uc.js');
-const meta = JSON.parse(source('theme.json'));
-const prefs = JSON.parse(source('preferences.json'));
-const pref = name => prefs.find(x => x.property === 'mod.compacttpr.' + name);
-test('independent Sine package has unique mod identity and valid entrypoints', () => {
-  assert.equal(meta.id, 'zen-compact-transparent-hdr-guard');
-  assert.equal(meta.style.chrome, 'chrome.css');
-  assert.equal(meta.scripts['sliders.uc.js'].include[0], 'chrome://browser/content/browser.xhtml');
-  assert.equal(meta.preferences, 'preferences.json');
-  assert.ok(!meta.homepage.includes('Zen-Site-Folders'));
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const dir=path.resolve(__dirname,'..');
+const source=name=>fs.readFileSync(path.join(dir,name),'utf8');
+const css=source('chrome.css');
+const script=source('video-page.uc.js');
+const meta=JSON.parse(source('theme.json'));
+const prefs=JSON.parse(source('preferences.json'));
+
+test('independent Sine entrypoints and no sliders',()=>{
+ assert.equal(meta.version,'0.1.1');
+ assert.deepEqual(Object.keys(meta.scripts),['video-page.uc.js']);
+ assert.equal(meta.style.chrome,'chrome.css');
+ assert.equal(meta.preferences,'preferences.json');
+ assert.ok(!fs.existsSync(path.join(dir,'sliders.uc.js')));
+ assert.equal(prefs.some(p=>p.label?.includes('滑桿')),false);
+ assert.ok(!prefs.some(p=>/video(sidebar|card)opacity/.test(p.property||'')));
+ for(const val of ['5px','15%','80%'])
+   assert.equal(prefs.some(p=>p.label?.includes('預設 '+val)),true);
 });
-test('all preferences are natively accepted by Sine; slider values carry units', () => {
-  const kinds = new Set(['separator','string','checkbox','dropdown']);
-  assert.ok(prefs.every(p => kinds.has(p.type)));
-  for (const [name,value] of Object.entries({customblur:'5px',transparentvalue:'15%',
-     leftsidebarheight:'80%',videosidebaropacity:'97%',videocardopacity:'96%'})) {
-    assert.equal(pref(name).type,'string');
-    assert.equal(pref(name).defaultValue,value);
-    assert.ok(js.includes("name: '" + name + "'"));
-  }
-  assert.equal(pref('disablevideoguard').defaultValue, false);
+
+test('HDR guard restores native Zen/Zia theme paint, no forced video compositor',()=>{
+ assert.match(css,/:root:is\(\[zia-video\], \[data-zcth-video-page\]\)/);
+ assert.match(css,/#titlebar::before\s*{[\s\S]*?content:\s*none\s*!important/);
+ assert.match(css,/\.zen-browser-generic-background\.zen-toolbar-background\s*{[\s\S]*?display:\s*flex\s*!important/);
+ assert.doesNotMatch(css,/\.browserSidebarContainer\s*{[^}]*will-change:\s*transform/);
+ assert.doesNotMatch(css,/--mod-compacttpr-videosidebaropacity/);
+ assert.doesNotMatch(css,/--mod-compacttpr-videocardopacity/);
 });
-test('normal mode inherits upstream backdrop blur', () => {
-  assert.match(css,/backdrop-filter:\s*blur\(var\(--mod-compacttpr-customblur, 5px\)\)/);
-  assert.match(css,/--mod-compacttpr-transparentvalue, 15%/);
+
+test('normal page preserves upstream real glass',()=>{
+ assert.match(css,/backdrop-filter:\s*blur\(\s*var\(--mod-compacttpr-customblur, 5px\)/);
+ assert.match(css,/--mod-compacttpr-transparentvalue, 15%/);
 });
-test('video mode uses Zia gate and does not force video layer promotion', () => {
-  assert.match(css,/:root\[zia-video\]/);
-  assert.match(css,/backdrop-filter:\s*none\s*!important/);
-  assert.match(css,/--mod-compacttpr-videosidebaropacity, 97%/);
-  assert.match(css,/--mod-compacttpr-videocardopacity, 96%/);
-  assert.doesNotMatch(css,/\.browserSidebarContainer\s*\{\s*will-change/i);
-  assert.doesNotMatch(css,/backface-visibility\s*:/i);
-});
-test('sliders delegate persistence to Sine change listener', () => {
-  assert.match(js,/original\.dispatchEvent\(new E\('change'/);
-  assert.match(js,/if \(!original\) return/);
+
+test('video URL classifier and event lifecycle',()=>{
+ const root={
+   flag:false,
+   toggleAttribute:(key,value)=>{if(key==='data-zcth-video-page')root.flag=value;},
+   removeAttribute:()=>{root.flag=false;}
+ };
+ const listeners={};
+ const tabs={addEventListener:(k,fn)=>{listeners[k]=fn;},removeEventListener:()=>{}};
+ const browser={currentURI:{spec:'https://www.youtube.com/watch?v=abc'}};
+ const tasks=[];
+ let seq=0,progress;
+ const win={
+   gBrowser:{selectedBrowser:browser,tabContainer:tabs,
+     addTabsProgressListener:x=>{progress=x;},removeTabsProgressListener:()=>{}},
+   setTimeout:fn=>{tasks.push(fn);return ++seq;},
+   clearTimeout:()=>{},addEventListener:()=>{}
+ };
+ const flush=()=>{while(tasks.length)tasks.shift()();};
+ vm.runInNewContext(script,{window:win,document:{documentElement:root},URL});
+ flush();
+ assert.equal(root.flag,true);
+ for(const [url,expect] of [
+   ['https://www.youtube.com/watch?v=abc',true],
+   ['https://www.youtube.com/feed/subscriptions',false],
+   ['https://www.youtube.com/shorts/ABC',true],
+   ['https://www.youtube.com/live/ABC',true],
+   ['https://www.bilibili.com/video/BV1xx',true],
+   ['https://github.com/kcussiefil',false]
+ ]) {
+   browser.currentURI.spec=url;
+   progress.onLocationChange(browser);
+   flush();
+   assert.equal(root.flag,expect,url);
+ }
 });
