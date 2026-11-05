@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Fix YouTube generic VP9 versus VP09 codec matching, selected itag fallback and playback-event URL identity; SDR glass restores on all supported Zia surfaces.",
+  "description": "Cross-site Zia-visible video classification with Bilibili quality adapter, generic HTML5 metadata, editable SDR fallback URL rules and single-video override; HDR has priority.",
   "author": "kcussiefil",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-05T18:34:17.774Z"
+  "updatedAt": "2026-11-06T03:45:00.000Z"
 }

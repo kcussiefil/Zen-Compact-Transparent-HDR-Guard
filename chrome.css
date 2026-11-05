@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.1.7
+/* Zen Compact Transparent HDR Guard v0.1.9
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
