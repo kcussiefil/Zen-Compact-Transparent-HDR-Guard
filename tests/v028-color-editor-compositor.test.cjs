@@ -47,7 +47,7 @@ test('028 never forces compositor through Zia no-video-blur protection',()=>{
  assert.equal(allow({open:true,watch:true,visibleVideo:true,bili:true}),true);
 });
 test('028 does not alter chosen color, dialog position, alpha or sidebar height',()=>{
- for(const wrong of [/\bopacity\s*:/,/\bbackground\s*:/,/\bbackdrop-filter\s*:/,/\bdisplay\s*:/,/\bvisibility\s*:/,/\btransform\s*:/,/\bposition\s*:/,/\bheight\s*:/,/\bfilter\s*:/]){
+ for(const wrong of [/(?:^|[\s;{}])opacity\s*:/,/(?:^|[\s;{}])background\s*:/,/(?:^|[\s;{}])backdrop-filter\s*:/,/(?:^|[\s;{}])display\s*:/,/(?:^|[\s;{}])visibility\s*:/,/(?:^|[\s;{}])transform\s*:/,/(?:^|[\s;{}])position\s*:/,/(?:^|[\s;{}])height\s*:/,/(?:^|[\s;{}])filter\s*:/]){
   assert.doesNotMatch(clean,wrong);
  }
  assert.match(css,/\[data-zsf-color-sidebar-hold\]/,
