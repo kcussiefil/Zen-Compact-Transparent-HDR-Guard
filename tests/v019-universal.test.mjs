@@ -286,3 +286,19 @@ test('022 HDR custom marker clears when the last visible video disappears',()=>{
  assert.ok(!x.attrs.has('data-zcth-hdr-glass'));
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
 });
+
+test('024 Bilibili fast-path bypasses SDR/HDR classifier and removes prior marker',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true,sdrEnabled:true,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'a',{state:'hdr',count:1,mediaKey:'old-bili'});
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'normal 022 classification works before fast path');
+ x.attrs.add('data-zcth-bilibili-glass');
+ x.advance(50);
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'explicit Bilibili override clears HDR categorization');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'Bilibili override does not mislabel source SDR');
+ assert.ok(!x.attrs.has('data-zcth-stream-state'));
+ x.manager.onFrameState(x.b[0],'a',{state:'sdr',count:1,mediaKey:'bili'});
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'content actor does not set SDR marker during bypass');
+ x.attrs.delete('data-zcth-bilibili-glass');
+ x.advance(50);
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'disabling Bilibili override restores existing classification');
+});
