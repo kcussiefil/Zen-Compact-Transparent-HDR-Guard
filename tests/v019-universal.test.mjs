@@ -49,6 +49,7 @@ function setup(panes=1,options={}){
  let videoVisible=true;
  const booleanPrefs={
   'mod.compacttpr.sdrrealblur':options.sdrEnabled!==false,
+  'mod.compacttpr.hdrrealblur':options.hdrEnabled===true,
   'zia.glass.blur-over-video':options.ziaBlurOverVideo===true
  };
  const props=new Map();
@@ -223,4 +224,65 @@ test('Visible-video state clears only when the video really disappears',()=>{
  x.advance(50);
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'),
    'closing/scrolling away video clears custom style');
+});
+
+test('022 HDR opt-in is disabled by default and never changes the SDR path',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true});
+ x.manager.onFrameState(x.b[0],'f',{state:'hdr',count:1,mediaKey:'hdr'});
+ assert.equal(x.props.get('data-zcth-stream-state'),'hdr');
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'HDR visual override defaults OFF');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'HDR must not inherit SDR appearance');
+});
+
+test('022 HDR opt-in activates on actual HDR while Zia blur-over-video is enabled',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true,sdrEnabled:false,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'f',{state:'hdr',count:1,mediaKey:'hdr'});
+ assert.equal(x.props.get('data-zcth-stream-state'),'hdr');
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'HDR custom visual path enabled');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ x.booleanPrefs['mod.compacttpr.hdrrealblur']=false;
+ x.advance(50);
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'switch OFF is instant native-Zia rollback');
+ x.booleanPrefs['mod.compacttpr.hdrrealblur']=true;
+ x.advance(50);
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'switch ON reapplies HDR custom appearance');
+});
+
+test('022 upstream Zia Blur over video OFF blocks HDR override even when explicitly enabled',()=>{
+ const x=setup(1,{rootZiaVideo:true,ziaBlurOverVideo:false,sdrEnabled:false,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'f',{state:'hdr',count:1});
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'must not bypass Zia no-blur HDR protection');
+});
+
+test('022 root zia-video still present temporarily must not cause a competing compositor override',()=>{
+ const x=setup(1,{rootZiaVideo:true,ziaBlurOverVideo:true,sdrEnabled:false,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'f',{state:'hdr',count:1});
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'wait until Zia explicitly permits blur');
+ x.attrs.delete('zia-video');
+ x.listeners.observer.f([{attributeName:'zia-video'}]);
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'becomes active once Zia removes root flag');
+});
+
+test('022 HDR/SDR/unknown transitions are mutually exclusive',()=>{
+ const x=setup(2,{rootZiaVideo:false,ziaBlurOverVideo:true,sdrEnabled:true,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'a',{state:'sdr',count:1});
+ x.manager.onFrameState(x.b[1],'b',{state:'hdr',count:1});
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'),'any confirmed visible HDR wins');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ x.manager.onFrameState(x.b[1],'b',{state:'unknown',count:1});
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'),'HDR promotion retracts on unknown');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'uncertain split pane stays native');
+ x.manager.onFrameState(x.b[1],'b',{state:'sdr',count:1});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'),'SDR logic preserved');
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'));
+});
+
+test('022 HDR custom marker clears when the last visible video disappears',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true,sdrEnabled:false,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'f',{state:'hdr',count:1});
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'));
+ x.setVideoVisible(false);
+ x.advance(50);
+ assert.ok(!x.attrs.has('data-zcth-hdr-glass'));
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
 });
