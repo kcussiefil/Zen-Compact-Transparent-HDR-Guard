@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.2.8**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.2.9**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.2.9](releases/v0.2.9.md) | Default-OFF experimental macOS Zen Glance floating-sidebar blur; only visible preview composition and protected background video. |
 | [v0.2.8](releases/v0.2.8.md) | Fixed actual macOS page blur behind Site Folders color editor with open-only composition; release documents and CI publishing policy aligned. |
 | [v0.2.7](releases/v0.2.7.md) | Site Folders selected-tab color editor matches the optional preview glass. No changes to Site Folders picker logic or HDR video compositing. |
 | [v0.2.6](releases/v0.2.6.md) | Optional, default-off unified preview-card glass for Zia tab/folder/tip cards and Site Folders. |
