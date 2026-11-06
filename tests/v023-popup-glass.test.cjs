@@ -6,14 +6,14 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const css = fs.readFileSync(path.join(root, 'chrome.css'), 'utf8');
-const rule = css.slice(css.indexOf('/* v0.2.3 — Optional custom glass for Zia'));
+const rule = css.slice(css.indexOf('/* v0.2.5 — Zia URL/search pop-up specificity correction'));
 const effective = rule.replace(/\/\*[\s\S]*?\*\//g, '');
 const prefs = JSON.parse(fs.readFileSync(path.join(root,'preferences.json'),'utf8'));
 const theme = JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
 const script = fs.readFileSync(path.join(root,'sdr-glass.uc.js'),'utf8');
 
 test('023 is derived from tested 022 and pop-up customisation starts OFF', () => {
-  assert.equal(theme.version,'0.2.4');
+  assert.equal(theme.version,'0.2.5');
   const setting=prefs.find(p=>p.property==='mod.compacttpr.urlbarcustomblur');
   assert.ok(setting);
   assert.equal(setting.type,'checkbox');
