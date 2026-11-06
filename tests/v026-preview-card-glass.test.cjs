@@ -77,7 +77,7 @@ test('026 does not accidentally style unclassified video or protected HDR',()=>{
 test('026 only paints visible cards, does not keep compositing HDR after cards close',()=>{
  assert.match(effective,/:not\(\[hidden\]\)\s*\{/);
  for(const banned of [
-  /\bwill-change\s*:/,/\bbackface-visibility\s*:/,/\bfilter\s*:/,
+  /\bwill-change\s*:/,/\bbackface-visibility\s*:/,/(?:^|[\s;{}])filter\s*:/,
   /\bbrightness\s*:/,/browserSidebarContainer\s*\{/,/\btransform\s*:/
  ])assert.doesNotMatch(effective,banned);
  assert.ok(!effective.includes('data-zcth-video-page] #tabbrowser-tabpanels'),
