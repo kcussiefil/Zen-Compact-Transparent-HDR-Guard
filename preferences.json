@@ -52,6 +52,12 @@
     "defaultValue": false
   },
   {
+    "property": "mod.compacttpr.hdrrealblur",
+    "label": "HDR 影片使用 HDR Guard 自訂毛玻璃（需開啟 Zia 的 Blur over video；預設關閉，可立即回退）",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
     "type": "separator",
     "label": "跨網站 SDR／HDR 識別與手動覆寫"
   },
