@@ -5,7 +5,10 @@ const fs=require('node:fs');
 const path=require('node:path');
 const base=path.resolve(__dirname,'..');
 const css=fs.readFileSync(path.join(base,'chrome.css'),'utf8');
-const segment=css.slice(css.indexOf('/* v0.2.6 — Independently enabled preview-card glass.'));
+const segment=css.slice(
+ css.indexOf('/* v0.2.6 — Independently enabled preview-card glass.'),
+ css.indexOf('/* v0.2.7 — Site Folders')
+);
 const effective=segment.replace(/\/\*[\s\S]*?\*\//g,'');
 const prefs=JSON.parse(fs.readFileSync(path.join(base,'preferences.json'),'utf8'));
 const manifest=JSON.parse(fs.readFileSync(path.join(base,'theme.json'),'utf8'));
