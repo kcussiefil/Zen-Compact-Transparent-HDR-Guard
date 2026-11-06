@@ -15,7 +15,7 @@
 | SDR 影片自訂毛玻璃 | 關閉 |
 | HDR 影片自訂毛玻璃 | 關閉，需 Zia *Blur over video* |
 | 網址列／搜尋彈出視窗套用自訂毛玻璃 | 關閉 |
-| **Zia 單頁／原生資料夾／提示卡片及 Site Folders 群組卡片**套用相同毛玻璃參數 | 關閉（v0.2.6 新增） |
+| **Zia 單頁／原生資料夾／提示卡片、Site Folders 群組預覽與選取分頁顏色視窗**套用相同毛玻璃參數 | 關閉（v0.2.7 加入選色視窗） |
 | Bilibili 全站立即套用自訂毛玻璃 | **開啟**；刻意略過 SDR／HDR 檢查 |
 
 所有實際設定名稱與預設值請以 [`preferences.json`](preferences.json) 為準。
@@ -32,17 +32,17 @@
 
 - 畫面上有影片，**不代表能可靠辨識 HDR 或 SDR**。判斷依播放器提供的可用資訊進行，無法辨識時不應假設就是 SDR。
 - 已確認的 HDR 優先於一般 SDR 規則。但 **Bilibili 全站立即套用**是使用者可控制的明確例外，會跳過檢查；如果更在意 HDR 保護，請先關閉這個預設開啟的選項。
-- v0.2.6 的預覽卡片樣式只調整毛玻璃外觀，不刻意改變卡片大小、動畫或使影片合成層常駐。
+- v0.2.7 將 Site Folders「選取分頁顏色」視窗也納入原本預覽卡片毛玻璃開關；選色、預覽、儲存、取消等操作仍由 Site Folders 負責。僅調整背景色、透明度及模糊，不變更卡片大小、動畫或影片合成層。
 - 即使使用最新版本，Zia 在影片上啟用真正模糊時仍可能讓 HDR 變灰、變暗。應實際確認關閉側欄／卡片後亮度是否恢復。
 - Node 自動測試不能證明 macOS＋OLED 的 GPU、HDR 亮度和視覺效果已驗收。
 
 ## 問題處理與文件
 
-出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.2.5](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.5)。
+出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.2.6](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.6)。
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.2.6**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.2.7**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

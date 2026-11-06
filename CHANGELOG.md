@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.2.6**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.2.7**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.2.7](releases/v0.2.7.md) | Site Folders selected-tab color editor matches the optional preview glass. No changes to Site Folders picker logic or HDR video compositing. |
 | [v0.2.6](releases/v0.2.6.md) | Optional, default-off unified preview-card glass for Zia tab/folder/tip cards and Site Folders. |
 | [v0.2.5](releases/v0.2.5.md) | Fixed custom URL/search popup glass style being overridden. |
 | [v0.2.4](releases/v0.2.4.md) | Optional immediate Bilibili-wide glass, with an explicit HDR-detection tradeoff. |
