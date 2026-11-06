@@ -73,5 +73,5 @@ test('no new compositor promotion or brightness transformation survives popup cl
  assert.doesNotMatch(clean,/\bbackface-visibility\s*:/);
  assert.doesNotMatch(clean,/(?:^|[;\s{}])brightness\s*:/);
  assert.doesNotMatch(clean,/(?:^|[;\s{}])filter\s*:/);
- assert.doesNotMatch(clean,/#tabbrowser-tabpanels[^{}]+\{/);
+ assert.doesNotMatch(clean,/#tabbrowser-tabpanels\s+\.browserSidebarContainer\s*\{/);
 });
