@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.1.9
+/* Zen Compact Transparent HDR Guard v0.2.0
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -29,7 +29,12 @@
 
   :root[zen-compact-mode="true"]:not([customizing]):not(
       [inDOMFullscreen="true"]
-    ):is(:not([zia-video], [data-zcth-video-page]), [data-zcth-sdr-glass][zia-video]) {
+    ):is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-sdr-glass][zia-video]
+    ) {
     @media (-moz-bool-pref: "zen.view.compact.hide-tabbar") or (-moz-bool-pref: "zen.view.use-single-toolbar") {
       &:not([zen-compact-animating]) {
         #navigator-toolbox {
@@ -115,50 +120,20 @@
 }
 
 
-/* v0.1.2 — Native Zia video sidebar paint.
-   IMPORTANT: the upstream Transparent Mode stylesheet is gated above to
-   normal pages ONLY. It MUST NOT run in Zia-video or video-page mode:
-   it hides .zen-toolbar-background with !important, which defeats Zia's
-   native two-layer workspace paint and lets website text show through. */
-
-/* Zia itself handles [zia-video], so no background colour is hardcoded.
-   On a watch page whose video has scrolled away, Zia clears [zia-video].
-   Keep the exact same native layered paint without enabling its blur. */
-:root[data-zcth-video-page]:not([zia-video])[zen-compact-mode="true"]
-  #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background {
-  background: light-dark(#e9e9e9, #131313) !important;
-  backdrop-filter: none !important;
-}
-
-:root[data-zcth-video-page]:not([zia-video])[zen-compact-mode="true"]
-  #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background::after {
-  /* Zen's original paint: --zen-main-browser-background-toolbar */
-  opacity: var(--zen-background-opacity, 1) !important;
-}
-
-:root[data-zcth-video-page]:not([zia-video])[zen-compact-mode="true"]
-  #navigator-toolbox:not([animate="true"]) #titlebar .zen-toolbar-background::before {
-  /* Zen's original old-space cross-fade layer */
-  opacity: calc(1 - var(--zen-background-opacity, 1)) !important;
-}
-
-/* Zia normally makes its cards opaque only while [zia-video] exists.
-   Match that on a video watch page, without modifying card geometry.
-   Actual visible-video cases remain entirely Zia-controlled. */
-:root[data-zcth-video-page]:not([zia-video]) :is(#zia-tab-card, #zia-folder-card, #zia-tip-card) {
-  background-color: var(--zia-tab-card-bg, rgb(38, 38, 38)) !important;
-  backdrop-filter: none !important;
-}
-
-/* Avoid restoring Zia's compositor promotion when watch-page video isn't
-   in view but the player may be floating or shown in another layer.
-   The rule is deliberately scoped to named watch pages. */
-:root[data-zcth-video-page]:not([zia-video])[zen-compact-mode="true"]
-  #tabbrowser-tabpanels .browserSidebarContainer {
-  will-change: auto !important;
-  backface-visibility: visible !important;
-}
-
+/* v0.2.0 — Zia 2.118 native video compositor ownership.
+ * Older HDR Guard revisions treated a watch-page URL as a reason to force
+ * opaque backgrounds and `will-change: auto`, even when Zia's new
+ * `Blur over video` setting intentionally cleared root [zia-video].
+ * That prevented the floating sidebar from blurring over HDR/SDR video.
+ *
+ * Do not override .zen-toolbar-background, Zia's hover cards or the selected
+ * .browserSidebarContainer here. Zia's compositor promotion is conditional
+ * on the ACTUAL visible sidebar/toolbar/card state and is removed as soon
+ * as those overlays disappear. It must not be permanently forced ON.
+ *
+ * With `Blur over video` OFF, Zia still retains its no-blur HDR video
+ * protection. The explicit 019 opt-in confirmed-SDR rules below are kept
+ * for that older/protected mode only. */
 
 /* v0.1.4: true glass on confirmed SDR uses EXACTLY the same
  * #titlebar::before and user-configured blur, transparency and height
