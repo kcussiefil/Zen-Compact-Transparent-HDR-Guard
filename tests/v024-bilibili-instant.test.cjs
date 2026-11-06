@@ -52,7 +52,7 @@ function setup(start='https://www.bilibili.com/video/BV123',options={}){
 }
 
 test('024 release and correct wildcard www.bilibili.com/* are default',()=>{
- assert.equal(theme.version,'0.2.5');
+ assert.equal(theme.version,'0.2.6');
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.bilibiliinstantglass')?.defaultValue,true);
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.sdrsitepatterns')?.defaultValue,'www.bilibili.com/*');
  assert.ok(script.includes("const DEFAULT='www.bilibili.com/*'"));
@@ -123,8 +123,8 @@ test('cleanup removes all markers and preference listeners',()=>{
 });
 test('Bilibili fast path is a dedicated stylesheet branch, not fake SDR',()=>{
  assert.match(css,/\[data-zcth-bilibili-glass\]/);
- assert.equal((css.match(/\[data-zcth-bilibili-glass\]/g)||[]).length,4,
-  'sidebar and three URL popup selectors');
+ assert.equal((css.match(/\[data-zcth-bilibili-glass\]/g)||[]).length,5,
+  'sidebar, three URL popup selectors and the new preview-card selector');
  assert.match(script,/if\(root\.hasAttribute\('data-zcth-bilibili-glass'\)\)return false/);
  assert.match(script,/if\(!alive\|\|!browser\|\|root\.hasAttribute\('data-zcth-bilibili-glass'\)\)return/);
  assert.doesNotMatch(code,/setInterval|setTimeout\(refresh|mediaKey|sendQuery|data-zcth-sdr-glass/);

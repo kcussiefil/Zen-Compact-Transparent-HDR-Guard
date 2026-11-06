@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.5
+/* Zen Compact Transparent HDR Guard v0.2.6
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -343,6 +343,45 @@
       > .urlbar-background {
       background: var(--zia-urlbar-open-bg) !important;
       backdrop-filter: none !important;
+    }
+  }
+}
+
+/* v0.2.6 — Independently enabled preview-card glass.
+ * The exact same color, transparency and blur variables are used by
+ * #titlebar::before and the v0.2.5 URL/search popup.
+ *
+ * Zia's tab/folder/tip cards and Zen-Site-Folders' independent hover card
+ * both live directly under :root. Match only ACTUALLY VISIBLE cards so
+ * there is no background-filter paint when the preview is hidden.
+ *
+ * Zia 2.118 uses fixed 76% / blur(24px) saturate(1.6) !important.
+ * Site Folders 0.7.6 also uses !important on its independent container.
+ * Specificity-only ghost IDs beat either extension regardless of load order,
+ * without altering any card dimensions, border/radius, animation or content.
+ *
+ * IMPORTANT FOR HDR: no video-layer promotion here. Zia/Site Folders own
+ * their existing :has(visible-card) compositor gates and release them when
+ * the card hides; do not add unconditional will-change or brightness filters.
+ * Unknown/unprotected video remains native Zia, while confirmed HDR needs
+ * the separate HDR opt-in and Zia Blur over video ON. */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+       (-moz-bool-pref: "mod.compacttpr.previewcardcustomblur") {
+  @media -moz-pref("zia.cards.blur") {
+    :root:not(#zcth-card-ghost-1):not(#zcth-card-ghost-2):not(#zcth-card-ghost-3):is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-bilibili-glass],
+      [data-zcth-sdr-glass],
+      [data-zcth-hdr-glass]
+    ) > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card):not([hidden]) {
+      background-color: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
     }
   }
 }

@@ -7,13 +7,16 @@ const base=path.resolve(__dirname,'..');
 const css=fs.readFileSync(path.join(base,'chrome.css'),'utf8');
 const prefs=JSON.parse(fs.readFileSync(path.join(base,'preferences.json'),'utf8'));
 const theme=JSON.parse(fs.readFileSync(path.join(base,'theme.json'),'utf8'));
-const popup=css.slice(css.indexOf('/* v0.2.5 — Zia URL/search pop-up specificity correction.'));
+const popup=css.slice(
+ css.indexOf('/* v0.2.5 — Zia URL/search pop-up specificity correction.'),
+ css.indexOf('/* v0.2.6 — Independently enabled preview-card glass.')
+);
 const clean=popup.replace(/\/\*[\s\S]*?\*\//g,'');
 const ghost=':not(#zia-none):not(#zia-none-2):not(#zcth-popup-priority)';
 const occurs=(text,needle)=>text.split(needle).length-1;
 
 test('025 fixes 023 popup paint being overridden by Zia 2.118 high-specificity !important',()=>{
- assert.equal(theme.version,'0.2.5');
+ assert.equal(theme.version,'0.2.6');
  assert.equal(occurs(clean,ghost),3,'main pop-up and two contrast rules all win the cascade');
  assert.match(clean,new RegExp('#urlbar#urlbar:is\\(\\[breakout-extend\\]'));
  // Zia's own normal popup selector carries 2 ghost ID conditions and

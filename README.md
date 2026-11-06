@@ -1,4 +1,45 @@
-# Zen Compact Transparent HDR Guard v0.2.5
+# Zen Compact Transparent HDR Guard v0.2.6
+
+## v0.2.6 — 預覽卡片與側欄使用一致的毛玻璃參數
+
+本次新增 **「預覽卡片跟隨 HDR Guard 毛玻璃（單一分頁與群組）」** 設定，**預設關閉**，對應 Sine 偏好值 `mod.compacttpr.previewcardcustomblur`。
+
+開啟後，以下四個 Zia／Site Folders 預覽容器共用 HDR Guard 既有的自訂背景色、透明度與模糊半徑，與浮動側欄及 v0.2.5 URL Popup 的設定一致：
+
+- Zia 單一分頁預覽：`#zia-tab-card`
+- Zia 原生群組預覽：`#zia-folder-card`
+- Zia 提示預覽：`#zia-tip-card`
+- Zen Site Folders 0.7.6 獨立群組預覽：`#zsf-folder-hover-card`
+
+**外觀：** 使用 `--mod-compacttpr-customcolor-final`、`--mod-compacttpr-transparentvalue`、`--mod-compacttpr-customblur`，不再沿用 Zia 預設的 `76%` 實色及 `blur(24px) saturate(1.6)`。只覆蓋卡片本體的顏色與模糊，不更動大小、位置、圓角、陰影、進出動畫、內部行距、群組排序或音量動畫。
+
+**上游依賴：** 仍須在 Zia 啟用 `zia.cards.blur`（預覽卡片的毛玻璃選項）；關閉此上游選項或 HDR Guard 新開關，回到 Zia／Site Folders 原生卡片外觀。不修改 Zia 或 Site Folders 專案。
+
+### SDR／HDR 適用條件
+
+- 一般網頁可直接使用自訂預覽卡片。
+- 已確認 SDR 且開啟 HDR Guard SDR 自訂毛玻璃時套用。
+- 已確認 HDR 且開啟 HDR Guard HDR 自訂毛玻璃、並允許 Zia 影片上方毛玻璃時套用。
+- Bilibili `www.bilibili.com/*` 的快速模式啟用時直接套用，不另行等待串流分類（與 0.2.4 一致）。
+- **HDR 未開放、未知格式影片或 Zia 的影片毛玻璃關閉時**，保留 Zia 原生預覽卡片外觀，不強制啟用影片合成。
+
+### HDR 安全與驗證
+
+新增的 CSS **只在卡片本身沒有 `hidden` 時作用**；不添加 `will-change: transform`、`backface-visibility`、影片亮度修正，亦不修改 Zia／Site Folders 既有的 `:has(可見卡片)` 合成啟閉。預覽卡片開啟時 HDR 可能被 Gecko 轉成較暗的合成畫面，關閉卡片後應由 Zia 釋放合成圖層；最終是否立即恢復原始 HDR 亮度仍須以 macOS OLED 實機確認。
+
+### 回退
+
+1. **立即還原：** 在 Sine 取消勾選「預覽卡片跟隨 HDR Guard 毛玻璃」，保持現有 HDR／SDR／Popup 設定不變。
+2. **完整退回：** [v0.2.5 正式版](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.5)；已固定備份分支 `backup/v0.2.5-before-card-glass`，Commit `cee605f87df1305d76222aa880beaac65357df98`。
+3. v0.2.1 以來既有的穩定標籤與備份分支皆保留。
+
+### 安裝與驗收
+
+在 Sine 更新到 0.2.6，開啟新選項與 Zia 卡片毛玻璃選項，完整退出並重新開啟 Zen。先在普通網頁比較側欄、單一分頁預覽及 Site Folders 群組預覽是否使用相同的顏色／模糊參數；再播放 SDR、HDR 影片，特別確認 **卡片消失後 HDR 立即恢復亮度**。為方便辨識，可以暫時將自訂模糊從 5px 改成 12px，比較卡片是否跟著改變，再改回原設定。
+
+---
+
+## v0.2.5 歷史說明
 
 ## v0.2.5 — Zia Popup 毛玻璃樣式被覆蓋的修正
 

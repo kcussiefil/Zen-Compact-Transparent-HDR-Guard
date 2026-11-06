@@ -12,9 +12,9 @@ const manager=read('sdr-glass.uc.js');
 const actor=read('actors/ZcthUniversalChild.sys.mjs');
 const parent=read('actors/ZcthUniversalParent.sys.mjs');
 
-test('v0.2.5 is an independent Sine MOD that retains both original scripts',()=>{
+test('v0.2.6 is an independent Sine MOD that retains both original scripts',()=>{
  assert.equal(theme.id,'zen-compact-transparent-hdr-guard');
- assert.equal(theme.version,'0.2.5');
+ assert.equal(theme.version,'0.2.6');
  assert.equal(theme.style.chrome,'chrome.css');
  assert.ok(theme.scripts['video-page.uc.js']);
  assert.ok(theme.scripts['sdr-glass.uc.js']);
@@ -27,6 +27,8 @@ test('opt-in true glass and editable site/video settings have valid defaults',()
    'HDR experiment should default to OFF for immediate rollback');
  assert.equal(get('mod.compacttpr.urlbarcustomblur')?.defaultValue,false,
    'URL pop-up experiment should default to OFF for immediate rollback');
+ assert.equal(get('mod.compacttpr.previewcardcustomblur')?.defaultValue,false,
+   'Preview cards must remain Zia-native until explicitly opted in');
  assert.equal(get('mod.compacttpr.bilibiliinstantglass')?.defaultValue,true,
    'Requested Bilibili URL-level immediate override is on by default');
  assert.equal(get('mod.compacttpr.sdrsitepatterns')?.type,'string');

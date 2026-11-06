@@ -64,6 +64,12 @@
     "defaultValue": false
   },
   {
+    "property": "mod.compacttpr.previewcardcustomblur",
+    "label": "預覽卡片跟隨 HDR Guard 毛玻璃（單一分頁與群組；需 Zia 預覽卡片毛玻璃開啟，預設關閉）",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
     "property": "mod.compacttpr.bilibiliinstantglass",
     "label": "Bilibili 全站立即使用自訂毛玻璃（www.bilibili.com/*；跳過 SDR/HDR 檢查，預設開啟）",
     "type": "checkbox",
