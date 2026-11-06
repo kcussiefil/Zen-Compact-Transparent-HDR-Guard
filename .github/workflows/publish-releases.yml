@@ -1,0 +1,41 @@
+name: Publish HDR Guard releases
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - theme.json
+      - "releases/**"
+      - ".github/workflows/publish-releases.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.repository == 'kcussiefil/Zen-Compact-Transparent-HDR-Guard'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Publish version from theme.json
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          current="$(node -p "JSON.parse(require('fs').readFileSync('theme.json', 'utf8')).version")"
+          tag="v$current"
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Bad tag: $tag"; exit 1; }
+          notes="releases/$tag.md"
+          test -s "$notes"
+          if gh release view "$tag" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "Already published: $tag"
+          else
+            gh release create "$tag" --repo "$GH_REPO" --target "$GITHUB_SHA" \
+              --title "Zen Compact Transparent HDR Guard $tag" --notes-file "$notes"
+            echo "Published $tag from $GITHUB_SHA"
+          fi

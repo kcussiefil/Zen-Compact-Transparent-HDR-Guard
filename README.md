@@ -1,4 +1,31 @@
-# Zen Compact Transparent HDR Guard v0.1.9
+# Zen Compact Transparent HDR Guard v0.2.0
+
+Zen／Sine 獨立 MOD，支援 [Zia v2.118.0](https://github.com/z1n-k/zia/releases/tag/v2.118.0) 的影片毛玻璃合成與舊版 HDR Guard 的 HDR／SDR 串流辨識。
+
+## v0.2.0（020）：Zia 2.118 影片毛玻璃相容性
+
+### 修正
+- **移除 019 舊版影片頁面強制實心**：YouTube、Bilibili 的影片頁面不再額外把 `.zen-toolbar-background`、Zia 預覽卡片改成實色、關閉 `backdrop-filter`。
+- **不再永久干預影片合成**：移除影片網址對應的 `will-change: auto !important`、`backface-visibility: visible !important`。由 Zia 2.118 在側欄實際顯示時啟用合成，隱藏後解除，不添加常駐的 `will-change: transform`。
+- **非 YouTube／Bilibili 的 HTML5 影片也一致處理**：Zia 偵測到選中或分割窗格中的可見影片時，讓 Zia 原生模糊規則接手，而不是套用 019 的一般網頁自訂浮動背景。
+- **保留 019 所有原功能**：HDR 優先判定、SDR 影片識別、YouTube／Bilibili 畫質偵測、未知網站與單支影片手動規則、浮動側欄外觀設定，以及分割畫面保護均未移除。
+
+### 建議設定
+1. Zia 2.118 的 **Look → Blur over video** 設為開啟。啟用後 Zia 讓影片上方的毛玻璃保留，但 HDR 影片在側欄顯示時可能失去 HDR；這是上游合成方式的限制。
+2. HDR Guard 保留「啟用浮動側欄毛玻璃」。SDR 實驗性毛玻璃開關可維持既有設定；當 Zia 的 Blur over video 開啟時，由 Zia 自行管理，不需讓兩邊重複強制合成。
+3. 完全退出 Zen 後重新開啟，以更新 Sine 樣式。
+
+### 實測驗收
+- HDR：側欄隱藏時正常；側欄展開後有毛玻璃，可接受略暗；收合後立即恢復正常。
+- SDR：側欄、普通分頁卡片、Zen Site Folders 0.7.6 的群組預覽維持原有效果。
+- 在影片頁面捲動到留言區、跨影片／分頁切換、開關預覽卡片，確認背景沒有變成實心或一直發灰。
+- 關閉 Zia Blur over video 後，原本 019 的保守 HDR 影片保護及可選 SDR 毛玻璃仍可運作。
+
+本版測試可驗證程式規則與自動化邏輯，但**不能代替 macOS 27.2＋OLED 上的 HDR／SDR 實機視覺驗收**。若有顯示異常，可在 Sine 停用此 MOD，或回到 019 commit `c2b1c048cc635c5023296a7f09854e872803243e`。
+
+---
+
+## v0.1.9 保留功能說明
 
 Zen／Sine 獨立 MOD。以 [Zia v2.117.6](https://github.com/z1n-k/zia) 的 `[zia-video]` 畫面可見影片狀態作為共通入口，維持原本浮動側欄、預覽卡片、網址列／新分頁搜尋、尋找列、手勢箭頭和截圖工具等毛玻璃樣式。
 
