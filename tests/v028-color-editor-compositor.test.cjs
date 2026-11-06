@@ -12,7 +12,7 @@ const rule=css.slice(start,css.indexOf('/* v0.2.9 — Opt-in macOS Zen Glance gl
 const clean=rule.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 test('028 uses existing Sine opt-in with disabled-by-default rollback',()=>{
- assert.equal(theme.version,'0.2.8');
+ assert.equal(theme.version,'0.2.9');
  assert.ok(start>0);
  assert.equal(prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur')?.defaultValue,false);
  assert.match(clean,/-moz-bool-pref: "mod\.compacttpr\.previewcardcustomblur"/);
