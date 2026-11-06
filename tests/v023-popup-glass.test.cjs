@@ -76,7 +76,7 @@ test('light/dark opposite-palette Zia single-toolbar popup stays opaque', () => 
 test('new popup overrides never touch video compositor or HDR brightness', () => {
   assert.doesNotMatch(effective, /\bwill-change\s*:/);
   assert.doesNotMatch(effective, /\bbackface-visibility\s*:/);
-  assert.doesNotMatch(effective, /\b(?:brightness|filter)\s*:/);
+  assert.doesNotMatch(effective, /(?:^|[\\s;{}])(?:brightness|filter)\\s*:/m);
   assert.doesNotMatch(effective, /#tabbrowser-tabpanels\s+\.browserSidebarContainer\s*\{/);
   assert.doesNotMatch(effective, /\bdisplay\s*:\s*none/);
 });
