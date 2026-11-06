@@ -1,4 +1,4 @@
-name: HDR Guard 023 regression
+name: HDR Guard regression and release policy
 
 on:
   pull_request:

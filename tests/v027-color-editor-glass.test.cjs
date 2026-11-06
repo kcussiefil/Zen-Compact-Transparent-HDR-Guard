@@ -11,12 +11,15 @@ const prior=css.slice(
  css.indexOf('/* v0.2.6 — Independently enabled preview-card glass.'),
  css.indexOf('/* v0.2.7 — Site Folders')
 );
-const color=css.slice(css.indexOf('/* v0.2.7 — Site Folders'));
+const color=css.slice(
+ css.indexOf('/* v0.2.7 — Site Folders'),
+ css.indexOf('/* v0.2.8 — Selected-color dialog compositor:')
+);
 const cleaned=color.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 
 test('027 is visual-only and reuses preview card switch, no new prefs',()=>{
- assert.equal(theme.version,'0.2.7');
+ assert.equal(theme.version,'0.2.8');
  const setting=prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur');
  assert.equal(setting?.defaultValue,false,'instant rollback to original Site Folders card');
  assert.ok(setting.label.includes('選取分頁顏色'));
