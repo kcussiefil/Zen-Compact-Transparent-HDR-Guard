@@ -13,7 +13,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. It adjusts floating-sidebar 
 - **SDR video** custom glass (off by default).
 - **HDR video** custom glass (off by default; requires Zia *Blur over video*).
 - URL/search popup custom glass (off by default).
-- **Zia / Site Folders preview cards and the Site Folders selected-tab color editor** with matching HDR Guard glass variables (off by default; color editor added in v0.2.7).
+- **Zia / Site Folders preview cards and the Site Folders selected-tab color editor** with matching HDR Guard glass variables (off by default; the macOS dialog blur is corrected in v0.2.8).
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
 These settings live in Sine; the authoritative names and defaults are in [`preferences.json`](preferences.json).
@@ -30,7 +30,7 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 
 - A page containing a video is not proof that its stream is SDR or HDR. The classifier uses available playback/codec evidence; unknown remains unknown.
 - Confirmed HDR takes priority over ordinary SDR rules. **The Bilibili immediate-glass option is a deliberate opt-in exception** and can allow blur without waiting for HDR checks. Disable it if strict video protection matters more than glass effects.
-- The preview-card option also styles Site Folders' non-modal selected-tab color dialog as of v0.2.7, while Site Folders continues to own all picker functionality. It uses the same sidebar/popup style variables for Zia tab/folder/tip cards and Site Folders' independent group card. It does **not** intentionally change card layout or keep the video compositor active after the card disappears.
+- The preview-card option styles Site Folders' non-modal selected-tab color dialog. Since v0.2.8, the browser content is promoted for actual macOS background blur **only while that editor is open**; closing it removes the condition. Site Folders still owns all picker functionality. It uses the same sidebar/popup style variables for Zia tab/folder/tip cards and Site Folders' independent group card. It does **not** intentionally change card layout or keep the video compositor active after the card disappears.
 - Zia's video blur can still make HDR content appear darker or washed out on macOS. HDR Guard cannot guarantee HDR-preserving blur; verify that normal video presentation returns when the card/sidebar is hidden.
 - Node regression tests check rules and selectors, **not actual OLED/GPU color or brightness**.
 
@@ -38,13 +38,13 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 
 - Test ordinary webpages, SDR videos, HDR videos, unknown-format videos, Bilibili, and preview cards separately. Restart Zen when applying a newly installed script.
 - If a visual problem appears, first disable the specific HDR Guard option in Sine; you can also disable the mod without changing other projects.
-- The previous [v0.2.5 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.5) remains available as a full code rollback point.
+- The previous [v0.2.7 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.7) remains available as a full code rollback point; you can disable the preview-card setting for immediate rollback.
 
 ## Project information
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.2.6** ([`theme.json`](theme.json)) |
+| Current version | **v0.2.8** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
