@@ -64,14 +64,20 @@
     "defaultValue": false
   },
   {
+    "property": "mod.compacttpr.bilibiliinstantglass",
+    "label": "Bilibili 全站立即使用自訂毛玻璃（www.bilibili.com/*；跳過 SDR/HDR 檢查，預設開啟）",
+    "type": "checkbox",
+    "defaultValue": true
+  },
+  {
     "type": "separator",
     "label": "跨網站 SDR／HDR 識別與手動覆寫"
   },
   {
     "property": "mod.compacttpr.sdrsitepatterns",
-    "label": "未知格式允許 SDR 毛玻璃的網站網址規則（以 ; 分隔；僅匹配網域及路徑，已知 HDR 一律優先）",
+    "label": "未知格式允許 SDR 毛玻璃的網站網址規則（以 ; 分隔；Bilibili 快速模式關閉時才使用此備援；已知 HDR 優先）",
     "type": "string",
-    "defaultValue": "www.bilibili.com/video/*;www.bilibili.com/bangumi/play/*"
+    "defaultValue": "www.bilibili.com/*"
   },
   {
     "property": "mod.compacttpr.manualvideourl",
