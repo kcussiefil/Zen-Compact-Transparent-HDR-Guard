@@ -16,6 +16,7 @@
 | HDR 影片自訂毛玻璃 | 關閉，需 Zia *Blur over video* |
 | 網址列／搜尋彈出視窗套用自訂毛玻璃 | 關閉 |
 | **Zia 單頁／原生資料夾／提示卡片、Site Folders 群組預覽與選取分頁顏色視窗**套用相同毛玻璃參數 | 關閉（v0.2.8 修正 macOS 的實際模糊） |
+| **Zen Glance 開啟時的浮動側欄毛玻璃修補** | **關閉**（macOS 測試選項；保護背景 HDR 影片合成層） |
 | Bilibili 全站立即套用自訂毛玻璃 | **開啟**；刻意略過 SDR／HDR 檢查 |
 
 所有實際設定名稱與預設值請以 [`preferences.json`](preferences.json) 為準。
@@ -28,6 +29,8 @@
 4. 先維持預設值，依需求分別開啟 SDR、HDR、Popup、預覽卡片選項。
 5. 預覽卡片要接管毛玻璃時，也要開啟 Zia 的卡片毛玻璃；HDR 影片上的自訂效果另外需要 Zia *Blur over video*。
 
+Glance 修補須另行在 Sine 開啟「Zen Glance 開啟時修正浮動側欄毛玻璃」。此為未經 OLED 實機驗證的測試功能；若 HDR 亮度異常，立刻關閉此開關即可回退。
+
 ## HDR／SDR 注意事項
 
 - 畫面上有影片，**不代表能可靠辨識 HDR 或 SDR**。判斷依播放器提供的可用資訊進行，無法辨識時不應假設就是 SDR。
@@ -38,11 +41,11 @@
 
 ## 問題處理與文件
 
-出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.2.7](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.7)；若只是外觀問題，可在 Sine 關閉預覽卡片毛玻璃選項。
+出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.2.8](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.8)；若只是外觀問題，可在 Sine 關閉預覽卡片毛玻璃選項。
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.2.8**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.2.9**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
