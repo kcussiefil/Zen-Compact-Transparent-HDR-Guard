@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.4
+/* Zen Compact Transparent HDR Guard v0.2.5
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -286,8 +286,13 @@
 }
 
 
-/* v0.2.3 — Optional custom glass for Zia's URL/search pop-up.
+/* v0.2.5 — Zia URL/search pop-up specificity correction.
  * The background is customised ONLY while Zia's own pop-up is shown.
+ * Zia 2.118 uses :root:not(#zia-none):not(#zia-none-2) and
+ * #urlbar#urlbar with !important. Its two ghost IDs inflate CSS
+ * specificity, defeating 0.2.3/0.2.4 even with identical CSS values.
+ * A third :not(#...) guard guarantees our popup style wins regardless
+ * of stylesheet load order, but changes no element matching.
  * Zia remains sole owner of browserSidebarContainer composition:
  * do not set will-change, backface-visibility, or alter video brightness.
  *
@@ -300,7 +305,7 @@
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
        (-moz-bool-pref: "mod.compacttpr.urlbarcustomblur") {
   @media -moz-pref("zia.urlbar.pop-up-blur") {
-    :root:is(
+    :root:not(#zia-none):not(#zia-none-2):not(#zcth-popup-priority):is(
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
@@ -318,7 +323,7 @@
     }
 
     /* Preserve Zia's contrast guard when toolbar and popup palettes differ. */
-    :root[zen-single-toolbar="true"][zia-light]:is(
+    :root:not(#zia-none):not(#zia-none-2):not(#zcth-popup-priority)[zen-single-toolbar="true"][zia-light]:is(
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
@@ -327,7 +332,7 @@
       [data-zcth-hdr-glass]
     ) #urlbar#urlbar[breakout-extend][zia-pop-site="dark"]:not([zia-classic])
       > .urlbar-background,
-    :root[zen-single-toolbar="true"]:not([zia-light]):is(
+    :root:not(#zia-none):not(#zia-none-2):not(#zcth-popup-priority)[zen-single-toolbar="true"]:not([zia-light]):is(
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
