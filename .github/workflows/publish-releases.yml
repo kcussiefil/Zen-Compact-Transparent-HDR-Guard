@@ -20,7 +20,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Publish version from theme.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax, regressions and release policy (mandatory preflight)
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check sdr-glass.uc.js
+          node --check video-page.uc.js
+          node --check actors/ZcthUniversalParent.sys.mjs
+          node --check actors/ZcthUniversalChild.sys.mjs
+          node --test tests/*.test.*
+      - name: Publish release from canonical notes
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,10 +44,14 @@ jobs:
           [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Bad tag: $tag"; exit 1; }
           notes="releases/$tag.md"
           test -s "$notes"
+          title="$(head -n 1 "$notes" | sed 's/^# //')"
+          [[ "$title" == "Zen Compact Transparent HDR Guard $tag — "* ]] || {
+            echo "Release title does not follow docs/RELEASE_POLICY.md"; exit 1;
+          }
           if gh release view "$tag" --repo "$GH_REPO" >/dev/null 2>&1; then
-            echo "Already published: $tag"
+            echo "Already published: $tag (historical release unchanged)"
           else
             gh release create "$tag" --repo "$GH_REPO" --target "$GITHUB_SHA" \
-              --title "Zen Compact Transparent HDR Guard $tag" --notes-file "$notes"
+              --title "$title" --notes-file "$notes"
             echo "Published $tag from $GITHUB_SHA"
           fi
