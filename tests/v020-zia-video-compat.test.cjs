@@ -10,8 +10,8 @@ const manifest = JSON.parse(fs.readFileSync(path.join(root, 'theme.json'), 'utf8
 const prefs = JSON.parse(fs.readFileSync(path.join(root, 'preferences.json'), 'utf8'));
 const manager = fs.readFileSync(path.join(root, 'sdr-glass.uc.js'), 'utf8');
 
-test('022 retains all 019 actor, stream classification and user settings', () => {
-  assert.equal(manifest.version, '0.2.2');
+test('023 retains all 019 actor, stream classification and user settings', () => {
+  assert.equal(manifest.version, '0.2.3');
   assert.ok(manifest.scripts['video-page.uc.js']);
   assert.ok(manifest.scripts['sdr-glass.uc.js']);
   assert.equal(manifest.preferences, 'preferences.json');
@@ -20,13 +20,14 @@ test('022 retains all 019 actor, stream classification and user settings', () =>
     'mod.compacttpr.usecompacttransparent',
     'mod.compacttpr.sdrrealblur',
     'mod.compacttpr.hdrrealblur',
+    'mod.compacttpr.urlbarcustomblur',
     'mod.compacttpr.sdrsitepatterns',
     'mod.compacttpr.manualvideourl',
   ]) assert.ok(prefs.some(p => p.property === key), key);
   assert.match(manager, /states\.some\(x=>x\.state==='hdr'\)/);
 });
 
-test('022 removes old watch-page opaque CSS and forced no-compositor overrides', () => {
+test('023 removes old watch-page opaque CSS and forced no-compositor overrides', () => {
   assert.doesNotMatch(effective, /:root\[data-zcth-video-page\]:not\(\[zia-video\]\)/,
     'watch URL is never a reason to force solid video paint');
   assert.doesNotMatch(effective, /will-change:\s*auto\s*!important/,
@@ -85,7 +86,7 @@ test('state matrix keeps HDR protected when upstream blur is disabled', () => {
   }),true,'ordinary pages preserve user-selected transparent style');
 });
 
-test('022 HDR custom appearance is strictly gated by sidebar visibility',()=>{
+test('023 HDR custom appearance is strictly gated by sidebar visibility',()=>{
  const start=effective.indexOf('[data-zcth-hdr-glass]:is(');
  const end=effective.indexOf(')\n    ) {',start);
  assert.ok(start>=0 && end>start, 'HDR selector must exist in primary custom sidebar paint');

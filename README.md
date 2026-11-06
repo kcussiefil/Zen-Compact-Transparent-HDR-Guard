@@ -1,4 +1,29 @@
-# Zen Compact Transparent HDR Guard v0.2.2
+# Zen Compact Transparent HDR Guard v0.2.3
+
+## v0.2.3 — Zia 網址列／搜尋彈出視窗的自訂毛玻璃
+
+依照 Zia 2.118.0 的「**The pop-up is see-through, the page blurred behind**」設計，新增 **「網址列／搜尋彈出視窗使用 HDR Guard 自訂毛玻璃」** 開關（預設關閉）。啟用後，Zia 的網址列、搜尋建議，以及沒有建議清單時的浮動搜尋列，將使用 HDR Guard 現有的背景顏色、透明度與模糊強度，不會更動彈出視窗的幾何尺寸、位置或開合動畫。
+
+### 作用條件及 HDR 保護
+
+- 必須開啟 HDR Guard 的「啟用浮動側欄毛玻璃」，以及 Zia 的「The pop-up is see-through, the page blurred behind」。
+- 一般網頁：啟用新選項後，彈出視窗使用 HDR Guard 自訂毛玻璃。
+- SDR 影片：必須由原本的 SDR 分類器確認並啟用 **SDR 自訂毛玻璃**；未啟用則維持 Zia 原生效果。
+- HDR 影片：必須由原本的 HDR 分類器確認、開啟 **HDR 自訂毛玻璃**，且 Zia 已允許影片上方模糊。若關閉其中任一項，或影片格式不明，就維持 Zia 的原生彈出視窗。
+- Zia 單一工具列模式若彈出視窗顏色與工具列深淺相反，仍使用 Zia 實色背景，避免文字難以辨識。
+- **不新增任何影片 `will-change: transform`、`backface-visibility`、亮度補償，也不在視窗關閉後保留彈出視窗合成。** 網頁合成時機仍交由 Zia 控制。Zia 開啟影片背景毛玻璃時，彈出視窗展開可能使 HDR 略暗，這是 Gecko／macOS 上游現象，不能僅靠這個外觀 MOD 消除。
+
+### 獨立回退
+
+1. 新選項預設關閉；若有問題，可在 Sine 立即關掉「網址列／搜尋彈出視窗使用 HDR Guard 自訂毛玻璃」，原本的 HDR／SDR 側欄設定不受影響。
+2. 若需要完整還原 0.2.2，可使用 [v0.2.2 正式版](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.2)，Commit `5a2f6b9e897673ffb1c7ccf883f1375660e8e8d8`；已另建 `backup/v0.2.2-before-popup` 分支。
+3. 先前使用者實測正常的 0.2.1 仍保留獨立 `backup/v0.2.1-tested-stable` 分支與 [v0.2.1 正式版](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.1)。
+
+**本輪靜態回歸測試不能代替 macOS 27.2＋OLED 的實際 HDR 亮度驗收。** 必須再確認 HDR 播放期間彈出視窗關閉後，畫面不會持續發灰。
+
+---
+
+## v0.2.2 歷史說明
 
 ## v0.2.2 — HDR 自訂側欄毛玻璃，側欄收起不持續干擾 HDR
 

@@ -1,4 +1,4 @@
-name: HDR Guard 020 regression
+name: HDR Guard 023 regression
 
 on:
   pull_request:

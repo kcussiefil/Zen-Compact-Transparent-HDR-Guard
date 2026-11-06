@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.2
+/* Zen Compact Transparent HDR Guard v0.2.3
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -279,5 +279,59 @@
     ) {
     will-change: transform !important;
     backface-visibility: hidden !important;
+  }
+}
+
+
+/* v0.2.3 — Optional custom glass for Zia's URL/search pop-up.
+ * The background is customised ONLY while Zia's own pop-up is shown.
+ * Zia remains sole owner of browserSidebarContainer composition:
+ * do not set will-change, backface-visibility, or alter video brightness.
+ *
+ * A selected video is allowed only if the existing 0.2.2 classifier
+ * explicitly activated the SDR or HDR appearance marker. Unknown / HDR
+ * with custom HDR OFF falls back to Zia-native popup glass.
+ *
+ * Keep opposite-palette single-toolbar search results opaque to preserve
+ * contrast, matching Zia 2.118's original readability exception. */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+       (-moz-bool-pref: "mod.compacttpr.urlbarcustomblur") {
+  @media -moz-pref("zia.urlbar.pop-up-blur") {
+    :root:is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-sdr-glass],
+      [data-zcth-hdr-glass]
+    ) #urlbar#urlbar:is([breakout-extend], [zen-floating-urlbar="true"]):not([zia-classic])
+      > .urlbar-background {
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+    }
+
+    /* Preserve Zia's contrast guard when toolbar and popup palettes differ. */
+    :root[zen-single-toolbar="true"][zia-light]:is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-sdr-glass],
+      [data-zcth-hdr-glass]
+    ) #urlbar#urlbar[breakout-extend][zia-pop-site="dark"]:not([zia-classic])
+      > .urlbar-background,
+    :root[zen-single-toolbar="true"]:not([zia-light]):is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-sdr-glass],
+      [data-zcth-hdr-glass]
+    ) #urlbar#urlbar[breakout-extend][zia-pop-site="light"]:not([zia-classic])
+      > .urlbar-background {
+      background: var(--zia-urlbar-open-bg) !important;
+      backdrop-filter: none !important;
+    }
   }
 }

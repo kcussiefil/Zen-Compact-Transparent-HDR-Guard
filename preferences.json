@@ -58,6 +58,12 @@
     "defaultValue": false
   },
   {
+    "property": "mod.compacttpr.urlbarcustomblur",
+    "label": "網址列／搜尋彈出視窗使用 HDR Guard 自訂毛玻璃（需 Zia 彈出視窗毛玻璃開啟；預設關閉）",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
     "type": "separator",
     "label": "跨網站 SDR／HDR 識別與手動覆寫"
   },
