@@ -66,12 +66,12 @@ test('release policy: separate CI evidence from actual macOS OLED acceptance',()
 test('release policy: previous tag, backup and immediate rollback are documented',()=>{
  const rollback=notes.split('## Rollback')[1];
  assert.match(rollback,/Sine/);
- const changelogVersions=[...changelog.matchAll(/^\\| \\[v(\\d+\\.\\d+\\.\\d+)\\]\\(releases\\/v\\1\\.md\\)/gm)].map(m=>m[1]);
+ const changelogVersions=[...changelog.matchAll(/^\| \[v(\d+\.\d+\.\d+)\]\(releases\/v\d+\.\d+\.\d+\.md\)/gm)].map(m=>m[1]);
  assert.equal(changelogVersions[0],version,'Latest changelog entry must be current release');
  const previous=changelogVersions[1];
  assert.ok(previous,'Latest release must retain a previous rollback reference');
  assert.ok(rollback.includes('v'+previous),'Rollback must cite the previous release tag');
- assert.match(rollback,/backup\\/v\\d+\\.\\d+\\.\\d+[-a-z0-9]*/i);
+ assert.match(rollback,/backup\/v\d+\.\d+\.\d+[-a-z0-9]*/i);
  assert.match(rollback,/[a-f0-9]{40}/);
  assert.match(rollback,/(OFF|disable)/);
 });
