@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.0
+/* Zen Compact Transparent HDR Guard v0.2.1
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -33,7 +33,9 @@
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
-      [data-zcth-sdr-glass][zia-video]
+      /* Explicit SDR opt-in now also works when Zia 2.118 clears
+         root [zia-video] under its own Blur over video preference. */
+      [data-zcth-sdr-glass]
     ) {
     @media (-moz-bool-pref: "zen.view.compact.hide-tabbar") or (-moz-bool-pref: "zen.view.use-single-toolbar") {
       &:not([zen-compact-animating]) {
