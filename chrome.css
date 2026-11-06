@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.8
+/* Zen Compact Transparent HDR Guard v0.2.9
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -458,6 +458,72 @@
         will-change: transform !important;
         backface-visibility: hidden !important;
       }
+    }
+  }
+}
+
+
+/* v0.2.9 — Opt-in macOS Zen Glance glass compositor.
+ *
+ * Zen opens a distinct .zen-glance-overlay while its parent is marked
+ * .zen-glance-background. Promote the foreground preview while the floating
+ * sidebar is shown; do not promote an HDR video in the background.
+ *
+ * Default OFF; disable mod.compacttpr.glanceglass for immediate rollback.
+ * Both promotion rules stop matching immediately when Glance closes.
+ */
+@media (-moz-platform: macos) {
+  @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+         (-moz-bool-pref: "mod.compacttpr.glanceglass") {
+    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+      #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+    ) #titlebar {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+      #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+    ) #titlebar::before {
+      content: "" !important;
+      position: absolute !important;
+      inset: 0 !important;
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+      z-index: -1 !important;
+      pointer-events: none !important;
+    }
+
+    /* Only while sidebar is visible; do not touch a video in the Glance preview. */
+    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+      #navigator-toolbox:is([zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+        [flash-popup], [movingtab], [zen-compact-mode-active], [animate="true"])
+    ):has(
+      #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+    ) #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected:not(
+      :has(browser[zia-video])
+    ) {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
+    }
+
+    /* Parent/background compositor: never override Zia/HDR Guard video protection. */
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"], [zia-video], [data-zcth-video-page]
+    ):not(
+      :has(#tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-background browser[zia-video])
+    ):has(
+      #navigator-toolbox:is([zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+        [flash-popup], [movingtab], [zen-compact-mode-active], [animate="true"])
+    ):has(
+      #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+    ) #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-background.deck-selected {
+      will-change: transform !important;
+      backface-visibility: hidden !important;
     }
   }
 }

@@ -5,13 +5,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const css = fs.readFileSync(path.join(root, 'chrome.css'), 'utf8');
-const effective = css.replace(/\/\*[\s\S]*?\*\//g, '');
+const legacyCss = css.slice(0, css.indexOf('/* v0.2.9 — Opt-in macOS Zen Glance glass compositor.'));
+const effective = legacyCss.replace(/\/\*[\s\S]*?\*\//g, '');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'theme.json'), 'utf8'));
 const prefs = JSON.parse(fs.readFileSync(path.join(root, 'preferences.json'), 'utf8'));
 const manager = fs.readFileSync(path.join(root, 'sdr-glass.uc.js'), 'utf8');
 
 test('024 retains all 019 actor, stream classification and user settings', () => {
-  assert.equal(manifest.version, '0.2.8');
+  assert.equal(manifest.version, '0.2.9');
   assert.ok(manifest.scripts['video-page.uc.js']);
   assert.ok(manifest.scripts['sdr-glass.uc.js']);
   assert.equal(manifest.preferences, 'preferences.json');

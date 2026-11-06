@@ -19,7 +19,7 @@ const cleaned=color.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 
 test('027 is visual-only and reuses preview card switch, no new prefs',()=>{
- assert.equal(theme.version,'0.2.8');
+ assert.equal(theme.version,'0.2.9');
  const setting=prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur');
  assert.equal(setting?.defaultValue,false,'instant rollback to original Site Folders card');
  assert.ok(setting.label.includes('選取分頁顏色'));
