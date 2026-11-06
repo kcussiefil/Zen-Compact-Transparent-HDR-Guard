@@ -1,4 +1,4 @@
-// HDR Guard v0.1.9 — Zia-visible video, universal stream/URL policy.
+// HDR Guard v0.2.1 — Zia 2.118 Blur over video-aware SDR switch.
 (() => {
 'use strict';
 const KEY='__zcthUniversalV019',ACTOR='ZcthUniversal';
@@ -68,8 +68,21 @@ function videoBrowsers(){
   )];
  }catch(_){}
  if(nodes.length)return [...new Set(nodes)];
+ // Zia 2.118 with Blur over video deliberately CLEARS root [zia-video].
+ // Do not classify ordinary tabs without an actual visible video browser.
+ if(!root.hasAttribute('zia-video'))return [];
  const current=window.gBrowser?.selectedBrowser;
  return current?[current]:[];
+}
+function shouldClassify(){
+ if(!enabled())return false;
+ if(root.hasAttribute('zia-video'))return true;
+ // The option controls Zia's root flag, not browser[zia-video].
+ // With it enabled we still need SDR/HDR classification to operate the
+ // user's optional custom SDR surface (without forcing HDR composition).
+ let overVideo=false;
+ try{overVideo=Services.prefs.getBoolPref('zia.glass.blur-over-video',false)}catch(_){}
+ return overVideo&&videoBrowsers().length>0;
 }
 function clear(){
  root.removeAttribute('data-zcth-sdr-glass');
@@ -99,7 +112,7 @@ function stateFor(browser,allowManual){
    ? {state:'sdr',source:rule} : {state:'unknown',source:'probing'};
 }
 function render(){
- if(!alive||!enabled()||!root.hasAttribute('zia-video')){
+ if(!alive||!shouldClassify()){
   clear();unknownSince.clear();return;
  }
  const panes=videoBrowsers();
@@ -131,7 +144,7 @@ function schedule(delay=0){
 async function probe(){
  if(!alive)return;
  const browser=window.gBrowser?.selectedBrowser;
- if(!enabled()||!root.hasAttribute('zia-video')){clear();return}
+ if(!shouldClassify()){clear();return}
  if(!registered||!browser){render();return}
  if(busy){rerun=true;render();return}
  let actor;
@@ -157,7 +170,7 @@ const progress={onLocationChange(browser){
 try{window.gBrowser?.addTabsProgressListener(progress)}catch(_){}
 const observer=new MutationObserver(changes=>{
  if(changes.some(c=>c.attributeName==='zia-video')){
-  if(!root.hasAttribute('zia-video')){
+  if(!shouldClassify()){
    revision++;records.clear();unknownSince.clear();
   }
   render();schedule(0);
