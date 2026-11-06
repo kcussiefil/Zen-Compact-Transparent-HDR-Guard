@@ -12,9 +12,9 @@ const manager=read('sdr-glass.uc.js');
 const actor=read('actors/ZcthUniversalChild.sys.mjs');
 const parent=read('actors/ZcthUniversalParent.sys.mjs');
 
-test('v0.2.1 is an independent Sine MOD that retains both original scripts',()=>{
+test('v0.2.2 is an independent Sine MOD that retains both original scripts',()=>{
  assert.equal(theme.id,'zen-compact-transparent-hdr-guard');
- assert.equal(theme.version,'0.2.1');
+ assert.equal(theme.version,'0.2.2');
  assert.equal(theme.style.chrome,'chrome.css');
  assert.ok(theme.scripts['video-page.uc.js']);
  assert.ok(theme.scripts['sdr-glass.uc.js']);
@@ -23,6 +23,8 @@ test('v0.2.1 is an independent Sine MOD that retains both original scripts',()=>
 test('opt-in true glass and editable site/video settings have valid defaults',()=>{
  const get=p=>prefs.find(x=>x.property===p);
  assert.equal(get('mod.compacttpr.sdrrealblur')?.defaultValue,false);
+ assert.equal(get('mod.compacttpr.hdrrealblur')?.defaultValue,false,
+   'HDR experiment should default to OFF for immediate rollback');
  assert.equal(get('mod.compacttpr.sdrsitepatterns')?.type,'string');
  assert.match(get('mod.compacttpr.sdrsitepatterns')?.defaultValue||'',/bilibili\.com\/video\/\*/);
  assert.match(get('mod.compacttpr.sdrsitepatterns')?.defaultValue||'',/bangumi\/play\/\*/);
@@ -42,6 +44,7 @@ test('universal actor covers all frames and listens for video changes',()=>{
 test('one safe policy controls all Zia glass surfaces',()=>{
  assert.match(manager,/root\.hasAttribute\('zia-video'\)/);
  assert.match(manager,/data-zcth-sdr-glass/);
+ assert.match(manager,/data-zcth-hdr-glass/);
  assert.match(manager,/data-zcth-stream-state/);
  assert.match(manager,/some\(s=>s\.state==='hdr'\)/);
  assert.match(manager,/panes\.length===1/);

@@ -1,4 +1,42 @@
-# Zen Compact Transparent HDR Guard v0.2.1
+# Zen Compact Transparent HDR Guard v0.2.2
+
+## v0.2.2 — HDR 自訂側欄毛玻璃，側欄收起不持續干擾 HDR
+
+以已經實測正常的 **v0.2.1** 為基準，新增獨立「HDR 影片使用 HDR Guard 自訂毛玻璃」設定，**預設關閉**，可直接在 Sine 取消勾選，立即恢復 Zia 原生樣式。
+
+### 使用條件
+- Zia v2.118 的 **See-through surfaces keep blurring a video behind them** 必須開啟。
+- HDR Guard 的「啟用浮動側欄毛玻璃」維持開啟。
+- SDR 自訂毛玻璃開關完全獨立，沿用已確認正常的 v0.2.1 邏輯。
+- HDR 的來源必須由既有串流判斷器**確認為 HDR**；未知格式仍維持 Zia 原生效果，避免冒然改變 HDR 顯示。
+
+### 顯示狀態
+| 影片／側欄 | HDR 設定關閉 | HDR 設定開啟 |
+|---|---|---|
+| HDR，側欄收起 | Zia 原生 HDR | Zia 原生 HDR，不添加任何強制影片合成 |
+| HDR，側欄展開 | Zia 原生毛玻璃 | 使用 HDR Guard 自訂側欄透明度／模糊／背景／高度 |
+| HDR，側欄收合 | 回到正常 HDR | 自訂樣式退出，交由 Zia 恢復影片合成 |
+| SDR | v0.2.1 | v0.2.1，依獨立 SDR 開關 |
+| 未知影片格式 | Zia 原生 | Zia 原生 |
+
+### 實作範圍
+新增 `mod.compacttpr.hdrrealblur`（預設 `false`）。沿用原有 `ZcthUniversal` 串流判斷器，只在已確認 HDR、Zia 允許影片模糊時設定 HDR 自訂樣式標記。CSS 再要求 Zia 的側欄／浮動介面可見狀態，才套用與現有 SDR 相同的自訂浮動側欄樣式。
+
+**沒有新增 `will-change: transform`、`backface-visibility` 或亮度補償。** 影片層的合成啟閉仍完全由 Zia 決定。Zia 的 `Blur over video` 已知可能在側欄展開時讓 HDR 畫面略暗、失去 HDR 呈現；這是上游限制，本版只接管毛玻璃樣式。
+
+### 回退保護
+1. **立即回退外觀：** Sine 中取消勾選「HDR 影片使用 HDR Guard 自訂毛玻璃」，不必修改 SDR 設定，即恢復 Zia 原生效果。
+2. **完整回退程式碼：** 已另建獨立 `backup/v0.2.1-tested-stable` 分支，指向 `7a6ae9990b3ebedc3a74c2973988440c5e1cd430`；亦保留 [v0.2.1 正式版](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.1)。回到舊版後需重啟 Zen。
+3. 如果新版 Sine 不支援直接安裝舊版本，可將備份版本原始碼以後續新版本號恢復發布，避免重寫 Git 歷史或覆蓋 v0.2.1 tag。
+
+### 測試
+執行 `node --test tests/*.test.*` 及 JavaScript 語法檢查。自動測試涵蓋 HDR 開關預設關閉、動態切換、Zia 功能關閉、HDR／SDR 與未知狀態切換、分割窗格和影片消失後清除。
+
+**macOS 27.2＋OLED 的 HDR 亮度恢復及實際模糊呈現仍需實機驗證。** 不應以通過 Node 測試宣稱 HDR 畫面已實測正常。
+
+---
+
+## v0.2.1 歷史說明
 
 ## v0.2.1：修正 Zia 2.118 開啟「Blur over video」後 SDR 自訂樣式開關無效
 

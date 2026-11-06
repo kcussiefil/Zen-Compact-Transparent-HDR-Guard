@@ -1,4 +1,4 @@
-// HDR Guard v0.2.1 — Zia 2.118 Blur over video-aware SDR switch.
+// HDR Guard v0.2.2 — separate SDR and HDR visual opt-ins; native Zia compositor.
 (() => {
 'use strict';
 const KEY='__zcthUniversalV019',ACTOR='ZcthUniversal';
@@ -25,7 +25,10 @@ try{
  else console.warn('[HDR Guard] Universal actor not registered',e);
 }
 const pref=(name,def='')=>{try{return Services.prefs.getStringPref(name,def)}catch(_){return def}};
-const enabled=()=>Services.prefs.getBoolPref('mod.compacttpr.sdrrealblur',false);
+const sdrEnabled=()=>Services.prefs.getBoolPref('mod.compacttpr.sdrrealblur',false);
+const hdrEnabled=()=>Services.prefs.getBoolPref('mod.compacttpr.hdrrealblur',false);
+const ziaBlurOverVideo=()=>Services.prefs.getBoolPref('zia.glass.blur-over-video',false);
+const enabled=()=>sdrEnabled()||(hdrEnabled()&&ziaBlurOverVideo());
 function siteMatches(uri,rules){
  let u;try{u=new URL(uri)}catch(_){return false}
  if(u.protocol!=='https:'&&u.protocol!=='http:')return false;
@@ -80,12 +83,11 @@ function shouldClassify(){
  // The option controls Zia's root flag, not browser[zia-video].
  // With it enabled we still need SDR/HDR classification to operate the
  // user's optional custom SDR surface (without forcing HDR composition).
- let overVideo=false;
- try{overVideo=Services.prefs.getBoolPref('zia.glass.blur-over-video',false)}catch(_){}
- return overVideo&&videoBrowsers().length>0;
+ return ziaBlurOverVideo()&&videoBrowsers().length>0;
 }
 function clear(){
  root.removeAttribute('data-zcth-sdr-glass');
+ root.removeAttribute('data-zcth-hdr-glass');
  root.removeAttribute('data-zcth-stream-state');
  root.removeAttribute('data-zcth-classification-source');
 }
@@ -122,7 +124,11 @@ function render(){
  else if(states.length&&states.every(x=>x.state==='sdr'))value='sdr';
  root.setAttribute('data-zcth-stream-state',value);
  root.setAttribute('data-zcth-classification-source',value==='sdr'?states[0].source:'protected');
- root.toggleAttribute('data-zcth-sdr-glass',value==='sdr');
+ root.toggleAttribute('data-zcth-sdr-glass',value==='sdr'&&sdrEnabled());
+ // Only opt in to HDR appearance when Zia itself allows blur over video.
+ // Do NOT promote the video layer here: Zia owns that while an overlay is open.
+ root.toggleAttribute('data-zcth-hdr-glass',
+   value==='hdr'&&hdrEnabled()&&ziaBlurOverVideo()&&!root.hasAttribute('zia-video'));
 }
 function onFrameState(browser,actor,data){
  if(!alive||!browser)return;
