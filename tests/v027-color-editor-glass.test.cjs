@@ -11,7 +11,10 @@ const prior=css.slice(
  css.indexOf('/* v0.2.6 — Independently enabled preview-card glass.'),
  css.indexOf('/* v0.2.7 — Site Folders')
 );
-const color=css.slice(css.indexOf('/* v0.2.7 — Site Folders'));
+const color=css.slice(
+ css.indexOf('/* v0.2.7 — Site Folders'),
+ css.indexOf('/* v0.2.8 — Selected-color dialog compositor:')
+);
 const cleaned=color.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 
