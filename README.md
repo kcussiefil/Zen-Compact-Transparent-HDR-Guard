@@ -1,4 +1,25 @@
-# Zen Compact Transparent HDR Guard v0.2.4
+# Zen Compact Transparent HDR Guard v0.2.5
+
+## v0.2.5 — Zia Popup 毛玻璃樣式被覆蓋的修正
+
+**問題原因：** Zia 2.118 的網址列／搜尋 Popup 樣式使用 `:root:not(#zia-none):not(#zia-none-2) #urlbar#urlbar` 等高優先權 CSS 選擇器，且背景與模糊都有 `!important`。HDR Guard 0.2.3／0.2.4 的 CSS 雖然已讀取與側欄**完全相同的**自訂顏色、透明度及模糊半徑，但選擇器優先權不足，所以經常仍顯示 Zia 預設 **78% 不透明度／24px 模糊＋1.6 倍飽和度**。
+
+**修正：**
+- 替 HDR Guard Popup 與深淺色對比保護規則增加 CSS 專用的虛擬 ID 優先權，確保即使 Zia 樣式後載入，也不會覆蓋我們的自訂設定。
+- 保留 Popup 對側欄的相同三組變數：`--mod-compacttpr-customcolor-final`、`--mod-compacttpr-transparentvalue`、`--mod-compacttpr-customblur`。
+- 依舊以 Zia 的 `zia.urlbar.pop-up-blur` 為前提，只對真正開啟的網址列、搜尋建議與浮動網址列生效。
+- 保留 Zia「深淺色反轉」時的實色可讀性保護，以及 Bilibili 快速模式、SDR／HDR 自訂開關與既有影片辨識行為。
+- **不碰 `will-change`、`backface-visibility` 或影片的亮度、色彩濾鏡。** Popup 收合後仍由 Zia 的合成規則控制，不會因這次修正而增加長期的影片合成圖層。
+
+**安裝及驗收：** 在 Sine 更新到 0.2.5，確認「網址列／搜尋彈出視窗使用 HDR Guard 自訂毛玻璃」已開啟，且 Zia 的「The pop-up is see-through, the page blurred behind」也已開啟，然後完整退出並重啟 Zen。將 HDR Guard 的模糊強度從 5px 暫時改成 12px 或其他容易辨識的數值，開啟搜尋 Popup，應能明顯看到差異，再還原原本設定。
+
+**HDR 限制：** Zia 啟用影片上方毛玻璃時，Popup 顯示期間仍可能令 HDR 變暗；本版只修正視覺樣式優先權，不能消除 Gecko／macOS 影像合成的上游限制。**必須實機確認關閉 Popup 後，HDR 亮度立即恢復。**
+
+**可回退：** 在 Sine 直接關閉 Popup 自訂毛玻璃開關，即可即時恢復 Zia 原本的 Popup 外觀；完整恢復可使用 [v0.2.4](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.4) 或備份分支 `backup/v0.2.4-before-popup-specificity`（Commit `eac78ef94997a6977fb253c56ad96950227248a1`），不修改過去的 Release tag。
+
+---
+
+## v0.2.4 歷史說明
 
 ## Bilibili 全站立即套用自訂毛玻璃（不等待 SDR／HDR 檢查）
 
