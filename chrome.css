@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.7
+/* Zen Compact Transparent HDR Guard v0.2.8
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -46,7 +46,7 @@
           [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
           [flash-popup], [has-popup-menu], [movingtab],
           [zen-compact-mode-active], [animate="true"],
-          [data-zsf-preview-sidebar-hold]
+          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
         )),
         :has(#zen-appcontent-navbar-wrapper:is(
           [zen-has-hover], [has-popup-menu], [zen-compact-mode-active]
@@ -418,6 +418,46 @@
       ) !important;
       backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
       opacity: 1 !important;
+    }
+  }
+}
+
+/* v0.2.8 — Selected-color dialog compositor: opened only, never persistent.
+ *
+ * The v0.2.7 editor color-mix + backdrop-filter actually paint with CSS,
+ * but macOS/Gecko renders normal webpage pixels on a separate CoreAnimation
+ * layer. Without the same Zia video/hover-card compositor technique, the
+ * editor and held-open sidebar can become see-through as pointer focus moves
+ * out of the sidebar. Zia 2.118 and Site Folders' ordinary hover cards
+ * use an identical gated video-layer promotion while the card is visible.
+ *
+ * The Site Folders editor is a NON-MODAL <dialog> directly below :root.
+ * Its show() sets [open] and close() clears [open] synchronously.
+ * The strict :has(> dialog[open]) selector releases browser compositing
+ * immediately after closing, without any observer, timer or JS changes.
+ * Restrict this to macOS where the rendering-layer workaround is needed.
+ * Do not override popup geometry, hide/show, color-picker inputs or alpha.
+ *
+ * IMPORTANT: upstream Zia root [zia-video] remains a hard exclusion:
+ * HDR blur is allowed only when Zia itself permits Blur over video.
+ * Other tabs with unclassified video keep their compositor protection.
+ */
+@media (-moz-platform: macos) {
+  @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+         (-moz-bool-pref: "mod.compacttpr.previewcardcustomblur") {
+    @media -moz-pref("zia.cards.blur") {
+      :root:not([zia-video]):is(
+        :not([data-zcth-video-page]):not(
+          :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+        ),
+        [data-zcth-bilibili-glass],
+        [data-zcth-sdr-glass],
+        [data-zcth-hdr-glass]
+      ):has(> #zsf-color-dialog[open])
+        #tabbrowser-tabpanels .browserSidebarContainer {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
     }
   }
 }
