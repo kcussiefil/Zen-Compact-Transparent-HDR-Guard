@@ -14,6 +14,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. It adjusts floating-sidebar 
 - **HDR video** custom glass (off by default; requires Zia *Blur over video*).
 - URL/search popup custom glass (off by default).
 - **Zia / Site Folders preview cards and the Site Folders selected-tab color editor** with matching HDR Guard glass variables (off by default; the macOS dialog blur is corrected in v0.2.8).
+- **Zen Glance** floating-sidebar glass (macOS experimental, default-OFF; safeguards against promoting background HDR video).
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
 These settings live in Sine; the authoritative names and defaults are in [`preferences.json`](preferences.json).
@@ -25,6 +26,8 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 3. Install the Sine repository `kcussiefil/Zen-Compact-Transparent-HDR-Guard` and restart Zen.
 4. Start with the default settings. Enable SDR, HDR, popup and preview-card options individually as needed.
 5. For preview-card custom glass, also enable Zia's preview-card blur. For custom glass over a confirmed HDR video, enable Zia's *Blur over video* and HDR Guard's separate HDR switch.
+
+The new Glance option can be enabled separately in Sine. Test its on-screen result and HDR interactions on macOS before treating it as verified; disable the option for instant rollback.
 
 ## Video/HDR limitations
 
@@ -38,13 +41,13 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 
 - Test ordinary webpages, SDR videos, HDR videos, unknown-format videos, Bilibili, and preview cards separately. Restart Zen when applying a newly installed script.
 - If a visual problem appears, first disable the specific HDR Guard option in Sine; you can also disable the mod without changing other projects.
-- The previous [v0.2.7 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.7) remains available as a full code rollback point; you can disable the preview-card setting for immediate rollback.
+- The previous [v0.2.8 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.8) remains available as a full code rollback point; you can disable the preview-card setting for immediate rollback.
 
 ## Project information
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.2.8** ([`theme.json`](theme.json)) |
+| Current version | **v0.2.9** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
