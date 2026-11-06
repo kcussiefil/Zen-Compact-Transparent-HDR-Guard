@@ -1,4 +1,23 @@
-# Zen Compact Transparent HDR Guard v0.2.0
+# Zen Compact Transparent HDR Guard v0.2.1
+
+## v0.2.1：修正 Zia 2.118 開啟「Blur over video」後 SDR 自訂樣式開關無效
+
+**原因：**Zia 2.118 開啟影片上方毛玻璃時，會清除視窗根元素的 `zia-video` 標記，但保留影片所在瀏覽器的 `browser[zia-video]`。020 的 SDR 分類器只在根元素具有 `zia-video` 時才運作，因此開關勾選與否均只顯示 Zia 原生毛玻璃。
+
+**修正：**
+- Zia `Blur over video` 開啟、SDR 自訂樣式開關**關閉**：維持 Zia 原生影片毛玻璃。
+- Zia `Blur over video` 開啟、SDR 自訂樣式開關**開啟**：若影片辨識為 SDR，套用 HDR Guard 原本的自訂浮動側欄背景色、透明度、模糊強度與高度；HDR 或未知格式仍由 Zia 管理。
+- Zia `Blur over video` 關閉：維持 019／020 的保守影片保護；只有確認 SDR 且使用者開啟選項時才啟用自訂毛玻璃。
+- 判斷實際可見影片而非只看網址，仍支援分割窗格，保留 HDR 優先、Bilibili／YouTube、一般 HTML5 和單支影片手動覆寫。
+- **不添加任何 HDR 的常駐 `will-change: transform`。**側欄隱藏時的 HDR 顯示仍由 Zia 2.118 控制。
+
+**如何辨識是否成功：**播放已確認的 SDR 影片，側欄展開後，切換 Sine「SDR 影片使用 HDR Guard 自訂毛玻璃」開關，應可明顯看到 Zia 原生模糊樣式與 HDR Guard 自訂背景／模糊差異。若沒有差異，先檢查目前播放格式是否已被識別為 SDR；未知格式一律不自動解除 HDR 保護。
+
+自動化測試涵蓋開關動態切換、Zia 根元素影片標記切換、HDR 優先及影片離開視窗後清除狀態；你的 macOS 27.2 OLED HDR 視覺效果仍需實機確認。
+
+---
+
+## v0.2.0 變更紀錄
 
 Zen／Sine 獨立 MOD，支援 [Zia v2.118.0](https://github.com/z1n-k/zia/releases/tag/v2.118.0) 的影片毛玻璃合成與舊版 HDR Guard 的 HDR／SDR 串流辨識。
 

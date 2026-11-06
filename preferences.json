@@ -47,7 +47,7 @@
   },
   {
     "property": "mod.compacttpr.sdrrealblur",
-    "label": "SDR 影片啟用真正毛玻璃（Zia 的 Blur over video 關閉時使用；預設關閉）",
+    "label": "SDR 影片使用 HDR Guard 自訂毛玻璃（開啟後取代 Zia 的 SDR 側欄樣式；預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },

@@ -10,8 +10,8 @@ const manifest = JSON.parse(fs.readFileSync(path.join(root, 'theme.json'), 'utf8
 const prefs = JSON.parse(fs.readFileSync(path.join(root, 'preferences.json'), 'utf8'));
 const manager = fs.readFileSync(path.join(root, 'sdr-glass.uc.js'), 'utf8');
 
-test('020 retains all 019 actor, stream classification and user settings', () => {
-  assert.equal(manifest.version, '0.2.0');
+test('021 retains all 019 actor, stream classification and user settings', () => {
+  assert.equal(manifest.version, '0.2.1');
   assert.ok(manifest.scripts['video-page.uc.js']);
   assert.ok(manifest.scripts['sdr-glass.uc.js']);
   assert.equal(manifest.preferences, 'preferences.json');
@@ -25,7 +25,7 @@ test('020 retains all 019 actor, stream classification and user settings', () =>
   assert.match(manager, /states\.some\(x=>x\.state==='hdr'\)/);
 });
 
-test('020 removes old watch-page opaque CSS and forced no-compositor overrides', () => {
+test('021 removes old watch-page opaque CSS and forced no-compositor overrides', () => {
   assert.doesNotMatch(effective, /:root\[data-zcth-video-page\]:not\(\[zia-video\]\)/,
     'watch URL is never a reason to force solid video paint');
   assert.doesNotMatch(effective, /will-change:\s*auto\s*!important/,
@@ -43,6 +43,10 @@ test('visible embedded video uses Zia 2.118 native glass (including split view)'
   assert.ok(effective.includes(
     '#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video]'
   ), 'chrome actor visibility is authoritative instead of video-site URL');
+  assert.match(effective, /\[data-zcth-sdr-glass\]\s*\)/,
+    'SDR custom glass is selectable regardless of Zia root video flag');
+  assert.doesNotMatch(effective, /\[data-zcth-sdr-glass\]\[zia-video\]\s*\)/,
+    'old gate made SDR checkbox ineffective with Zia Blur over video enabled');
   // No unconditional compositor promotion: ordinary web pages and video
   // overlays are managed by Zia only while the sidebar is actually shown.
   const promoted = [...effective.matchAll(/will-change:\s*transform\s*!important/g)];
@@ -59,7 +63,7 @@ test('state matrix keeps HDR protected when upstream blur is disabled', () => {
   // A Zia 2.118 Blur over video = ON policy sets root zia-video OFF.
   const appliesOriginalTransparentMode = ({ rootZiaVideo, watchPage, browserVideo, sdrGlass }) =>
     (!rootZiaVideo && !watchPage && !browserVideo) ||
-    (rootZiaVideo && sdrGlass);
+    sdrGlass;
   assert.equal(appliesOriginalTransparentMode({
     rootZiaVideo:false,watchPage:true,browserVideo:true,sdrGlass:false
   }),false,'HDR watch pages use Zia native blur when upstream allows it');
@@ -72,6 +76,9 @@ test('state matrix keeps HDR protected when upstream blur is disabled', () => {
   assert.equal(appliesOriginalTransparentMode({
     rootZiaVideo:true,watchPage:true,browserVideo:true,sdrGlass:true
   }),true,'confirmed SDR optional legacy glass remains available');
+  assert.equal(appliesOriginalTransparentMode({
+    rootZiaVideo:false,watchPage:true,browserVideo:true,sdrGlass:true
+  }),true,'confirmed SDR opt-in takes over native Zia Blur over video surface');
   assert.equal(appliesOriginalTransparentMode({
     rootZiaVideo:false,watchPage:false,browserVideo:false,sdrGlass:false
   }),true,'ordinary pages preserve user-selected transparent style');
