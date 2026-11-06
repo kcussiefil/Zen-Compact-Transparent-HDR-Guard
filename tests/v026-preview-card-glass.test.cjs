@@ -65,7 +65,7 @@ test('026 does not accidentally style unclassified video or protected HDR',()=>{
  for(const marker of ['data-zcth-bilibili-glass','data-zcth-sdr-glass','data-zcth-hdr-glass'])
   assert.match(effective,new RegExp('\\['+marker+'\\]'),marker);
  const eligible=({rootVideo,watchPage,visibleVideo,bili,sdr,hdr})=>
-   (!rootVideo&&!watchPage&&!visibleVideo)||bili||sdr||hdr;
+   Boolean((!rootVideo&&!watchPage&&!visibleVideo)||bili||sdr||hdr);
  assert.equal(eligible({rootVideo:false,watchPage:false,visibleVideo:false}),true,'ordinary');
  assert.equal(eligible({rootVideo:false,watchPage:true,visibleVideo:true}),false,'HDR unknown');
  assert.equal(eligible({rootVideo:true,watchPage:true,visibleVideo:true}),false,'Zia no-HDR-blur');
