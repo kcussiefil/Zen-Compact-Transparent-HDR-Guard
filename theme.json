@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Cross-site Zia-visible video classification with Bilibili quality adapter, generic HTML5 metadata, editable SDR fallback URL rules and single-video override; HDR has priority.",
+  "description": "Immediate opt-in glass on www.bilibili.com/* without SDR checks, plus HDR/SDR stream classification and video-safe Zia glass for other sites.",
   "author": "kcussiefil",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "style": {
     "chrome": "chrome.css"
   },
@@ -33,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-06T03:49:00.000Z"
+  "updatedAt": "2026-11-06T03:50:00.000Z"
 }
