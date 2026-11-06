@@ -13,7 +13,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. It adjusts floating-sidebar 
 - **SDR video** custom glass (off by default).
 - **HDR video** custom glass (off by default; requires Zia *Blur over video*).
 - URL/search popup custom glass (off by default).
-- **Zia and Site Folders preview cards** using the same HDR Guard glass variables (off by default; introduced in v0.2.6).
+- **Zia / Site Folders preview cards and the Site Folders selected-tab color editor** with matching HDR Guard glass variables (off by default; color editor added in v0.2.7).
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
 These settings live in Sine; the authoritative names and defaults are in [`preferences.json`](preferences.json).
@@ -30,7 +30,7 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 
 - A page containing a video is not proof that its stream is SDR or HDR. The classifier uses available playback/codec evidence; unknown remains unknown.
 - Confirmed HDR takes priority over ordinary SDR rules. **The Bilibili immediate-glass option is a deliberate opt-in exception** and can allow blur without waiting for HDR checks. Disable it if strict video protection matters more than glass effects.
-- The v0.2.6 preview-card option follows the existing sidebar/popup style variables for Zia tab/folder/tip cards and Site Folders' independent group card. It does **not** intentionally change card layout or keep the video compositor active after the card disappears.
+- The preview-card option also styles Site Folders' non-modal selected-tab color dialog as of v0.2.7, while Site Folders continues to own all picker functionality. It uses the same sidebar/popup style variables for Zia tab/folder/tip cards and Site Folders' independent group card. It does **not** intentionally change card layout or keep the video compositor active after the card disappears.
 - Zia's video blur can still make HDR content appear darker or washed out on macOS. HDR Guard cannot guarantee HDR-preserving blur; verify that normal video presentation returns when the card/sidebar is hidden.
 - Node regression tests check rules and selectors, **not actual OLED/GPU color or brightness**.
 
