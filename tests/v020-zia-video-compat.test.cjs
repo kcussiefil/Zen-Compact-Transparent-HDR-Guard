@@ -10,8 +10,8 @@ const manifest = JSON.parse(fs.readFileSync(path.join(root, 'theme.json'), 'utf8
 const prefs = JSON.parse(fs.readFileSync(path.join(root, 'preferences.json'), 'utf8'));
 const manager = fs.readFileSync(path.join(root, 'sdr-glass.uc.js'), 'utf8');
 
-test('023 retains all 019 actor, stream classification and user settings', () => {
-  assert.equal(manifest.version, '0.2.3');
+test('024 retains all 019 actor, stream classification and user settings', () => {
+  assert.equal(manifest.version, '0.2.4');
   assert.ok(manifest.scripts['video-page.uc.js']);
   assert.ok(manifest.scripts['sdr-glass.uc.js']);
   assert.equal(manifest.preferences, 'preferences.json');
