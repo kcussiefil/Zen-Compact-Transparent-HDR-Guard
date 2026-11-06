@@ -47,7 +47,7 @@
   },
   {
     "property": "mod.compacttpr.sdrrealblur",
-    "label": "SDR 影片啟用真正毛玻璃（實驗性；預設關閉）",
+    "label": "SDR 影片啟用真正毛玻璃（Zia 的 Blur over video 關閉時使用；預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },
