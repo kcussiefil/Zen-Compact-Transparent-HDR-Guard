@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.6
+/* Zen Compact Transparent HDR Guard v0.2.7
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -382,6 +382,42 @@
         transparent var(--mod-compacttpr-transparentvalue, 15%)
       ) !important;
       backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+    }
+  }
+}
+
+/* v0.2.7 — Site Folders' non-modal selected-tab-color editor glass.
+ * Site Folders remains responsible for all picker UI, placement, preview,
+ * save/cancel and sidebar hold state. This is a paint-only override.
+ * The dialog is appended directly to document.documentElement and uses
+ * #zsf-color-dialog[open], unlike #zsf-folder-hover-card.
+ *
+ * Site Folders v0.7.6 paints color-mix(...78%, transparent) and fixed
+ * blur(24px) saturate(1.45) !important. Three ghost IDs make our CSS
+ * strictly win without any dependence on extension load order.
+ *
+ * Keep element opacity at 1 during hover/focus; the chosen translucency
+ * stays in background color-mix. Never alter dialog positioning visibility,
+ * z-index, the video compositor (will-change) or brightness/color filters.
+ * Video-marker eligibility mirrors the existing preview-card safety policy. */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+       (-moz-bool-pref: "mod.compacttpr.previewcardcustomblur") {
+  @media -moz-pref("zia.cards.blur") {
+    :root:not(#zcth-color-editor-ghost-1):not(#zcth-color-editor-ghost-2):not(#zcth-color-editor-ghost-3):is(
+      :not([zia-video], [data-zcth-video-page]):not(
+        :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
+      ),
+      [data-zcth-bilibili-glass],
+      [data-zcth-sdr-glass],
+      [data-zcth-hdr-glass]
+    ) > #zsf-color-dialog[open] {
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+      opacity: 1 !important;
     }
   }
 }
