@@ -1,11 +1,11 @@
-// HDR Guard v0.2.2 — separate SDR and HDR visual opt-ins; native Zia compositor.
+// HDR Guard v0.2.4 — bypass Bilibili SDR/HDR classification when instant glass is selected.
 (() => {
 'use strict';
 const KEY='__zcthUniversalV019',ACTOR='ZcthUniversal';
 if(window[KEY])return;
 const root=document.documentElement;
 const BASE='chrome://sine/content/zen-compact-transparent-hdr-guard/actors/';
-const DEFAULT='www.bilibili.com/video/*;www.bilibili.com/bangumi/play/*';
+const DEFAULT='www.bilibili.com/*';
 const records=new Map(),unknownSince=new Map();
 let pending=null,busy=false,rerun=false,alive=true,revision=0,registered=false;
 try{
@@ -78,6 +78,9 @@ function videoBrowsers(){
  return current?[current]:[];
 }
 function shouldClassify(){
+ // Bilibili fast path is a deliberate user exception, not SDR evidence.
+ // Keep its appearance independent of probes, 350ms fallback and HDR markers.
+ if(root.hasAttribute('data-zcth-bilibili-glass'))return false;
  if(!enabled())return false;
  if(root.hasAttribute('zia-video'))return true;
  // The option controls Zia's root flag, not browser[zia-video].
@@ -131,7 +134,7 @@ function render(){
    value==='hdr'&&hdrEnabled()&&ziaBlurOverVideo()&&!root.hasAttribute('zia-video'));
 }
 function onFrameState(browser,actor,data){
- if(!alive||!browser)return;
+ if(!alive||!browser||root.hasAttribute('data-zcth-bilibili-glass'))return;
  let map=records.get(browser);
  if(!map){map=new Map();records.set(browser,map)}
  const state=['sdr','hdr','unknown','none'].includes(data?.state)?data.state:'unknown';

@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.3
+/* Zen Compact Transparent HDR Guard v0.2.4
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -33,6 +33,9 @@
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
+      /* User-authorised Bilibili fast path: synchronous URL marker.
+         Zia's compositor still promotes video only while an overlay opens. */
+      [data-zcth-bilibili-glass],
       /* Confirmed SDR keeps its proven v0.2.1 custom glass behaviour. */
       [data-zcth-sdr-glass],
       /* HDR: only paint custom glass while Zia reports a visible sidebar /
@@ -301,6 +304,7 @@
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
+      [data-zcth-bilibili-glass],
       [data-zcth-sdr-glass],
       [data-zcth-hdr-glass]
     ) #urlbar#urlbar:is([breakout-extend], [zen-floating-urlbar="true"]):not([zia-classic])
@@ -318,6 +322,7 @@
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
+      [data-zcth-bilibili-glass],
       [data-zcth-sdr-glass],
       [data-zcth-hdr-glass]
     ) #urlbar#urlbar[breakout-extend][zia-pop-site="dark"]:not([zia-classic])
@@ -326,6 +331,7 @@
       :not([zia-video], [data-zcth-video-page]):not(
         :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(.deck-selected, [zen-split="true"]) browser[zia-video])
       ),
+      [data-zcth-bilibili-glass],
       [data-zcth-sdr-glass],
       [data-zcth-hdr-glass]
     ) #urlbar#urlbar[breakout-extend][zia-pop-site="light"]:not([zia-classic])

@@ -1,4 +1,29 @@
-# Zen Compact Transparent HDR Guard v0.2.3
+# Zen Compact Transparent HDR Guard v0.2.4
+
+## Bilibili 全站立即套用自訂毛玻璃（不等待 SDR／HDR 檢查）
+
+依照實際網址格式 `www.bilibili.com/*`（HTTP/HTTPS、任意路徑，包含首頁、影片、番劇、搜尋等）新增 **「Bilibili 全站立即使用自訂毛玻璃」** 設定，**預設開啟**。
+
+只要選取 Bilibili 分頁，瀏覽器的 `TabSelect`／`onLocationChange` 事件就同步標記該網域，讓現有 HDR Guard 側欄樣式立即套用；**不再先顯示 Zia 原生毛玻璃，等待 50ms 輪詢或 350ms 網址備援之後才切換**。Zia 仍控制視訊合成時機，側欄／彈出視窗關閉後不由本 MOD 強制留下影片的 `will-change` 狀態。
+
+- **安全限制：** 快速模式只有在 Zia 的 **See-through surfaces keep blurring a video behind them** 開啟時才運作；如果關閉這個選項，恢復 Zia 原生影片保護。
+- **辨識政策：** Bilibili 快速模式啟用時，**完全跳過 SDR／HDR 辨識對毛玻璃的決策**。即使遇到 Bilibili HDR，仍套用自訂外觀，影片可能發灰或失去 HDR；這是使用者主動選擇的例外，不代表影片被判定為 SDR。
+- **其他網站：** YouTube 及其他 HTML5 來源的 SDR／HDR 辨識與原本設定不變。
+- **彈出視窗：** 若同時啟用 v0.2.3 的自訂搜尋彈出視窗設定，Bilibili 也立即沿用該自訂樣式；如果彈出視窗設定關閉，維持 Zia 原生效果。
+- **精確匹配：** 只匹配 `www.bilibili.com`；不會誤套用至其他子網域、仿冒網域、YouTube 或一般網頁。
+- **原本網址備援欄位：** 預設值修正為 `www.bilibili.com/*`，關閉 Bilibili 快速模式時才會使用該備援規則及原有串流辨識優先順序。既有使用者如果曾自行修改此欄位，Sine 可能保留舊值，可視需要手動更新。
+
+### 回退
+1. **立即回退：** 在 Sine 關閉「Bilibili 全站立即使用自訂毛玻璃」即可恢復原本的串流檢查（包含 350ms 未知畫質備援）；不影響 HDR／SDR 開關。
+2. **完整回退：** [v0.2.3](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.3)，commit `dcfe5104d8bf38090b506e353e09b2d2551d5121`，備份分支 `backup/v0.2.3-before-bilibili-instant`。
+3. 仍保留 [v0.2.1 穩定版](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.1)。
+
+### 驗收
+完整退出並重開 Zen，確認 Zia 影片毛玻璃開關與 Bilibili 快速模式都已開啟。在 Bilibili 首頁、影片、番劇之間切換，應在側欄展開時直接看到 HDR Guard 自訂毛玻璃，不再有 Zia 原生轉換的延遲；離開該網站後應恢復其他網站的原始策略。Bilibili 播放 HDR 時的實際亮度仍需在 OLED 實機測試。
+
+---
+
+## v0.2.3 變更紀錄
 
 ## v0.2.3 — Zia 網址列／搜尋彈出視窗的自訂毛玻璃
 
