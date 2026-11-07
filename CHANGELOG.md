@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.3.0**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.3.1**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.3.1](releases/v0.3.1.md) | Event-first, exact HG visual parity; 50ms polling replaced with 1s fallback watchdog and independent 100ms site timer; unused Glance observer suspended. Virtual-time benchmark added. |
 | [v0.3.0](releases/v0.3.0.md) | Reworked Glance/card compositing with a guarded post-close reset; retained confirmed per-tab SDR/HDR state for fast return and shortened unknown SDR fallback to 100 ms. |
 | [v0.2.9](releases/v0.2.9.md) | Default-OFF experimental macOS Zen Glance floating-sidebar blur; only visible preview composition and protected background video. |
 | [v0.2.8](releases/v0.2.8.md) | Fixed actual macOS page blur behind Site Folders color editor with open-only composition; release documents and CI publishing policy aligned. |
