@@ -1,4 +1,4 @@
-// HDR Guard v0.2.4 — bypass Bilibili SDR/HDR classification when instant glass is selected.
+// HDR Guard v0.3.0 — per-browser stream cache, fast tab resume, protected SDR/HDR classification.
 (() => {
 'use strict';
 const KEY='__zcthUniversalV019',ACTOR='ZcthUniversal';
@@ -6,7 +6,7 @@ if(window[KEY])return;
 const root=document.documentElement;
 const BASE='chrome://sine/content/zen-compact-transparent-hdr-guard/actors/';
 const DEFAULT='www.bilibili.com/*';
-const records=new Map(),unknownSince=new Map();
+const records=new Map(),unknownSince=new Map(),browserURIs=new WeakMap();
 let pending=null,busy=false,rerun=false,alive=true,revision=0,registered=false;
 try{
  const media={capture:true,mozSystemGroup:true},events={};
@@ -63,6 +63,17 @@ function manualRule(browser){
  if(current&&identity(uri)&&identity(uri)===identity(current))return 'manual-video';
  return siteMatches(uri,pref('mod.compacttpr.sdrsitepatterns',DEFAULT))?'site-rule':'';
 }
+function uriOf(browser){try{return browser?.currentURI?.spec||''}catch(_){return ''}}
+function invalidateBrowser(browser){
+ if(!browser)return;
+ records.delete(browser);unknownSince.delete(browser);browserURIs.delete(browser);
+}
+function ensureBrowserURI(browser){
+ if(!browser)return;
+ const uri=uriOf(browser);
+ if(browserURIs.has(browser)&&browserURIs.get(browser)!==uri)invalidateBrowser(browser);
+ browserURIs.set(browser,uri);
+}
 function videoBrowsers(){
  let nodes=[];
  try{
@@ -95,6 +106,7 @@ function clear(){
  root.removeAttribute('data-zcth-classification-source');
 }
 function stateFor(browser,allowManual){
+ ensureBrowserURI(browser);
  const map=records.get(browser);
  const visible=map?[...map.values()].filter(s=>s.count>0):[];
  if(visible.some(s=>s.state==='hdr'))return {state:'hdr',source:'auto'};
@@ -113,7 +125,7 @@ function stateFor(browser,allowManual){
  if(!stamp||stamp.key!==key){
   stamp={key,at:Date.now()};unknownSince.set(browser,stamp);
  }
- return Date.now()-stamp.at>=350
+ return Date.now()-stamp.at>=100
    ? {state:'sdr',source:rule} : {state:'unknown',source:'probing'};
 }
 function render(){
@@ -125,8 +137,11 @@ function render(){
  let value='unknown';
  if(states.some(x=>x.state==='hdr'))value='hdr';
  else if(states.length&&states.every(x=>x.state==='sdr'))value='sdr';
- root.setAttribute('data-zcth-stream-state',value);
- root.setAttribute('data-zcth-classification-source',value==='sdr'?states[0].source:'protected');
+ if(root.getAttribute?.('data-zcth-stream-state')!==value)
+  root.setAttribute('data-zcth-stream-state',value);
+ const source=value==='sdr'?states[0].source:'protected';
+ if(root.getAttribute?.('data-zcth-classification-source')!==source)
+  root.setAttribute('data-zcth-classification-source',source);
  root.toggleAttribute('data-zcth-sdr-glass',value==='sdr'&&sdrEnabled());
  // Only opt in to HDR appearance when Zia itself allows blur over video.
  // Do NOT promote the video layer here: Zia owns that while an overlay is open.
@@ -135,6 +150,7 @@ function render(){
 }
 function onFrameState(browser,actor,data){
  if(!alive||!browser||root.hasAttribute('data-zcth-bilibili-glass'))return;
+ ensureBrowserURI(browser);
  let map=records.get(browser);
  if(!map){map=new Map();records.set(browser,map)}
  const state=['sdr','hdr','unknown','none'].includes(data?.state)?data.state:'unknown';
@@ -168,19 +184,36 @@ async function probe(){
  }catch(_){render()}
  finally{busy=false;if(rerun&&alive){rerun=false;schedule(0)}}
 }
+/* A tab switch is not a stream change. Keep each browser's last confirmed
+ * actor snapshot and render it synchronously. New documents and URL changes
+ * are invalidated per-browser, never globally, so returning to a loaded
+ * video does not flash the unknown/solid state during another actor probe. */
 function onNavigate(){
- revision++;records.clear();unknownSince.clear();clear();schedule(0);
+ revision++;
+ ensureBrowserURI(window.gBrowser?.selectedBrowser);
+ render();schedule(0);
+}
+function onTabClose(event){
+ const browser=event?.target?.linkedBrowser;
+ invalidateBrowser(browser);
 }
 const tabs=window.gBrowser?.tabContainer;
 tabs?.addEventListener('TabSelect',onNavigate);
+tabs?.addEventListener('TabClose',onTabClose);
 const progress={onLocationChange(browser){
- if(browser===window.gBrowser?.selectedBrowser)onNavigate();
+ // Includes same-URL reloads and YouTube SPA navigation; do not reuse an
+ // earlier stream format until the new document/stream has been validated.
+ invalidateBrowser(browser);
+ browserURIs.set(browser,uriOf(browser));
+ if(browser===window.gBrowser?.selectedBrowser){revision++;render();schedule(0)}
 }};
 try{window.gBrowser?.addTabsProgressListener(progress)}catch(_){}
 const observer=new MutationObserver(changes=>{
  if(changes.some(c=>c.attributeName==='zia-video')){
   if(!shouldClassify()){
-   revision++;records.clear();unknownSince.clear();
+   revision++;
+   // Zia removed video visibility: do not retain a displayed glass marker.
+   // Preserve per-browser snapshots for an unchanged video in another tab.
   }
   render();schedule(0);
  }
@@ -193,6 +226,7 @@ function cleanup(){
  alive=false;clear();observer.disconnect();window.clearInterval(interval);
  if(pending!==null)window.clearTimeout(pending);
  tabs?.removeEventListener('TabSelect',onNavigate);
+ tabs?.removeEventListener('TabClose',onTabClose);
  try{window.gBrowser?.removeTabsProgressListener(progress)}catch(_){}
  records.clear();unknownSince.clear();delete window[KEY];
 }
