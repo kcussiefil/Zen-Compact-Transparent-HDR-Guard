@@ -137,6 +137,173 @@
   }
 }
 
+/* v0.3.3 — opt-out unified HG theme.
+ *
+ * HG paint is resolved from the user's existing Sine variables regardless of
+ * whether a playing video has been classified as SDR or HDR.  Waiting for
+ * data-zcth-sdr/hdr-glass formerly exposed Zia's 24px preview/popup paint.
+ * Zia's matching feature preferences remain the gate for each surface.
+ *
+ * Only macOS backdrop composition is visibility-gated below. Hidden native
+ * cards receive computed HG paint, but never cause GPU promotion on their own.
+ * The opt-out preserves the complete v0.3.2 protected-video policy.
+ */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+       (-moz-bool-pref: "mod.compacttpr.unifiedhg") {
+  @media -moz-pref("zia.compact.sidebar-blur") {
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"]
+    ):not(#zcth-unified-side-1):not(#zcth-unified-side-2)
+      #titlebar {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"]
+    ):not(#zcth-unified-side-1):not(#zcth-unified-side-2)
+      #titlebar::before {
+      content: "" !important;
+      position: absolute !important;
+      inset: 0 !important;
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+      z-index: -1 !important;
+      pointer-events: none !important;
+    }
+
+    /* Zia otherwise changes this surface to NO blur when [zia-video]
+       appears. Restore the same underlying glass used on ordinary pages.
+       The compositor promotion remains strictly visible-overlay-only. */
+    :root[zen-compact-mode="true"][zia-video]:not(
+      [customizing], [inDOMFullscreen="true"]
+    ):not(#zcth-unified-zia-1):not(#zcth-unified-zia-2)
+      .zen-toolbar-background {
+      background: transparent !important;
+      backdrop-filter: blur(28px) saturate(1.6) !important;
+      &::after {
+        opacity: calc(var(--zen-background-opacity, 1) * 0.78) !important;
+      }
+      &::before {
+        opacity: calc((1 - var(--zen-background-opacity, 1)) * 0.78) !important;
+      }
+    }
+  }
+
+  @media -moz-pref("zia.cards.blur") {
+    :root:not(#zcth-unified-card-1):not(#zcth-unified-card-2):not(#zcth-unified-card-3):not(#zcth-unified-card-4)
+      > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+             #zsf-folder-hover-card) {
+      background-color: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+    }
+    :root:not(#zcth-unified-editor-1):not(#zcth-unified-editor-2):not(#zcth-unified-editor-3):not(#zcth-unified-editor-4)
+      > #zsf-color-dialog[open] {
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  @media -moz-pref("zia.urlbar.pop-up-blur") {
+    :root:not(#zcth-unified-pop-1):not(#zcth-unified-pop-2):not(#zcth-unified-pop-3):not(#zcth-unified-pop-4):not(#zcth-unified-pop-5)
+      #urlbar#urlbar:is([breakout-extend], [zen-floating-urlbar="true"]):not([zia-classic])
+      > .urlbar-background {
+      background: color-mix(
+        in srgb,
+        var(--mod-compacttpr-customcolor-final),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+    }
+
+    /* In Zia's opposite-palette toolbar mode, keep its popup-specific colour
+       for legible text, but do NOT switch back to solid/no-blur Zia paint. */
+    :root[zen-single-toolbar="true"][zia-light]:not(#zcth-unified-pop-1):not(#zcth-unified-pop-2):not(#zcth-unified-pop-3):not(#zcth-unified-pop-4):not(#zcth-unified-pop-5)
+      #urlbar#urlbar[breakout-extend][zia-pop-site="dark"]:not([zia-classic])
+      > .urlbar-background,
+    :root[zen-single-toolbar="true"]:not([zia-light]):not(#zcth-unified-pop-1):not(#zcth-unified-pop-2):not(#zcth-unified-pop-3):not(#zcth-unified-pop-4):not(#zcth-unified-pop-5)
+      #urlbar#urlbar[breakout-extend][zia-pop-site="light"]:not([zia-classic])
+      > .urlbar-background {
+      background: color-mix(
+        in srgb,
+        var(--zia-urlbar-open-bg, var(--mod-compacttpr-customcolor-final)),
+        transparent var(--mod-compacttpr-transparentvalue, 15%)
+      ) !important;
+      backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+    }
+  }
+
+  /* A hidden card only has a computed style; promotion happens exactly while
+     a sidebar/card/popup is ACTUALLY open. This deliberately allows unknown
+     video/HDR to appear dim during the overlay, but releases immediately when
+     it closes. Never promote a tab merely because a video exists. */
+  @media (-moz-platform: macos) {
+    @media -moz-pref("zia.compact.sidebar-blur") {
+      :root[zen-compact-mode="true"]:not(
+        [customizing], [inDOMFullscreen="true"]
+      ):not(:has(#tabbrowser-tabpanels >
+        .browserSidebarContainer.zen-glance-overlay.deck-selected)):is(
+        [zen-renaming-tab="true"],
+        :has(#navigator-toolbox:is(
+          [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+          [flash-popup], [has-popup-menu], [movingtab],
+          [zen-compact-mode-active], [animate="true"],
+          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
+        )),
+        :has(#zen-appcontent-navbar-wrapper:is(
+          [zen-has-hover], [has-popup-menu], [zen-compact-mode-active]
+        ))
+      ) #tabbrowser-tabpanels >
+        .browserSidebarContainer:is(.deck-selected, [zen-split="true"]):not(
+          .zen-glance-overlay, .zen-glance-background
+        ) {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+    @media -moz-pref("zia.cards.blur") {
+      :root:not([customizing], [inDOMFullscreen="true"]):not(:has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      )):is(
+        :has(> :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+                   #zsf-folder-hover-card):not([hidden])),
+        :has(> #zsf-color-dialog[open])
+      ) #tabbrowser-tabpanels >
+        .browserSidebarContainer:is(.deck-selected, [zen-split="true"]):not(
+          .zen-glance-overlay, .zen-glance-background
+        ) {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+    @media -moz-pref("zia.urlbar.pop-up-blur") {
+      :root:not([customizing], [inDOMFullscreen="true"]):not(:has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      )):has(#urlbar:is([breakout-extend],
+        [zen-floating-urlbar="true"]):not([zia-classic]))
+      #tabbrowser-tabpanels >
+        .browserSidebarContainer:is(.deck-selected, [zen-split="true"]):not(
+          .zen-glance-overlay, .zen-glance-background
+        ) {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+  }
+}
+
 
 /* v0.2.0 — Zia 2.118 native video compositor ownership.
  * Older HDR Guard revisions treated a watch-page URL as a reason to force

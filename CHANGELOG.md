@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.3.2**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.3.3**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.3.3](releases/v0.3.3.md) | Default-ON, reversible unified HG appearance for sidebar, Zia/Site Folders cards and URL/new-tab popups from first frame, including unclassified video; macOS composition is limited to visible overlays. |
 | [v0.3.2](releases/v0.3.2.md) | Precompute HG preview blur on hidden Zia native cards so Site Folders can copy the correct first-frame style; no JS or visual value change, v0.3.1 performance maintained. |
 | [v0.3.1](releases/v0.3.1.md) | Event-first, exact HG visual parity; 50ms polling replaced with 1s fallback watchdog and independent 100ms site timer; unused Glance observer suspended. Virtual-time benchmark added. |
 | [v0.3.0](releases/v0.3.0.md) | Reworked Glance/card compositing with a guarded post-close reset; retained confirmed per-tab SDR/HDR state for fast return and shortened unknown SDR fallback to 100 ms. |
