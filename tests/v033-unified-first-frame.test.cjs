@@ -73,11 +73,11 @@ test('033 compositor is only requested for actually displayed sidebar/card/popup
  }
 });
 
-test('033 does not add any actor probes, listeners or polling and preserves 031 timing',()=>{
+test('033 actor timing unchanged; 036 synchronous YouTube marker tested separately',()=>{
  for(const [file,expected] of Object.entries({
   'sdr-glass.uc.js':'489b4b604741d18e717b767a5053463b55477e4f',
   'glance-recovery.uc.js':'0493f4e612d474f6bbbdf21791f94dcb3b254c93',
-  'video-page.uc.js':'698860f7b14e018811e6fb79ceed46a2c984c541',
+  'video-page.uc.js':'5517ace524ac181289a3514329fab0336a1e46b6',
   'actors/ZcthUniversalChild.sys.mjs':'0bf395f09d59dae8d530cecc0df4d74694600ddc'
  }))assert.equal(sha(file),expected,file);
 });

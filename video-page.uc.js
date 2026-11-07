@@ -25,6 +25,16 @@
     } catch (_) { return false; }
   }
 
+
+  // Synchronous, YouTube-only state for the limited macOS 0.3.6 rule.
+  function isYouTubeVideoPage(spec) {
+    try {
+      const host = new URL(spec).hostname.toLowerCase();
+      return (host === 'youtu.be' || host === 'youtube.com' ||
+        host.endsWith('.youtube.com')) && isVideoPage(spec);
+    } catch (_) { return false; }
+  }
+
   // Explicit user opt-in covers www.bilibili.com/* (all paths, query and hash).
   // Do not broaden the rule to other subdomains or other websites.
   function isBilibili(spec) {
@@ -45,6 +55,7 @@
       try { spec = browser?.currentURI?.spec || ''; } catch (_) {}
     }
     root.toggleAttribute('data-zcth-video-page', isVideoPage(spec));
+    root.toggleAttribute('data-zcth-youtube-page', isYouTubeVideoPage(spec));
     // Write synchronously on TabSelect and onLocationChange: no timer,
     // no 350ms unknown-stream fallback, and no content actor roundtrip.
     root.toggleAttribute('data-zcth-bilibili-glass',
@@ -85,6 +96,7 @@
       try { Services.prefs.removeObserver(name, prefObserver); } catch (_) {}
     }
     root.removeAttribute('data-zcth-video-page');
+    root.removeAttribute('data-zcth-youtube-page');
     root.removeAttribute('data-zcth-bilibili-glass');
     delete window[KEY];
   }
