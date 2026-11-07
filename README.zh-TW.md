@@ -31,6 +31,8 @@
 
 Glance 修補須另行在 Sine 開啟「Zen Glance 開啟時修正浮動側欄毛玻璃」。v0.3.0 已縮小 Glance 開啟時的合成處理，並在關閉後進行一次不涉及影片的合成重整；仍需 OLED 實機驗證。若 HDR 亮度或預覽卡片模糊異常，請關閉選項並完整重啟 Zen。
 
+v0.3.2 將 HG 的預覽卡片 CSS 提前適用於尚未顯示的 Zia 原生卡片，讓 Site Folders v0.7.6 開啟群組預覽時同步讀取到你設定的模糊值（例如 10px），減少先出現 Zia 24px 再轉為 HG 的視覺跳變。隱藏的卡片仍由 Zia／Site Folders 的 display:none 保護，不會額外進行 GPU 模糊；未新增 JavaScript、計時器、輪詢，也不改動 v0.3.1 的性能改善。此為以原始碼與模擬流程驗證的修補，macOS GPU 首畫格仍需實機確認。
+
 v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高度。切換已辨識分頁、影片狀態與 Sine 開關變動時即時更新 HG 外觀；主程式備援輪詢從每 50 ms 改為每 1000 ms，指定未知 SDR 網站仍用獨立 100 ms 計時器，無須等待輪詢。影片端每 180 ms 的原有檢查不變，以維持 HDR 安全。Glance 選項關閉時停用其 DOM 監聽。模擬實驗放在 [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs)，不能視為 macOS GPU 的實測加速。
 
 切回先前已確認格式的影片分頁時，會優先使用該分頁快取，避免先清空毛玻璃狀態。重新載入、切換影片網址等仍會重新檢查；未知網站 SDR 備援從 350 ms 改為 100 ms。
@@ -45,11 +47,11 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 ## 問題處理與文件
 
-出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.3.0](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.3.0)；若只是外觀問題，可在 Sine 關閉預覽卡片毛玻璃選項。
+出現顏色或模糊問題時，先在 Sine 關閉對應的 HDR Guard 選項；必要時停用 MOD。完整退回程式可使用 [v0.3.1](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.3.1)；若只是外觀問題，可在 Sine 關閉預覽卡片毛玻璃選項。
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.3.1**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.3.2**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

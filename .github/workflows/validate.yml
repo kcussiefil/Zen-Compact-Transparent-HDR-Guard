@@ -25,4 +25,6 @@ jobs:
       - name: Automated regressions
         run: node --test tests/*.test.*
       - name: Deterministic performance simulation (v0.3.0 vs v0.3.1)
-        run: node benchmarks/compare-v030-v031.cjs
+        run: |
+          node benchmarks/compare-v030-v031.cjs
+          node benchmarks/compare-v031-v032-preview.cjs
