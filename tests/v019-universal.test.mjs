@@ -98,7 +98,8 @@ function setup(panes=1,options={}){
  return {b,props,attrs,writes,prefObservers,win,pref,booleanPrefs,listeners,config,
   setVideoVisible:flag=>{videoVisible=flag},
   setVisibleBrowsers:nodes=>{visibleBrowsers=nodes},
-  manager:win.__zcthUniversalV019,advance:ms=>{now+=ms;listeners.tick()}};
+  manager:win.__zcthUniversalV019,advance:ms=>{now+=ms;listeners.tick()},
+  moveClock:ms=>{now+=ms}};
 }
 test('Actor registration covers HTTP/HTTPS in all frames with event-first 1000ms watchdog',()=>{
  const x=setup();
@@ -397,6 +398,8 @@ test('031 100ms unknown SDR fallback schedules a targeted timer instead of waiti
  x.manager.onFrameState(x.b[0],'frame',{state:'unknown',count:1,mediaKey:'unknown'});
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
  assert.equal(typeof x.listeners.scheduled,'function');
- x.advance(101);
+ const onFallback=x.listeners.scheduled;
+ x.moveClock(100);
+ onFallback(); // NO watchdog tick: repaint at exactly 100 ms
  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
 });
