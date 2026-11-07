@@ -3,44 +3,41 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const base=path.resolve(__dirname,'..');
-const css=fs.readFileSync(path.join(base,'chrome.css'),'utf8');
-const prefs=JSON.parse(fs.readFileSync(path.join(base,'preferences.json'),'utf8'));
-const theme=JSON.parse(fs.readFileSync(path.join(base,'theme.json'),'utf8'));
-const marker='/* v0.2.9 — Opt-in macOS Zen Glance glass compositor.';
+const root=path.resolve(__dirname,'..');
+const css=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+const prefs=JSON.parse(fs.readFileSync(path.join(root,'preferences.json'),'utf8'));
+const theme=JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
+const marker='/* v0.3.0 — macOS Glance glass with explicit hover-card priority and recovery.';
 const rule=css.slice(css.indexOf(marker)).replace(/\/\*[\s\S]*?\*\//g,'');
-const count=(s,needle)=>s.split(needle).length-1;
-
-test('v029 requires independent default-off macOS Sine opt-in',()=>{
- assert.equal(theme.version,'0.2.9');
+test('030 preserves the default-OFF Glance opt-in and correct v0.3.0 version',()=>{
+ assert.equal(theme.version,'0.3.0');
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.glanceglass')?.defaultValue,false);
+ assert.equal(theme.scripts['glance-recovery.uc.js'].loadOrder,80);
  assert.ok(css.includes(marker));
  assert.match(rule,/-moz-platform: macos/);
  assert.match(rule,/-moz-bool-pref: "mod\.compacttpr\.glanceglass"/);
- assert.match(rule,/-moz-bool-pref: "mod\.compacttpr\.usecompacttransparent"/);
- assert.match(rule,/\[zen-compact-mode="true"\]/);
 });
-
-test('only selected Glance overlays activate compositor and styling',()=>{
- assert.ok(count(rule,'.zen-glance-overlay.deck-selected')>=4);
- assert.match(rule,/#navigator-toolbox:is\(\[zen-has-hover\]/);
- assert.doesNotMatch(rule,/MutationObserver|setTimeout|setInterval|data-zcth-glance-open/);
+test('030 selected Glance alone can paint glass; no page promotion while a preview card is open',()=>{
+ assert.match(rule,/\.zen-glance-overlay\.deck-selected/);
+ assert.match(rule,/:not\(\s*:has\(> :is\(#zia-tab-card, #zia-folder-card, #zia-tip-card,/);
+ assert.match(rule,/#zsf-folder-hover-card\):not\(\[hidden\]\)\)/);
+ assert.match(rule,/\[zen-has-hover\]/);
+ assert.match(rule,/will-change: transform !important/);
 });
-
-test('Glance foreground is gated against its own video and when the sidebar is hidden',()=>{
- assert.match(rule,/\.zen-glance-overlay\.deck-selected:not\(\s*:has\(browser\[zia-video\]\)/);
- assert.equal(count(rule,'will-change: transform !important'),2);
- assert.equal(count(rule,'backface-visibility: hidden !important'),2);
-});
-
-test('background HDR video is excluded from compositor promotion',()=>{
+test('030 excludes root and Glance foreground/background video from promotion',()=>{
  assert.match(rule,/\[zia-video\], \[data-zcth-video-page\]/);
- assert.match(rule,/\.zen-glance-background browser\[zia-video\]/);
- assert.match(rule,/\.zen-glance-background\.deck-selected/);
+ assert.match(rule,/:is\(\s*\.zen-glance-background, \.zen-glance-overlay/);
+ assert.match(rule,/browser\[zia-video\]/);
  assert.doesNotMatch(rule,/#tabbrowser-tabpanels \.browserSidebarContainer\s*\{/);
 });
-
-test('custom glass parameters remain unchanged; no video color or layout changes',()=>{
+test('030 recovery clears compositor for one frame only, after Glance, never video',()=>{
+ assert.match(rule,/:root\[data-zcth-glance-recover\]:not/);
+ assert.match(rule,/will-change: auto !important/);
+ assert.match(rule,/backface-visibility: visible !important/);
+ assert.match(rule,/:not\(:has\(browser\[zia-video\]\)\)/);
+ assert.match(rule,/:not\(\s*:has\(#tabbrowser-tabpanels > \.browserSidebarContainer\.zen-glance-overlay\.deck-selected\)/);
+});
+test('030 preserves custom appearance and does not alter video geometry or brightness',()=>{
  for(const x of ['--mod-compacttpr-customcolor-final','--mod-compacttpr-transparentvalue','--mod-compacttpr-customblur'])assert.ok(rule.includes(x));
  for(const x of [/brightness\s*\(/,/filter:\s*brightness/,/video\.html5/,/opacity\s*:/,/transform\s*:/,/width\s*:/,/height\s*:/,/position:\s*fixed/])assert.doesNotMatch(rule,x);
  assert.match(rule,/#titlebar::before/);

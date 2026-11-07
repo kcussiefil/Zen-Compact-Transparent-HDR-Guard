@@ -8,11 +8,11 @@ const css=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
 const prefs=JSON.parse(fs.readFileSync(path.join(root,'preferences.json'),'utf8'));
 const theme=JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
 const start=css.indexOf('/* v0.2.8 — Selected-color dialog compositor:');
-const rule=css.slice(start,css.indexOf('/* v0.2.9 — Opt-in macOS Zen Glance glass compositor.'));
+const rule=css.slice(start,css.indexOf('/* v0.3.0 — macOS Glance glass with explicit hover-card priority and recovery.'));
 const clean=rule.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 test('028 uses existing Sine opt-in with disabled-by-default rollback',()=>{
- assert.equal(theme.version,'0.2.9');
+ assert.equal(theme.version,'0.3.0');
  assert.ok(start>0);
  assert.equal(prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur')?.defaultValue,false);
  assert.match(clean,/-moz-bool-pref: "mod\.compacttpr\.previewcardcustomblur"/);

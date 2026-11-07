@@ -53,7 +53,7 @@
   },
   {
     "property": "mod.compacttpr.hdrrealblur",
-    "label": "HDR 影片使用 HDR Guard 自訂毛玻璃（需開啟 Zia 的 Blur over video；預設關閉，可立即回退）",
+    "label": "HDR 影片使用 HDR Guard 自訂毛玻璃（需 Zia 的 Blur over video 開啟；預設關閉，可立即回退）",
     "type": "checkbox",
     "defaultValue": false
   },
@@ -71,7 +71,7 @@
   },
   {
     "property": "mod.compacttpr.glanceglass",
-    "label": "Zen Glance 開啟時修正浮動側欄毛玻璃（macOS 測試功能；預設關閉）",
+    "label": "Zen Glance 開啟時修正浮動側欄毛玻璃（預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },

@@ -12,9 +12,9 @@ const manager=read('sdr-glass.uc.js');
 const actor=read('actors/ZcthUniversalChild.sys.mjs');
 const parent=read('actors/ZcthUniversalParent.sys.mjs');
 
-test('v0.2.9 is an independent Sine MOD that retains both original scripts',()=>{
+test('v0.3.0 is an independent Sine MOD that retains both original scripts',()=>{
  assert.equal(theme.id,'zen-compact-transparent-hdr-guard');
- assert.equal(theme.version,'0.2.9');
+ assert.equal(theme.version,'0.3.0');
  assert.equal(theme.style.chrome,'chrome.css');
  assert.ok(theme.scripts['video-page.uc.js']);
  assert.ok(theme.scripts['sdr-glass.uc.js']);
@@ -73,7 +73,7 @@ test('manual pattern is host and path scoped; HDR overrides the fallback',()=>{
  assert.match(manager,/u\.searchParams\.get\('v'\)/);
  assert.match(manager,/state==='hdr'/);
  assert.match(manager,/unknownSince/);
- assert.match(manager,/>=350/);
+ assert.match(manager,/>=100/);
  assert.match(manager,/mod\.compacttpr\.manualvideourl/);
 });
 test('original HDR compositor protection remains available',()=>{
