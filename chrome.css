@@ -1,4 +1,4 @@
-/* Zen Compact Transparent HDR Guard v0.2.9
+/* Zen Compact Transparent HDR Guard v0.3.0
  * Derived from rasyidrafi/zen-compact-transparent-mode (Apache-2.0).
  * Disable the original mod before enabling this independent replacement. */
 @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
@@ -463,26 +463,40 @@
 }
 
 
-/* v0.2.9 — Opt-in macOS Zen Glance glass compositor.
+/* v0.3.0 — macOS Glance glass with explicit hover-card priority and recovery.
  *
- * Zen opens a distinct .zen-glance-overlay while its parent is marked
- * .zen-glance-background. Promote the foreground preview while the floating
- * sidebar is shown; do not promote an HDR video in the background.
+ * Retains opt-in Glance sidebar glass, but never stacks an extra promotion
+ * on top of the independent Zia / Site Folders hover-card compositor.
+ * Only non-video foreground/background layers are promoted, while the
+ * floating sidebar is visible and no root-level preview card is visible.
  *
- * Default OFF; disable mod.compacttpr.glanceglass for immediate rollback.
- * Both promotion rules stop matching immediately when Glance closes.
+ * The separate glance-recovery script briefly marks [data-zcth-glance-recover]
+ * only AFTER Glance closes, to drop a stale normal-page compositor layer
+ * for one frame. It never runs with a visible/potential HDR video.
  */
 @media (-moz-platform: macos) {
   @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
          (-moz-bool-pref: "mod.compacttpr.glanceglass") {
-    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"], [zia-video], [data-zcth-video-page]
+    ):not(
+      :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(
+        .zen-glance-background, .zen-glance-overlay
+      ) browser[zia-video])
+    ):has(
       #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
     ) #titlebar {
       position: relative !important;
       overflow: hidden !important;
     }
 
-    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"], [zia-video], [data-zcth-video-page]
+    ):not(
+      :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(
+        .zen-glance-background, .zen-glance-overlay
+      ) browser[zia-video])
+    ):has(
       #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
     ) #titlebar::before {
       content: "" !important;
@@ -498,32 +512,45 @@
       pointer-events: none !important;
     }
 
-    /* Only while sidebar is visible; do not touch a video in the Glance preview. */
-    :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
-      #navigator-toolbox:is([zen-has-hover], [zen-user-show], [zen-has-empty-tab],
-        [flash-popup], [movingtab], [zen-compact-mode-active], [animate="true"])
+    /* Stop applying our own browser promotion as soon as any preview card
+       appears. Its existing Zia/Site-Folders gated compositor takes priority. */
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"], [zia-video], [data-zcth-video-page]
+    ):not(
+      :has(> :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+                 #zsf-folder-hover-card):not([hidden]))
+    ):not(
+      :has(#tabbrowser-tabpanels > .browserSidebarContainer:is(
+        .zen-glance-background, .zen-glance-overlay
+      ) browser[zia-video])
+    ):has(
+      #navigator-toolbox:is(
+        [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+        [flash-popup], [has-popup-menu], [movingtab],
+        [zen-compact-mode-active], [animate="true"],
+        [data-zsf-preview-sidebar-hold]
+      )
     ):has(
       #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
-    ) #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected:not(
-      :has(browser[zia-video])
+    ) #tabbrowser-tabpanels > .browserSidebarContainer:is(
+      .zen-glance-overlay.deck-selected, .zen-glance-background.deck-selected
     ) {
       will-change: transform !important;
       backface-visibility: hidden !important;
     }
 
-    /* Parent/background compositor: never override Zia/HDR Guard video protection. */
-    :root[zen-compact-mode="true"]:not(
-      [customizing], [inDOMFullscreen="true"], [zia-video], [data-zcth-video-page]
+    /* One-frame compositor RELEASE on the selected non-video page only.
+       Glance recovery script sets this marker after Glance is fully closed.
+       Never persist it or match an HDR/video page. */
+    :root[data-zcth-glance-recover]:not(
+      [zia-video], [data-zcth-video-page], [inDOMFullscreen="true"]
     ):not(
-      :has(#tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-background browser[zia-video])
-    ):has(
-      #navigator-toolbox:is([zen-has-hover], [zen-user-show], [zen-has-empty-tab],
-        [flash-popup], [movingtab], [zen-compact-mode-active], [animate="true"])
-    ):has(
-      #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
-    ) #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-background.deck-selected {
-      will-change: transform !important;
-      backface-visibility: hidden !important;
+      :has(#tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected)
+    ) #tabbrowser-tabpanels > .browserSidebarContainer.deck-selected:not(
+      .zen-glance-overlay, .zen-glance-background
+    ):not(:has(browser[zia-video])) {
+      will-change: auto !important;
+      backface-visibility: visible !important;
     }
   }
 }
