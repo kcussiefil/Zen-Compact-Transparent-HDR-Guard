@@ -83,8 +83,15 @@ function setup(panes=1,options={}){
   clearTimeout:()=>{},addEventListener:()=>{}
  };
  let visibleBrowsers=b;
- const doc={documentElement:root,querySelectorAll:()=>videoVisible?visibleBrowsers:[]};
- class Observer{constructor(f){this.f=f;listeners.observer=this}observe(){}disconnect(){}}
+ const panels={};
+ const doc={documentElement:root,getElementById:id=>id==='tabbrowser-tabpanels'?panels:null,
+  querySelectorAll:()=>videoVisible?visibleBrowsers:[]};
+ class Observer{
+  constructor(f){this.f=f}
+  observe(target){if(target===root)listeners.observer=this;
+    if(target===panels)listeners.browserObserver=this}
+  disconnect(){}
+ }
  let config;
  vm.runInNewContext(code,{
   window:win,document:doc,URL,Date:{now:()=>now},
@@ -402,4 +409,17 @@ test('031 100ms unknown SDR fallback schedules a targeted timer instead of waiti
  x.moveClock(100);
  onFallback(); // NO watchdog tick: repaint at exactly 100 ms
  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+});
+
+test('031 Zia browser-level video visibility changes repaint HG immediately, without watchdog',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true});
+ x.manager.onFrameState(x.b[0],'frame',{state:'sdr',count:1,mediaKey:'stream'});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+ assert.ok(x.listeners.browserObserver,'browser[zia-video] is monitored directly');
+ x.setVideoVisible(false);
+ x.listeners.browserObserver.f([{attributeName:'zia-video',target:{localName:'browser'}}]);
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'hidden video clears in same event');
+ x.setVideoVisible(true);
+ x.listeners.browserObserver.f([{attributeName:'zia-video',target:{localName:'browser'}}]);
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'),'same known SDR visible again restores HG without Zia intermediate');
 });
