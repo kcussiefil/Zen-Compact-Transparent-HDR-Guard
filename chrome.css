@@ -215,6 +215,38 @@
     }
   }
 
+
+  /* v0.3.6 — YouTube-only offscreen compositor mitigation.
+   * Zia promotes all browserSidebarContainers during flyout hover. If its
+   * video marker changes, offscreen panes can unnecessarily change layers
+   * even though HG maintains promotion of the selected pane. Limit this
+   * unnecessary churn without promoting any additional page or changing
+   * the selected page, HG glass paint, Glance, or split views. */
+  @media (-moz-platform: macos) {
+    @media -moz-pref("zia.compact.sidebar-blur") {
+      :root[zen-compact-mode="true"][data-zcth-youtube-page]:not(
+        [customizing], [inDOMFullscreen="true"]
+      ):not(:has(
+        #tabbrowser-tabpanels > .browserSidebarContainer:is(
+          [zen-split="true"], .zen-glance-overlay.deck-selected
+        )
+      )):not(#zcth-hidden-youtube-1):not(#zcth-hidden-youtube-2):is(
+        [zen-renaming-tab="true"],
+        :has(#navigator-toolbox:is(
+          [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+          [flash-popup], [has-popup-menu], [movingtab],
+          [zen-compact-mode-active], [animate="true"],
+          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
+        ))
+      ) #tabbrowser-tabpanels > .browserSidebarContainer:not(
+        .deck-selected, [zen-split="true"]
+      ) {
+        will-change: auto !important;
+        backface-visibility: visible !important;
+      }
+    }
+  }
+
   @media -moz-pref("zia.cards.blur") {
     :root:not(#zcth-unified-card-1):not(#zcth-unified-card-2):not(#zcth-unified-card-3):not(#zcth-unified-card-4)
       > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,

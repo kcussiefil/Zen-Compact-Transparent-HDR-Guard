@@ -58,6 +58,6 @@ test('033 preserves all prior Sine preferences and defaults when unified theme i
 test('031 video content actor remains on original 180ms to protect current-stream detection latency',()=>{
  assert.equal(blob('actors/ZcthUniversalChild.sys.mjs'),'0bf395f09d59dae8d530cecc0df4d74694600ddc');
 });
-test('031 URL/Bilibili instant marker remains unchanged',()=>{
- assert.equal(blob('video-page.uc.js'),'698860f7b14e018811e6fb79ceed46a2c984c541');
+test('031 URL/Bilibili behavior preserved and 036 YouTube marker tested independently',()=>{
+ assert.equal(blob('video-page.uc.js'),'5517ace524ac181289a3514329fab0336a1e46b6');
 });
