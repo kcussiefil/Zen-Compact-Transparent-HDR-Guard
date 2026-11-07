@@ -175,6 +175,28 @@
       pointer-events: none !important;
     }
 
+    /* v0.3.5 — keep the floating sidebar's native underlay stable across
+       Zia's asynchronous [zia-video] change when YouTube begins playback.
+       Previously Zia owned this 28px underlay before the video marker, then
+       HG's [zia-video] override took over after it. Both had equivalent paint
+       but switching owners could flash one compositor frame. The HG 10px
+       titlebar::before paint above already stays constant; keep its *underlay*
+       constant as well. Restrict to the floating navigator toolbox, not the
+       separate top toolbar's intentionally solid background. */
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"]
+    ):not(#zcth-stable-underlay-1):not(#zcth-stable-underlay-2)
+      #navigator-toolbox .zen-toolbar-background {
+      background: transparent !important;
+      backdrop-filter: blur(28px) saturate(1.6) !important;
+      &::after {
+        opacity: calc(var(--zen-background-opacity, 1) * 0.78) !important;
+      }
+      &::before {
+        opacity: calc((1 - var(--zen-background-opacity, 1)) * 0.78) !important;
+      }
+    }
+
     /* Zia otherwise changes this surface to NO blur when [zia-video]
        appears. Restore the same underlying glass used on ordinary pages.
        The compositor promotion remains strictly visible-overlay-only. */
