@@ -73,7 +73,7 @@ test('manual pattern is host and path scoped; HDR overrides the fallback',()=>{
  assert.match(manager,/u\.searchParams\.get\('v'\)/);
  assert.match(manager,/state==='hdr'/);
  assert.match(manager,/unknownSince/);
- assert.match(manager,/>=350/);
+ assert.match(manager,/>=100/);
  assert.match(manager,/mod\.compacttpr\.manualvideourl/);
 });
 test('original HDR compositor protection remains available',()=>{
