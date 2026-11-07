@@ -56,7 +56,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.3.4** ([`theme.json`](theme.json)) |
+| Current version | **v0.3.5** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

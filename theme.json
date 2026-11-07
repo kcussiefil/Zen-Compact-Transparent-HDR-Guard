@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Unified first-frame HG glass for Zen sidebar, Zia/Site Folders previews and URL/new-tab popups, with visible-only macOS video compositing and reversible HDR safeguards.",
+  "description": "Unified first-frame HG glass for Zen sidebar, Zia/Site Folders previews and URL/new-tab popups; stable sidebar underlay across playback with visible-only video compositing and reversible HDR safeguards.",
   "author": "kcussiefil",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "style": {
     "chrome": "chrome.css"
   },
@@ -39,5 +39,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-07T13:11:59.000Z"
+  "updatedAt": "2026-11-07T13:44:46.000Z"
 }
