@@ -13,7 +13,11 @@ test('033 with unified theme OFF preserves exact v0.3.2 CSS, including 031 timin
  // The sole v0.3.2 visual change is one selector gate removal.
  // Re-insert the v0.3.1 comment and the old hidden gate. The resulting
  // stylesheet MUST be byte-for-byte the prior release (Git blob SHA).
- const full=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+ const withGeometry=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+ const geo=withGeometry.indexOf('/* v0.3.7 — video-independent compact sidebar geometry.');
+ const unifiedBegin=withGeometry.indexOf('/* v0.3.3 — opt-out unified HG theme.',geo);
+ assert.ok(geo>0&&unifiedBegin>geo);
+ const full=withGeometry.slice(0,geo)+withGeometry.slice(unifiedBegin);
  const from=full.indexOf('/* v0.3.3 — opt-out unified HG theme.');
  const to=full.indexOf('/* v0.2.0 —',from);
  assert.ok(from>0&&to>from,'unified section must be independently removable');
@@ -59,5 +63,5 @@ test('031 video content actor remains on original 180ms to protect current-strea
  assert.equal(blob('actors/ZcthUniversalChild.sys.mjs'),'0bf395f09d59dae8d530cecc0df4d74694600ddc');
 });
 test('031 URL/Bilibili behavior preserved and 036 YouTube marker tested independently',()=>{
- assert.equal(blob('video-page.uc.js'),'5517ace524ac181289a3514329fab0336a1e46b6');
+ assert.equal(blob('video-page.uc.js'),'698860f7b14e018811e6fb79ceed46a2c984c541');
 });

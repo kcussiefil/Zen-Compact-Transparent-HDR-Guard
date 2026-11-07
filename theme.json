@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Unified first-frame HG glass, stable sidebar underlay and YouTube-only offscreen compositor mitigation, preserving reversible HDR safeguards.",
+  "description": "Video-independent compact sidebar geometry, Zia-owned normal video compositing and first-frame HG 10px glass with reversible HDR safeguards.",
   "author": "kcussiefil",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "style": {
     "chrome": "chrome.css"
   },
@@ -39,5 +39,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-07T14:25:00.000Z"
+  "updatedAt": "2026-11-07T15:09:00.000Z"
 }
