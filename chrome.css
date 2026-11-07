@@ -634,6 +634,63 @@
 }
 
 
+/* v0.3.4 — Opt-in Glance foreground compositor for visible HG overlays.
+ * Unified HG excludes the selected Glance page; legacy Glance promotion also
+ * excludes visible cards. Explicitly hand off composition to Glance itself
+ * ONLY while a matching HG surface is open. No timers, hidden-card promotion,
+ * page-video filters or changes to the v0.3.3 first-frame appearance.
+ */
+@media (-moz-platform: macos) {
+  @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+         (-moz-bool-pref: "mod.compacttpr.unifiedhg") and
+         (-moz-bool-pref: "mod.compacttpr.glanceglass") {
+    @media -moz-pref("zia.compact.sidebar-blur") {
+      :root[zen-compact-mode="true"]:not([customizing], [inDOMFullscreen="true"]):has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      ):is(
+        [zen-renaming-tab="true"],
+        :has(#navigator-toolbox:is(
+          [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
+          [flash-popup], [has-popup-menu], [movingtab],
+          [zen-compact-mode-active], [animate="true"],
+          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
+        )),
+        :has(#zen-appcontent-navbar-wrapper:is(
+          [zen-has-hover], [has-popup-menu], [zen-compact-mode-active]
+        ))
+      ) #tabbrowser-tabpanels >
+        .browserSidebarContainer.zen-glance-overlay.deck-selected {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+    @media -moz-pref("zia.cards.blur") {
+      :root:not([customizing], [inDOMFullscreen="true"]):has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      ):is(
+        :has(> :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+                    #zsf-folder-hover-card):not([hidden])),
+        :has(> #zsf-color-dialog[open])
+      ) #tabbrowser-tabpanels >
+        .browserSidebarContainer.zen-glance-overlay.deck-selected {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+    @media -moz-pref("zia.urlbar.pop-up-blur") {
+      :root:not([customizing], [inDOMFullscreen="true"]):has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      ):has(#urlbar:is([breakout-extend],
+                       [zen-floating-urlbar="true"]):not([zia-classic]))
+      #tabbrowser-tabpanels >
+        .browserSidebarContainer.zen-glance-overlay.deck-selected {
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+      }
+    }
+  }
+}
+
 /* v0.3.0 — macOS Glance glass with explicit hover-card priority and recovery.
  *
  * Retains opt-in Glance sidebar glass, but never stacks an extra promotion

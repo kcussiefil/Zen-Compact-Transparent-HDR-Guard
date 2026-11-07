@@ -10,7 +10,7 @@ const theme=JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
 const marker='/* v0.3.0 — macOS Glance glass with explicit hover-card priority and recovery.';
 const rule=css.slice(css.indexOf(marker)).replace(/\/\*[\s\S]*?\*\//g,'');
 test('030 preserves the default-OFF Glance opt-in through v0.3.3',()=>{
- assert.equal(theme.version,'0.3.3');
+ assert.equal(theme.version,'0.3.4');
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.glanceglass')?.defaultValue,false);
  assert.equal(theme.scripts['glance-recovery.uc.js'].loadOrder,80);
  assert.ok(css.includes(marker));
