@@ -70,13 +70,14 @@ function setup(panes=1,options={}){
  const win={
   gBrowser:{selectedBrowser:b[0],
    tabContainer:{addEventListener:(n,f)=>listeners[n]=f,removeEventListener:()=>{}},
-   addTabsProgressListener:()=>{},removeTabsProgressListener:()=>{}},
+   addTabsProgressListener:f=>{listeners.progress=f},removeTabsProgressListener:()=>{}},
   setInterval:(f,ms)=>{listeners.tick=f;listeners.ms=ms;return 1},
   clearInterval:()=>{},
   setTimeout:(f)=>{listeners.scheduled=f;return 2},
   clearTimeout:()=>{},addEventListener:()=>{}
  };
- const doc={documentElement:root,querySelectorAll:()=>videoVisible?b:[]};
+ let visibleBrowsers=b;
+ const doc={documentElement:root,querySelectorAll:()=>videoVisible?visibleBrowsers:[]};
  class Observer{constructor(f){this.f=f;listeners.observer=this}observe(){}disconnect(){}}
  let config;
  vm.runInNewContext(code,{
@@ -87,6 +88,7 @@ function setup(panes=1,options={}){
  });
  return {b,props,attrs,win,pref,booleanPrefs,listeners,config,
   setVideoVisible:flag=>{videoVisible=flag},
+  setVisibleBrowsers:nodes=>{visibleBrowsers=nodes},
   manager:win.__zcthUniversalV019,advance:ms=>{now+=ms;listeners.tick()}};
 }
 test('Actor registration covers HTTP/HTTPS in all frames and uses 50ms probe',()=>{
@@ -96,11 +98,11 @@ test('Actor registration covers HTTP/HTTPS in all frames and uses 50ms probe',()
  assert.ok(x.config.opts.child.events.playing);
  assert.equal(x.listeners.ms,50);
 });
-test('Bilibili unknown has delayed site-rule fallback',()=>{
+test('Bilibili unknown has 100ms site-rule fallback',()=>{
  const x=setup();
  x.manager.onFrameState(x.b[0],'f',{state:'unknown',count:1,mediaKey:'m1'});
  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
- x.advance(349);assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ x.advance(99);assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
  x.advance(2);assert.ok(x.attrs.has('data-zcth-sdr-glass'));
  assert.equal(x.props.get('data-zcth-classification-source'),'site-rule');
 });
@@ -301,4 +303,41 @@ test('024 Bilibili fast-path bypasses SDR/HDR classifier and removes prior marke
  x.attrs.delete('data-zcth-bilibili-glass');
  x.advance(50);
  assert.ok(x.attrs.has('data-zcth-hdr-glass'),'disabling Bilibili override restores existing classification');
+});
+
+test('030 tab cache restores the known same-browser SDR immediately without new Actor frames',()=>{
+  const x=setup(2);
+  x.setVisibleBrowsers([x.b[0]]);
+  x.manager.onFrameState(x.b[0],'f',{state:'sdr',count:1,mediaKey:'first'});
+  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+  x.setVisibleBrowsers([x.b[1]]);
+  x.win.gBrowser.selectedBrowser=x.b[1];x.listeners.TabSelect();
+  assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+  x.setVisibleBrowsers([x.b[0]]);
+  x.win.gBrowser.selectedBrowser=x.b[0];x.listeners.TabSelect();
+  assert.ok(x.attrs.has('data-zcth-sdr-glass'),'same loaded tab should not wait for another query');
+});
+test('030 a changed YouTube video URL invalidates that browser cache and never reuses its SDR result',()=>{
+  const x=setup();
+  x.b[0].currentURI.spec='https://www.youtube.com/watch?v=first';
+  x.listeners.TabSelect();
+  x.manager.onFrameState(x.b[0],'f',{state:'sdr',count:1,mediaKey:'first'});
+  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+  x.b[0].currentURI.spec='https://www.youtube.com/watch?v=second';
+  x.listeners.TabSelect();
+  assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'new video is unknown until verified');
+});
+test('030 an identical-URL reload invalidates cached stream via progress listener',()=>{
+  const x=setup();
+  x.manager.onFrameState(x.b[0],'f',{state:'sdr',count:1,mediaKey:'first'});
+  assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+  x.listeners.progress.onLocationChange(x.b[0]);
+  assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'reloading same page must revalidate');
+});
+test('030 closing a browser invalidates its cached video without resetting other open tabs',()=>{
+  const x=setup(2);
+  x.setVisibleBrowsers([x.b[0]]);
+  x.manager.onFrameState(x.b[0],'f',{state:'sdr',count:1,mediaKey:'first'});
+  x.listeners.TabClose({target:{linkedBrowser:x.b[1]}});
+  assert.ok(x.attrs.has('data-zcth-sdr-glass'),'closing an inactive tab does not change visible video');
 });
