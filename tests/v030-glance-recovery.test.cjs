@@ -40,7 +40,7 @@ function setup({enabled=true,video=false,rootVideo=false,open=false}={}){
  class MutationObserver{
   constructor(fn){callbacks.mutation=fn}
   observe(){observing=true}
-  disconnect(){disconnected=true}
+  disconnect(){disconnected=true;observing=false}
  }
  const Services={prefs:{
   getBoolPref:()=>state.enabled,
@@ -48,7 +48,7 @@ function setup({enabled=true,video=false,rootVideo=false,open=false}={}){
   removeObserver:()=>{}
  }};
  vm.runInNewContext(source,{window,document,Services,MutationObserver,console});
- const fire=()=>callbacks.mutation([{type:'attributes',attributeName:'class',target:{classList:{contains:()=>true}}}]);
+ const fire=()=>observing&&callbacks.mutation([{type:'attributes',attributeName:'class',target:{classList:{contains:()=>true}}}]);
  const frame=()=>{const fn=frames.shift();assert.ok(fn,'expected queued frame');fn()};
  return {attrs,state,callbacks,frame,fire,observing:()=>observing,disconnected:()=>disconnected,
   cleanup:()=>window.__zcthGlanceRecoveryV030.cleanup()};
@@ -72,11 +72,15 @@ test('Glance reset does not touch the video compositor in an HDR/protected state
  y.state.open=false;y.fire();assert.ok(!y.attrs.has('data-zcth-glance-recover'));y.cleanup();
 });
 test('default-off user switch prevents any force-recomposition and restores on enable',()=>{
- const x=setup({enabled:false});x.state.open=true;x.fire();x.state.open=false;x.fire();
+ const x=setup({enabled:false});assert.ok(!x.observing(),'disabled option must not observe DOM');
+ x.state.open=true;x.fire();x.state.open=false;x.fire();
  assert.ok(!x.attrs.has('data-zcth-glance-recover'));
- x.state.enabled=true;x.state.open=true;x.fire();x.state.open=false;x.fire();
+ x.state.enabled=true;x.state.open=true;x.callbacks.pref.observe();
+ assert.ok(x.observing(),'enabling option immediately attaches DOM observer');
+ x.state.open=false;x.fire();
  x.frame();assert.ok(x.attrs.has('data-zcth-glance-recover'));
  x.state.enabled=false;x.callbacks.pref.observe();
+ assert.ok(!x.observing(),'disabling option detaches the observer');
  assert.ok(!x.attrs.has('data-zcth-glance-recover'));
  x.cleanup();
 });

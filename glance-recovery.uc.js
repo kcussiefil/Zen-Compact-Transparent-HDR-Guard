@@ -1,4 +1,4 @@
-// HDR Guard v0.3.0 — event-driven, video-safe Glance compositor recovery.
+// HG v0.3.1 — preference-gated Glance observer with video-safe compositor recovery.
 // Glance and Zia independently change Gecko's browser/layer composition.
 // This script only requests a ONE-frame reset on the selected normal page
 // after Glance closes. It never permanently forces compositing or changes
@@ -10,7 +10,7 @@
   const PREF = 'mod.compacttpr.glanceglass';
   const root = document.documentElement;
   let panels = null, tabContainer = null, observer = null;
-  let seenOpen = false, started = false, alive = true;
+  let seenOpen = false, started = false, alive = true, observing = false;
   let startTimer = null, prepareFrame = null, releaseFrame = null;
 
   function enabled() {
@@ -51,8 +51,23 @@
       });
     });
   }
+  function listenOnlyWhenEnabled() {
+    if (!observer || !panels) return;
+    const shouldObserve = enabled();
+    if (shouldObserve === observing) return;
+    if (shouldObserve) {
+      observer.observe(panels, {
+        subtree: true, childList: true, attributes: true,
+        attributeFilter: ['class']
+      });
+    } else {
+      observer.disconnect();
+    }
+    observing = shouldObserve;
+  }
   function sync() {
     if (!alive) return;
+    listenOnlyWhenEnabled();
     if (!enabled()) { seenOpen = false; dropMarker(); return; }
     if (hasGlance()) { seenOpen = true; dropMarker(); return; }
     if (seenOpen) { seenOpen = false; recover(); }
@@ -78,10 +93,6 @@
       if (changes.some(m => m.type === 'childList' ||
             (m.attributeName === 'class' &&
              m.target?.classList?.contains('browserSidebarContainer')))) sync();
-    });
-    observer.observe(panels, {
-      subtree: true, childList: true, attributes: true,
-      attributeFilter: ['class']
     });
     tabContainer.addEventListener('GlanceClose', onGlanceClose, true);
     try { Services.prefs.addObserver(PREF, prefObserver); } catch (_) {}

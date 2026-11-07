@@ -27,7 +27,9 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 4. Start with the default settings. Enable SDR, HDR, popup and preview-card options individually as needed.
 5. For preview-card custom glass, also enable Zia's preview-card blur. For custom glass over a confirmed HDR video, enable Zia's *Blur over video* and HDR Guard's separate HDR switch.
 
-Glance glass stays optional in Sine. v0.3.0 narrows its compositor overrides during hover cards and adds a one-frame, video-excluded recovery after Glance closes. It still needs on-device macOS verification; disable the option and restart Zen to roll back an unstable GPU state.
+Glance glass stays optional in Sine. In v0.3.1 its Glance DOM observer is disconnected while the option is OFF, and reconnects immediately when enabled. v0.3.0 narrows its compositor overrides during hover cards and adds a one-frame, video-excluded recovery after Glance closes. It still needs on-device macOS verification; disable the option and restart Zen to roll back an unstable GPU state.
+
+v0.3.1 keeps every custom glass CSS pixel identical to v0.3.0. The video classifier now paints on tab, video, preference and Zia visibility events; a 1000 ms watchdog replaces the earlier 50 ms polling, while an independent one-shot 100 ms fallback timer handles explicitly whitelisted unknown SDR sites. Video-side 180 ms stream checks remain unchanged for HDR safety. A reproducible deterministic simulation lives in [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs); simulated work reduction is **not** a measured Zen/GPU rendering speed increase.
 
 When switching back to a previously verified video tab, confirmed SDR/HDR stream data can be reused synchronously until URL, reload, or media evidence changes. Unknown-site SDR fallback is now 100 ms rather than 350 ms; this does not waive HDR protection for unknown videos.
 
@@ -43,13 +45,13 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 - Test ordinary webpages, SDR videos, HDR videos, unknown-format videos, Bilibili, and preview cards separately. Restart Zen when applying a newly installed script.
 - If a visual problem appears, first disable the specific HDR Guard option in Sine; you can also disable the mod without changing other projects.
-- The previous [v0.2.9 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.2.9) remains available as a full code rollback point; you can disable the preview-card setting for immediate rollback.
+- The previous [v0.3.0 release](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases/tag/v0.3.0) remains available as a full code rollback point; you can disable the preview-card setting for immediate rollback.
 
 ## Project information
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.3.0** ([`theme.json`](theme.json)) |
+| Current version | **v0.3.1** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

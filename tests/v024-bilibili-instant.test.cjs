@@ -52,7 +52,7 @@ function setup(start='https://www.bilibili.com/video/BV123',options={}){
 }
 
 test('024 release and correct wildcard www.bilibili.com/* are default',()=>{
- assert.equal(theme.version,'0.3.0');
+ assert.equal(theme.version,'0.3.1');
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.bilibiliinstantglass')?.defaultValue,true);
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.sdrsitepatterns')?.defaultValue,'www.bilibili.com/*');
  assert.ok(script.includes("const DEFAULT='www.bilibili.com/*'"));

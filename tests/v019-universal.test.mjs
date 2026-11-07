@@ -53,11 +53,17 @@ function setup(panes=1,options={}){
   'zia.glass.blur-over-video':options.ziaBlurOverVideo===true
  };
  const props=new Map();
+ const writes={changed:0,attempted:0};
+ const prefObservers=new Map();
  const root={
   hasAttribute:k=>attrs.has(k),
-  removeAttribute:k=>{attrs.delete(k);props.delete(k)},
-  setAttribute:(k,v)=>{attrs.add(k);props.set(k,v)},
-  toggleAttribute:(k,v)=>v?attrs.add(k):attrs.delete(k)
+  getAttribute:k=>props.get(k)??null,
+  removeAttribute:k=>{writes.attempted++;if(attrs.has(k))writes.changed++;attrs.delete(k);props.delete(k)},
+  setAttribute:(k,v)=>{writes.attempted++;if(!attrs.has(k)||props.get(k)!==v)writes.changed++;attrs.add(k);props.set(k,v)},
+  toggleAttribute:(k,v)=>{
+    writes.attempted++;if(attrs.has(k)!==v)writes.changed++;
+    if(v)attrs.add(k);else{attrs.delete(k);props.delete(k)}
+  }
  };
  const b=Array.from({length:panes},(_,i)=>({
   currentURI:{spec:i===0?'https://www.bilibili.com/video/BVabc':'https://www.youtube.com/watch?v=other'},
@@ -77,26 +83,37 @@ function setup(panes=1,options={}){
   clearTimeout:()=>{},addEventListener:()=>{}
  };
  let visibleBrowsers=b;
- const doc={documentElement:root,querySelectorAll:()=>videoVisible?visibleBrowsers:[]};
- class Observer{constructor(f){this.f=f;listeners.observer=this}observe(){}disconnect(){}}
+ const panels={};
+ const doc={documentElement:root,getElementById:id=>id==='tabbrowser-tabpanels'?panels:null,
+  querySelectorAll:()=>videoVisible?visibleBrowsers:[]};
+ class Observer{
+  constructor(f){this.f=f}
+  observe(target){if(target===root)listeners.observer=this;
+    if(target===panels)listeners.browserObserver=this}
+  disconnect(){}
+ }
  let config;
  vm.runInNewContext(code,{
   window:win,document:doc,URL,Date:{now:()=>now},
   ChromeUtils:{registerWindowActor:(name,opts)=>{config={name,opts}}},
-  Services:{prefs:{getBoolPref:(k,d)=>booleanPrefs[k]??d,getStringPref:(k,d)=>pref[k]??d}},
+  Services:{prefs:{getBoolPref:(k,d)=>booleanPrefs[k]??d,
+    getStringPref:(k,d)=>pref[k]??d,
+    addObserver:(key,obj)=>prefObservers.set(key,obj),
+    removeObserver:(key)=>prefObservers.delete(key)}},
   MutationObserver:Observer,console
  });
- return {b,props,attrs,win,pref,booleanPrefs,listeners,config,
+ return {b,props,attrs,writes,prefObservers,win,pref,booleanPrefs,listeners,config,
   setVideoVisible:flag=>{videoVisible=flag},
   setVisibleBrowsers:nodes=>{visibleBrowsers=nodes},
-  manager:win.__zcthUniversalV019,advance:ms=>{now+=ms;listeners.tick()}};
+  manager:win.__zcthUniversalV019,advance:ms=>{now+=ms;listeners.tick()},
+  moveClock:ms=>{now+=ms}};
 }
-test('Actor registration covers HTTP/HTTPS in all frames and uses 50ms probe',()=>{
+test('Actor registration covers HTTP/HTTPS in all frames with event-first 1000ms watchdog',()=>{
  const x=setup();
  assert.equal(x.config.name,'ZcthUniversal');
  assert.equal(x.config.opts.allFrames,true);
  assert.ok(x.config.opts.child.events.playing);
- assert.equal(x.listeners.ms,50);
+ assert.equal(x.listeners.ms,1000);
 });
 test('Bilibili unknown has 100ms site-rule fallback',()=>{
  const x=setup();
@@ -340,4 +357,69 @@ test('030 closing a browser invalidates its cached video without resetting other
   x.manager.onFrameState(x.b[0],'f',{state:'sdr',count:1,mediaKey:'first'});
   x.listeners.TabClose({target:{linkedBrowser:x.b[1]}});
   assert.ok(x.attrs.has('data-zcth-sdr-glass'),'closing an inactive tab does not change visible video');
+});
+
+test('031 Sine setting updates preserve HG appearance without waiting for the watchdog',()=>{
+ const x=setup();
+ x.manager.onFrameState(x.b[0],'frame',{state:'sdr',count:1,mediaKey:'stable'});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+ x.booleanPrefs['mod.compacttpr.sdrrealblur']=false;
+ x.prefObservers.get('mod.compacttpr.sdrrealblur').observe();
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'disable is immediate');
+ x.booleanPrefs['mod.compacttpr.sdrrealblur']=true;
+ x.prefObservers.get('mod.compacttpr.sdrrealblur').observe();
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'),'re-enable is immediate, no Zia-to-HG wait');
+});
+test('031 unchanged actor messages do not rewrite HG DOM attributes',()=>{
+ const x=setup();
+ const state={state:'sdr',count:1,mediaKey:'same'};
+ x.manager.onFrameState(x.b[0],'frame',state);
+ const before=x.writes.attempted;
+ x.manager.onFrameState(x.b[0],'frame',state);
+ assert.equal(x.writes.attempted,before,'identical stream skips rendering');
+ x.listeners.tick();
+ assert.equal(x.writes.attempted,before,'periodic render of same state performs no DOM writes');
+});
+test('031 actor HDR change immediately drops SDR and preserves protected HDR marker',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true,hdrEnabled:true});
+ x.manager.onFrameState(x.b[0],'frame',{state:'sdr',count:1,mediaKey:'old'});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+ x.manager.onFrameState(x.b[0],'frame',{state:'hdr',count:1,mediaKey:'new'});
+ assert.equal(x.props.get('data-zcth-stream-state'),'hdr');
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ assert.ok(x.attrs.has('data-zcth-hdr-glass'));
+});
+test('031 root Bilibili exception changes immediately without watchdog',()=>{
+ const x=setup();
+ x.manager.onFrameState(x.b[0],'frame',{state:'sdr',count:1,mediaKey:'yes'});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+ x.attrs.add('data-zcth-bilibili-glass');
+ x.listeners.observer.f([{attributeName:'data-zcth-bilibili-glass'}]);
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ x.attrs.delete('data-zcth-bilibili-glass');
+ x.listeners.observer.f([{attributeName:'data-zcth-bilibili-glass'}]);
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+});
+test('031 100ms unknown SDR fallback schedules a targeted timer instead of waiting for next 1s tick',()=>{
+ const x=setup();
+ x.manager.onFrameState(x.b[0],'frame',{state:'unknown',count:1,mediaKey:'unknown'});
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'));
+ assert.equal(typeof x.listeners.scheduled,'function');
+ const onFallback=x.listeners.scheduled;
+ x.moveClock(100);
+ onFallback(); // NO watchdog tick: repaint at exactly 100 ms
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+});
+
+test('031 Zia browser-level video visibility changes repaint HG immediately, without watchdog',()=>{
+ const x=setup(1,{rootZiaVideo:false,ziaBlurOverVideo:true});
+ x.manager.onFrameState(x.b[0],'frame',{state:'sdr',count:1,mediaKey:'stream'});
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'));
+ assert.ok(x.listeners.browserObserver,'browser[zia-video] is monitored directly');
+ x.setVideoVisible(false);
+ x.listeners.browserObserver.f([{attributeName:'zia-video',target:{localName:'browser'}}]);
+ assert.ok(!x.attrs.has('data-zcth-sdr-glass'),'hidden video clears in same event');
+ x.setVideoVisible(true);
+ x.listeners.browserObserver.f([{attributeName:'zia-video',target:{localName:'browser'}}]);
+ assert.ok(x.attrs.has('data-zcth-sdr-glass'),'same known SDR visible again restores HG without Zia intermediate');
 });

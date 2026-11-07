@@ -24,3 +24,5 @@ jobs:
           node --check actors/ZcthUniversalChild.sys.mjs
       - name: Automated regressions
         run: node --test tests/*.test.*
+      - name: Deterministic performance simulation (v0.3.0 vs v0.3.1)
+        run: node benchmarks/compare-v030-v031.cjs
