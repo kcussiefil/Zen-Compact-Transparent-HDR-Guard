@@ -256,6 +256,18 @@ const observer=new MutationObserver(changes=>{
 });
 observer.observe(root,{attributes:true,
  attributeFilter:['zia-video','data-zcth-bilibili-glass']});
+// Zia 2.118+ can deliberately remove root [zia-video] when native video
+// blur is allowed. Watch browser[zia-video] directly so scrolling a player
+// into/out of view updates HG immediately, not at the 1-second watchdog.
+const panelObserver=new MutationObserver(changes=>{
+ if(changes.some(c=>c.attributeName==='zia-video'&&
+                       c.target?.localName==='browser')){
+  revision++;render();schedule(0);
+ }
+});
+const panels=document.getElementById?.('tabbrowser-tabpanels');
+if(panels)panelObserver.observe(panels,{attributes:true,subtree:true,
+ attributeFilter:['zia-video']});
 const WATCHED_PREFS=[
  'mod.compacttpr.sdrrealblur','mod.compacttpr.hdrrealblur',
  'mod.compacttpr.sdrsitepatterns','mod.compacttpr.manualvideourl',
@@ -271,7 +283,7 @@ const interval=window.setInterval(()=>{render();void probe()},WATCHDOG_MS);
 schedule(0);
 function cleanup(){
  if(!alive)return;
- alive=false;clear();observer.disconnect();window.clearInterval(interval);
+ alive=false;clear();observer.disconnect();panelObserver.disconnect();window.clearInterval(interval);
  for(const name of WATCHED_PREFS){
   try{Services.prefs.removeObserver(name,prefObserver)}catch(_){}
  }
