@@ -137,6 +137,68 @@
   }
 }
 
+/* v0.3.7 — video-independent compact sidebar geometry.
+ * Earlier geometry sat inside the SDR/HDR eligibility selector; playback
+ * state changes could withdraw size, position and clipping even while the
+ * webpage and flyout were stationary. Protected glass paint stays guarded
+ * in the unchanged legacy section above. */
+@media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") {
+  @media (-moz-bool-pref: "zen.view.compact.hide-tabbar") or
+         (-moz-bool-pref: "zen.view.use-single-toolbar") {
+    @media (-moz-bool-pref: "mod.compacttpr.leftsidebaronlycollapsed") {
+      :root[zen-compact-mode="true"][zen-single-toolbar="true"]:not(
+        [customizing], [inDOMFullscreen="true"], [zen-compact-animating],
+        [zen-sidebar-expanded="true"]
+      ) #navigator-toolbox:not([animate="true"]) {
+        top: 50% !important;
+        height: calc(var(--mod-compacttpr-customheight-final) - var(--zen-compact-float)) !important;
+        transform: translateY(-50%) !important;
+      }
+      :root[zen-compact-mode="true"]:not(
+        [zen-single-toolbar="true"], [customizing],
+        [inDOMFullscreen="true"], [zen-compact-animating],
+        [zen-sidebar-expanded="true"]
+      ) #navigator-toolbox:not([animate="true"]) {
+        top: 50% !important;
+        height: calc(var(--mod-compacttpr-customheight-final) - var(--zen-compact-top-toolbar-hidden-fix, 0px)) !important;
+        transform: translateY(-50%) !important;
+      }
+    }
+    @media not (-moz-bool-pref: "mod.compacttpr.leftsidebaronlycollapsed") {
+      :root[zen-compact-mode="true"][zen-single-toolbar="true"]:not(
+        [customizing], [inDOMFullscreen="true"], [zen-compact-animating]
+      ) #navigator-toolbox:not([animate="true"]) {
+        top: 50% !important;
+        height: calc(var(--mod-compacttpr-customheight-final) - var(--zen-compact-float)) !important;
+        transform: translateY(-50%) !important;
+      }
+      :root[zen-compact-mode="true"]:not(
+        [zen-single-toolbar="true"], [customizing],
+        [inDOMFullscreen="true"], [zen-compact-animating]
+      ) #navigator-toolbox:not([animate="true"]) {
+        top: 50% !important;
+        height: calc(var(--mod-compacttpr-customheight-final) - var(--zen-compact-top-toolbar-hidden-fix, 0px)) !important;
+        transform: translateY(-50%) !important;
+      }
+    }
+  }
+  @media (-moz-bool-pref: "zen.view.compact.hide-tabbar") {
+    :root[zen-compact-mode="true"]:not(
+      [customizing], [inDOMFullscreen="true"], [zen-compact-animating]
+    ) #navigator-toolbox:not([animate="true"]) {
+      .zen-browser-generic-background.zen-toolbar-background {
+        display: none !important;
+      }
+      #titlebar {
+        position: relative !important;
+        box-shadow: var(--zen-big-shadow) !important;
+        border-radius: var(--zen-border-radius) !important;
+        overflow: hidden !important;
+      }
+    }
+  }
+}
+
 /* v0.3.3 — opt-out unified HG theme.
  *
  * HG paint is resolved from the user's existing Sine variables regardless of
@@ -216,37 +278,6 @@
   }
 
 
-  /* v0.3.6 — YouTube-only offscreen compositor mitigation.
-   * Zia promotes all browserSidebarContainers during flyout hover. If its
-   * video marker changes, offscreen panes can unnecessarily change layers
-   * even though HG maintains promotion of the selected pane. Limit this
-   * unnecessary churn without promoting any additional page or changing
-   * the selected page, HG glass paint, Glance, or split views. */
-  @media (-moz-platform: macos) {
-    @media -moz-pref("zia.compact.sidebar-blur") {
-      :root[zen-compact-mode="true"][data-zcth-youtube-page]:not(
-        [customizing], [inDOMFullscreen="true"]
-      ):not(:has(
-        #tabbrowser-tabpanels > .browserSidebarContainer:is(
-          [zen-split="true"], .zen-glance-overlay.deck-selected
-        )
-      )):not(#zcth-hidden-youtube-1):not(#zcth-hidden-youtube-2):is(
-        [zen-renaming-tab="true"],
-        :has(#navigator-toolbox:is(
-          [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
-          [flash-popup], [has-popup-menu], [movingtab],
-          [zen-compact-mode-active], [animate="true"],
-          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
-        ))
-      ) #tabbrowser-tabpanels > .browserSidebarContainer:not(
-        .deck-selected, [zen-split="true"]
-      ) {
-        will-change: auto !important;
-        backface-visibility: visible !important;
-      }
-    }
-  }
-
   @media -moz-pref("zia.cards.blur") {
     :root:not(#zcth-unified-card-1):not(#zcth-unified-card-2):not(#zcth-unified-card-3):not(#zcth-unified-card-4)
       > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
@@ -304,29 +335,8 @@
      video/HDR to appear dim during the overlay, but releases immediately when
      it closes. Never promote a tab merely because a video exists. */
   @media (-moz-platform: macos) {
-    @media -moz-pref("zia.compact.sidebar-blur") {
-      :root[zen-compact-mode="true"]:not(
-        [customizing], [inDOMFullscreen="true"]
-      ):not(:has(#tabbrowser-tabpanels >
-        .browserSidebarContainer.zen-glance-overlay.deck-selected)):is(
-        [zen-renaming-tab="true"],
-        :has(#navigator-toolbox:is(
-          [zen-has-hover], [zen-user-show], [zen-has-empty-tab],
-          [flash-popup], [has-popup-menu], [movingtab],
-          [zen-compact-mode-active], [animate="true"],
-          [data-zsf-preview-sidebar-hold], [data-zsf-color-sidebar-hold]
-        )),
-        :has(#zen-appcontent-navbar-wrapper:is(
-          [zen-has-hover], [has-popup-menu], [zen-compact-mode-active]
-        ))
-      ) #tabbrowser-tabpanels >
-        .browserSidebarContainer:is(.deck-selected, [zen-split="true"]):not(
-          .zen-glance-overlay, .zen-glance-background
-        ) {
-        will-change: transform !important;
-        backface-visibility: hidden !important;
-      }
-    }
+    /* v0.3.7: Zia alone owns normal video sidebar composition.
+     * HG retains its visible-card and popup compositing below. */
     @media -moz-pref("zia.cards.blur") {
       :root:not([customizing], [inDOMFullscreen="true"]):not(:has(
         #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
