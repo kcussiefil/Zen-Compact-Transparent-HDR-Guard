@@ -15,7 +15,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(base,'theme.json'),'utf8'));
 const count=(s,x)=>s.split(x).length-1;
 
 test('026 preview-card glass is independently toggleable and defaults off',()=>{
- assert.equal(manifest.version,'0.3.1');
+ assert.equal(manifest.version,'0.3.2');
  const pref=prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur');
  assert.ok(pref,'separate Sine setting');
  assert.equal(pref.type,'checkbox');
@@ -29,7 +29,7 @@ test('026 preview-card glass is independently toggleable and defaults off',()=>{
 test('026 styles all three requested card types plus Zia tooltips, no page geometry',()=>{
  const cards=['#zia-tab-card','#zia-folder-card','#zsf-folder-hover-card','#zia-tip-card'];
  for(const card of cards)assert.ok(effective.includes(card),card);
- assert.match(effective,/> :is\(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card\):not\(\[hidden\]\)/);
+ assert.match(effective,/> :is\(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card\)\s*\{/);
  assert.doesNotMatch(effective,/width\s*:|height\s*:|position\s*:|border-radius\s*:|corner-shape\s*:|animation\s*:/,
    'card position, sizes, shape and animation stay owned by Zia and Site Folders');
 });
@@ -77,8 +77,8 @@ test('026 does not accidentally style unclassified video or protected HDR',()=>{
  assert.equal(eligible({rootVideo:false,watchPage:true,visibleVideo:true,bili:true}),true,'Bilibili fast mode');
 });
 
-test('026 only paints visible cards, does not keep compositing HDR after cards close',()=>{
- assert.match(effective,/:not\(\[hidden\]\)\s*\{/);
+test('032 hidden Zia cards can pre-resolve HG styles without GPU painting',()=>{
+ assert.doesNotMatch(effective,/\bdisplay\s*:|\bvisibility\s*:/,'upstream [hidden] display remains authoritative');
  for(const banned of [
   /\bwill-change\s*:/,/\bbackface-visibility\s*:/,/(?:^|[\s;{}])filter\s*:/,
   /\bbrightness\s*:/,/browserSidebarContainer\s*\{/,/\btransform\s*:/
