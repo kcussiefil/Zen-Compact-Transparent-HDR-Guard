@@ -9,11 +9,15 @@ const blob=p=>{
  const bytes=fs.readFileSync(path.join(root,p));
  return crypto.createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
 };
-test('032 all CSS visual values identical to v0.3.1 apart from hidden-card eligibility',()=>{
+test('033 with unified theme OFF preserves exact v0.3.2 CSS, including 031 timing and first-frame preview fix',()=>{
  // The sole v0.3.2 visual change is one selector gate removal.
  // Re-insert the v0.3.1 comment and the old hidden gate. The resulting
  // stylesheet MUST be byte-for-byte the prior release (Git blob SHA).
- const original=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+ const full=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+ const from=full.indexOf('/* v0.3.3 — opt-out unified HG theme.');
+ const to=full.indexOf('/* v0.2.0 —',from);
+ assert.ok(from>0&&to>from,'unified section must be independently removable');
+ const original=full.slice(0,from)+'\n'+full.slice(to);
  const newNote=[
   ' * both live directly under :root. Resolve HG styles EVEN WHILE HIDDEN:',
   ' * Site Folders synchronously copies getComputedStyle() from Zia\'s normally',
@@ -37,8 +41,19 @@ test('032 all CSS visual values identical to v0.3.1 apart from hidden-card eligi
  assert.equal(checksum,'50aae335b40c894f000149a4c51db02ee2c19489',
    'no other CSS difference from v0.3.1 is permitted');
 });
-test('031 existing Sine preferences and default values remain byte-identical',()=>{
- assert.equal(blob('preferences.json'),'75f1a798e592f05bb808fc3a1ad105c0cfdb7488');
+test('033 preserves all prior Sine preferences and defaults when unified theme is OFF',()=>{
+ const raw=fs.readFileSync(path.join(root,'preferences.json'),'utf8');
+ const full=JSON.parse(raw);
+ const unified=full.filter(p=>p.property==='mod.compacttpr.unifiedhg');
+ assert.equal(unified.length,1);
+ assert.equal(unified[0].defaultValue,true);
+ const from=raw.indexOf('  {\n    "property": "mod.compacttpr.unifiedhg"');
+ const to=raw.indexOf('  {\n    "property": "mod.compacttpr.usefromzen"',from);
+ assert.ok(from>0&&to>from);
+ const prior=Buffer.from(raw.slice(0,from)+raw.slice(to));
+ const oldSha=crypto.createHash('sha1')
+  .update(Buffer.from('blob '+prior.length+'\0')).update(prior).digest('hex');
+ assert.equal(oldSha,'75f1a798e592f05bb808fc3a1ad105c0cfdb7488');
 });
 test('031 video content actor remains on original 180ms to protect current-stream detection latency',()=>{
  assert.equal(blob('actors/ZcthUniversalChild.sys.mjs'),'0bf395f09d59dae8d530cecc0df4d74694600ddc');

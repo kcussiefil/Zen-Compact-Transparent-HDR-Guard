@@ -6,6 +6,12 @@
     "defaultValue": true
   },
   {
+    "property": "mod.compacttpr.unifiedhg",
+    "label": "統一 HG 主題（側欄、預覽卡片、網址與新增分頁彈窗直接使用自訂模糊；影片顯示覆蓋介面時可能暫時發灰）",
+    "type": "checkbox",
+    "defaultValue": true
+  },
+  {
     "property": "mod.compacttpr.usefromzen",
     "label": "一般模式使用 Zen 主題背景色",
     "type": "checkbox",

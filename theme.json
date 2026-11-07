@@ -1,9 +1,9 @@
 {
   "id": "zen-compact-transparent-hdr-guard",
   "name": "Zen Compact Transparent HDR Guard",
-  "description": "Immediate opt-in glass on www.bilibili.com/* without SDR checks, plus HDR/SDR stream classification and video-safe Zia glass for other sites.",
+  "description": "Unified first-frame HG glass for Zen sidebar, Zia/Site Folders previews and URL/new-tab popups, with visible-only macOS video compositing and reversible HDR safeguards.",
   "author": "kcussiefil",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "style": {
     "chrome": "chrome.css"
   },
@@ -39,5 +39,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-07T08:59:32.000Z"
+  "updatedAt": "2026-11-07T10:10:24.000Z"
 }

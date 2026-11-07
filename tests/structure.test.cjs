@@ -12,16 +12,17 @@ const manager=read('sdr-glass.uc.js');
 const actor=read('actors/ZcthUniversalChild.sys.mjs');
 const parent=read('actors/ZcthUniversalParent.sys.mjs');
 
-test('v0.3.2 is an independent Sine MOD that retains both original scripts',()=>{
+test('v0.3.3 is an independent Sine MOD that retains both original scripts',()=>{
  assert.equal(theme.id,'zen-compact-transparent-hdr-guard');
- assert.equal(theme.version,'0.3.2');
+ assert.equal(theme.version,'0.3.3');
  assert.equal(theme.style.chrome,'chrome.css');
  assert.ok(theme.scripts['video-page.uc.js']);
  assert.ok(theme.scripts['sdr-glass.uc.js']);
  assert.equal(theme.preferences,'preferences.json');
 });
-test('opt-in true glass and editable site/video settings have valid defaults',()=>{
+test('unified theme has a reversible master setting; legacy feature options keep their defaults',()=>{
  const get=p=>prefs.find(x=>x.property===p);
+ assert.equal(get('mod.compacttpr.unifiedhg')?.defaultValue,true);
  assert.equal(get('mod.compacttpr.sdrrealblur')?.defaultValue,false);
  assert.equal(get('mod.compacttpr.hdrrealblur')?.defaultValue,false,
    'HDR experiment should default to OFF for immediate rollback');
@@ -76,10 +77,13 @@ test('manual pattern is host and path scoped; HDR overrides the fallback',()=>{
  assert.match(manager,/elapsed>=FALLBACK_MS/);
  assert.match(manager,/mod\.compacttpr\.manualvideourl/);
 });
-test('original HDR compositor protection remains available',()=>{
+test('original HDR compositor protection remains available when unified theme is disabled',()=>{
  assert.match(chrome,/data-zcth-video-page/);
  assert.match(chrome,/will-change:\s*transform\s*!important/);
  assert.match(chrome,/--mod-compacttpr-customblur/);
  assert.match(chrome,/--mod-compacttpr-transparentvalue/);
- assert.doesNotMatch(chrome,/blur\(28px\)/);
+ const start=chrome.indexOf('/* v0.3.3 — opt-out unified HG theme.');
+ const end=chrome.indexOf('/* v0.2.0 —',start);
+ const legacy=chrome.slice(0,start)+chrome.slice(end);
+ assert.doesNotMatch(legacy,/blur\(28px\)/);
 });
