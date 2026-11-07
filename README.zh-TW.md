@@ -54,7 +54,7 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.3.3**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.3.4**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
