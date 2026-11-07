@@ -3,7 +3,7 @@
   "name": "Zen Compact Transparent HDR Guard",
   "description": "Immediate opt-in glass on www.bilibili.com/* without SDR checks, plus HDR/SDR stream classification and video-safe Zia glass for other sites.",
   "author": "kcussiefil",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "style": {
     "chrome": "chrome.css"
   },
@@ -39,5 +39,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-07T08:33:42.000Z"
+  "updatedAt": "2026-11-07T08:59:32.000Z"
 }
