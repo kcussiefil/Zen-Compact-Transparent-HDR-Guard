@@ -33,6 +33,7 @@ jobs:
           node --check actors/ZcthUniversalChild.sys.mjs
           node --test tests/*.test.*
           node benchmarks/compare-v030-v031.cjs
+          node benchmarks/compare-v031-v032-preview.cjs
       - name: Publish release from canonical notes
         shell: bash
         env:
