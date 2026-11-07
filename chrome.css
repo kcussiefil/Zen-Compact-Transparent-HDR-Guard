@@ -352,8 +352,12 @@
  * #titlebar::before and the v0.2.5 URL/search popup.
  *
  * Zia's tab/folder/tip cards and Zen-Site-Folders' independent hover card
- * both live directly under :root. Match only ACTUALLY VISIBLE cards so
- * there is no background-filter paint when the preview is hidden.
+ * both live directly under :root. Resolve HG styles EVEN WHILE HIDDEN:
+ * Site Folders synchronously copies getComputedStyle() from Zia's normally
+ * hidden native card before its own first paint. Previously :not([hidden])
+ * made that source return Zia's 24px, then switch visibly to HG's setting.
+ * Both upstream mods already hide [hidden] cards with display:none!important,
+ * so the stored HG style does not paint or promote a hidden browser layer.
  *
  * Zia 2.118 uses fixed 76% / blur(24px) saturate(1.6) !important.
  * Site Folders 0.7.6 also uses !important on its independent container.
@@ -375,7 +379,7 @@
       [data-zcth-bilibili-glass],
       [data-zcth-sdr-glass],
       [data-zcth-hdr-glass]
-    ) > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card):not([hidden]) {
+    ) > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card, #zsf-folder-hover-card) {
       background-color: color-mix(
         in srgb,
         var(--mod-compacttpr-customcolor-final),
