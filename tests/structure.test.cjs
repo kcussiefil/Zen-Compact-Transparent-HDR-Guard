@@ -42,7 +42,7 @@ test('universal actor covers all frames and listens for video changes',()=>{
  assert.match(manager,/allFrames:true/);
  assert.match(manager,/https:\/\/\*\/\*/);
  assert.match(manager,/child:\{esModuleURI:BASE\+'ZcthUniversalChild\.sys\.mjs',events\}/);
- assert.match(manager,/setInterval\\(\\(\\)=>\\{render\\(\\);void probe\\(\\)\\},WATCHDOG_MS\\)/);
+ assert.ok(manager.includes('setInterval(()=>{render();void probe()},WATCHDOG_MS)'));
  assert.match(actor,/ZcthUniversal:State/);
  assert.match(parent,/__zcthUniversalV019/);
 });
