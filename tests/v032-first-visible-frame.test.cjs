@@ -56,7 +56,6 @@ test('032 without HG opt-in or on unknown HDR video, protect the native Zia trea
 test('032 stable actor and scheduler bytes with 036 URL experiment retired',()=>{
  const refs={
   'sdr-glass.uc.js':'489b4b604741d18e717b767a5053463b55477e4f',
-  'glance-recovery.uc.js':'0493f4e612d474f6bbbdf21791f94dcb3b254c93',
   'actors/ZcthUniversalChild.sys.mjs':'0bf395f09d59dae8d530cecc0df4d74694600ddc',
   'actors/ZcthUniversalParent.sys.mjs':'6abdd4e942b1b96733494adafdf00fc84a6e3f2a',
   'video-page.uc.js':'698860f7b14e018811e6fb79ceed46a2c984c541',

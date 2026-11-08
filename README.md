@@ -15,9 +15,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. Its default-ON **Unified HG 
 - **Legacy mode only:** HDR video custom glass (off by default; requires Zia *Blur over video*).
 - **Legacy mode only:** individual URL/search popup custom glass switch (off by default).
 - **Legacy mode only:** individual Zia / Site Folders preview-card and selected-tab-color editor glass switch (off by default).
-- **Preview stability test** (macOS, default-OFF): while a card is visible, suppresses promotion of background (not selected/split) pages; no card repaint. Excludes protected video and Glance. Unverified.
 - **macOS context-menu black-outline experiment** (default-OFF): adjusts CSS borders/content shadows but deliberately **does not disable the macOS window shadow** in v0.4.1; its previous override may be responsible for the invisible menu background. Keeps Zen Context Menu's original glass, background, ordering and icons. Requires widget.macos.native-context-menus=false. Actual macOS verification is required.
-- **Zen Glance** floating-sidebar glass (default-OFF): avoids competing card compositing while a preview is visible and performs a bounded non-video recovery after Glance closes.
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
 These settings live in Sine; the authoritative names and defaults are in [`preferences.json`](preferences.json).
@@ -31,9 +29,9 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 5. For the v0.4.1 menu shadow isolation test, keep Zen Context Menu's `Zen's own menus on macOS` enabled and leave its existing gradient, accent, ordering, icons and glass settings as preferred. Enable only HG's default-OFF menu outline switch. No popup background, opacity or blur is overridden; unlike v0.4.0, macOS window-shadow is preserved. Compare background visibility and dark corner outlines on light/dark webpages.
 6. If HDR video becomes too dim or a popup becomes unreadable, disable the unified HG switch in Sine immediately to restore the v0.3.2 treatment. Zia's own *Blur over video* and HG's HDR option still apply to the legacy mode.
 
-Glance glass stays optional in Sine. In v0.3.1 its Glance DOM observer is disconnected while the option is OFF, and reconnects immediately when enabled. v0.3.0 narrows its compositor overrides during hover cards and adds a one-frame, video-excluded recovery after Glance closes. It still needs on-device macOS verification; disable the option and restart Zen to roll back an unstable GPU state.
+v0.4.4 removes two failed experimental switches: background-tab preview-card stability and the optional Zen Glance compositor recovery. The general Glance exclusions and Zia-owned composition remain intact. On the affected Zen/Zia setup, leave Zia's **“A glance shows on its tab as a small picture of the page”** disabled to preserve the glass effect.
 
-v0.3.3 unifies first-frame appearance for all listed overlays without waiting for SDR/HDR classification. On macOS, Zia-style compositor promotion is added only while the sidebar, a card, the Site Folders color editor, or the URL/new-tab popup is visible. This deliberately permits HDR to dim while an overlay is open; it does not permanently promote an idle video. Zia's matching blur option must be ON, and Glance retains its separate safety path. No JavaScript, interval or video classifier was changed. Disabling Unified HG restores the v0.3.2 policy.
+v0.3.3 unifies first-frame appearance for all listed overlays without waiting for SDR/HDR classification. On macOS, Zia-style compositor promotion is added only while the sidebar, a card, the Site Folders color editor, or the URL/new-tab popup is visible. This deliberately permits HDR to dim while an overlay is open; it does not permanently promote an idle video. Zia's matching blur option must be ON, and Glance retains its existing safety exclusions. No JavaScript, interval or video classifier was changed. Disabling Unified HG restores the v0.3.2 policy.
 
 v0.3.2 applies the same HG preview appearance declaration to Zia's hidden native card as well. Site Folders 0.7.6 synchronously samples that source on first opening; it can now read the user's actual HG blur (for example 10px), rather than initially copying Zia's 24px. Hidden cards remain display:none in upstream mods; this does not create GPU blur on hidden cards. No JS, timer or polling change was made. A mocked first-frame comparison and strict CSS difference check are included in CI; real macOS first-frame validation remains necessary.
 
@@ -59,7 +57,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.4.3** ([`theme.json`](theme.json)) |
+| Current version | **v0.4.4** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

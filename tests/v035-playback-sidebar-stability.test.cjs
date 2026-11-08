@@ -8,7 +8,7 @@ const css=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
 const prefs=JSON.parse(fs.readFileSync(path.join(root,'preferences.json'),'utf8'));
 const theme=JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
 const unifiedStart=css.indexOf('/* v0.3.3 — opt-out unified HG theme.');
-const unifiedEnd=css.indexOf('/* v0.3.4 — Opt-in Glance foreground',unifiedStart);
+const unifiedEnd=css.indexOf('/* v0.2.0 — Zia 2.118 native video compositor ownership.',unifiedStart);
 const unified=css.slice(unifiedStart,unifiedEnd);
 const stableStart=unified.indexOf('/* v0.3.5 — keep the floating sidebar');
 const videoStart=unified.indexOf('/* Zia otherwise changes this surface to NO blur',stableStart);
@@ -17,7 +17,7 @@ const nativeVideo=unified.slice(videoStart,unified.indexOf('@media -moz-pref("zi
 const active=stable.replace(/\/\*[\s\S]*?\*\//g,'');
 const getProp=(s,p)=>s.match(new RegExp(p+'\\s*:\\s*([^;]+);'))?.[1]?.trim();
 test('035 stable underlay is only active in unified HG with matching Zia sidebar blur preference',()=>{
- assert.equal(theme.version,'0.4.3');
+ assert.equal(theme.version,'0.4.4');
  assert.ok(unifiedStart>0&&stableStart>0&&videoStart>stableStart);
  assert.match(unified,/@media \(-moz-bool-pref: "mod\.compacttpr\.usecompacttransparent"\) and\s+\(-moz-bool-pref: "mod\.compacttpr\.unifiedhg"\)/);
  assert.ok(unified.slice(0,stableStart).includes('@media -moz-pref("zia.compact.sidebar-blur")'));

@@ -3,7 +3,7 @@
   "name": "Zen Compact Transparent HDR Guard",
   "description": "Video-independent compact sidebar geometry, Zia-owned normal video compositing and first-frame HG 10px glass with reversible HDR safeguards.",
   "author": "kcussiefil",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "style": {
     "chrome": "chrome.css"
   },
@@ -19,12 +19,6 @@
         "chrome://browser/content/browser.xhtml"
       ],
       "loadOrder": 70
-    },
-    "glance-recovery.uc.js": {
-      "include": [
-        "chrome://browser/content/browser.xhtml"
-      ],
-      "loadOrder": 80
     }
   },
   "preferences": "preferences.json",
@@ -39,5 +33,5 @@
     "zen"
   ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard",
-  "updatedAt": "2026-11-08T11:37:00.000Z"
+  "updatedAt": "2026-11-08T12:54:30.000Z"
 }
