@@ -8,7 +8,7 @@ const a=css.indexOf('/* v0.3.7 — video-independent compact sidebar geometry.')
 const b=css.indexOf('/* v0.3.3 — opt-out unified HG theme.',a);
 const geom=css.slice(a,b),uni=css.slice(b,css.indexOf('/* v0.3.4 — Opt-in Glance foreground',b));
 test('037 stable sidebar geometry does not depend on any video state',()=>{
- assert.equal(manifest.version,'0.3.7');
+ assert.equal(manifest.version,'0.3.8');
  assert.ok(a>0&&b>a);
  for(const m of ['[zia-video]','[data-zcth-video-page]','[data-zcth-sdr-glass]','[data-zcth-hdr-glass]','[data-zcth-youtube-page]'])assert.ok(!geom.includes(m),m);
  assert.equal((geom.match(/top: 50% !important;/g)||[]).length,4);

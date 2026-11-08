@@ -846,3 +846,52 @@
     }
   }
 }
+
+/* v0.3.8 — opt-in macOS non-native context menu HG paint.
+ * Native NSMenu and non-context popups stay untouched. A dark HG-tinted
+ * translucent fallback is used when Firefox popup blur cannot composite. */
+@media (-moz-platform: macos) {
+  @media (-moz-pref("widget.macos.native-context-menus", false)) {
+    @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+           (-moz-bool-pref: "mod.compacttpr.contextmenuglass") {
+      :root {
+        --zcth-context-menu-tint: color-mix(
+          in srgb, rgb(17, 18, 21) 70%,
+          var(--mod-compacttpr-customcolor-final, rgba(23, 23, 26, 1))
+        );
+        --zcth-context-menu-bg: color-mix(
+          in srgb, var(--zcth-context-menu-tint),
+          transparent var(--mod-compacttpr-transparentvalue, 15%)
+        );
+      }
+      :root :is(
+        #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
+        #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
+      ),
+      :root :is(
+        #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
+        #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
+      ) menupopup {
+        --panel-background: var(--zcth-context-menu-bg) !important;
+        --panel-color: rgb(246, 246, 248) !important;
+        --menu-color: rgb(246, 246, 248) !important;
+        --menu-disabled-color: rgba(246, 246, 248, 0.54) !important;
+        --panel-border-color: rgba(255, 255, 255, 0.16) !important;
+        --menuitem-hover-background-color: rgba(255, 255, 255, 0.14) !important;
+        color-scheme: dark !important;
+      }
+      /* Best-effort backdrop blur only on the popup surface, no webpage
+         layer promotion, no extra timers, no menu handler changes. */
+      :root :is(
+        #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
+        #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
+      )::part(content),
+      :root :is(
+        #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
+        #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
+      ) menupopup::part(content) {
+        backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
+      }
+    }
+  }
+}

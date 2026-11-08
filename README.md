@@ -15,6 +15,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. Its default-ON **Unified HG 
 - **Legacy mode only:** HDR video custom glass (off by default; requires Zia *Blur over video*).
 - **Legacy mode only:** individual URL/search popup custom glass switch (off by default).
 - **Legacy mode only:** individual Zia / Site Folders preview-card and selected-tab-color editor glass switch (off by default).
+- **macOS context-menu glass** (default-OFF): a manually enabled non-native right-click menu uses HG-derived tint, opacity and best-effort blur. Requires widget.macos.native-context-menus=false; macOS NSMenu is not styled.
 - **Zen Glance** floating-sidebar glass (default-OFF): avoids competing card compositing while a preview is visible and performs a bounded non-video recovery after Glance closes.
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
@@ -26,7 +27,8 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 2. Disable the original **Zen Compact Transparent Mode** if installed, to avoid overlapping CSS.
 3. Install the Sine repository `kcussiefil/Zen-Compact-Transparent-HDR-Guard` and restart Zen.
 4. Unified HG is ON by default. Ensure Zia's corresponding sidebar, preview-card and URL-popup blur options are ON for the surfaces you want HG to style. The old individual HG toggles still apply when unified mode is OFF.
-5. If HDR video becomes too dim or a popup becomes unreadable, disable the unified HG switch in Sine immediately to restore the v0.3.2 treatment. Zia's own *Blur over video* and HG's HDR option still apply to the legacy mode.
+5. To try right-click menu glass, disable overlapping Context Menu mods, set widget.macos.native-context-menus=false in about:config, then enable the new default-OFF Sine toggle. Reverse both settings to restore native menus. Popup compositor blur is not guaranteed.
+6. If HDR video becomes too dim or a popup becomes unreadable, disable the unified HG switch in Sine immediately to restore the v0.3.2 treatment. Zia's own *Blur over video* and HG's HDR option still apply to the legacy mode.
 
 Glance glass stays optional in Sine. In v0.3.1 its Glance DOM observer is disconnected while the option is OFF, and reconnects immediately when enabled. v0.3.0 narrows its compositor overrides during hover cards and adds a one-frame, video-excluded recovery after Glance closes. It still needs on-device macOS verification; disable the option and restart Zen to roll back an unstable GPU state.
 
@@ -56,7 +58,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.3.7** ([`theme.json`](theme.json)) |
+| Current version | **v0.3.8** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

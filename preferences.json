@@ -12,6 +12,12 @@
     "defaultValue": true
   },
   {
+    "property": "mod.compacttpr.contextmenuglass",
+    "label": "右鍵選單使用 HG 毛玻璃（需手動設定 widget.macos.native-context-menus=false；預設關閉）",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
     "property": "mod.compacttpr.usefromzen",
     "label": "一般模式使用 Zen 主題背景色",
     "type": "checkbox",
