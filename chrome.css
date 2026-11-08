@@ -850,10 +850,12 @@
 /* v0.3.9 — HG styles Firefox-rendered context menus; Context Menu owns actions.
  * Firefox's popup.css paints the shadow content with --panel-background-color
  * and --panel-text-color; v0.3.8 set only unrelated/legacy variables.
- * The macOS popup widget also draws a solid Menu background unless its
- * native appearance is disabled. Set that on CONTEXT MENU popups only.
- * The black corner outline on white pages is avoided by removing the
- * opaque Menu underlay, native window shadow, CSS border and popup shadow.
+ * v0.3.10: retain the widget's popup appearance; disabling its appearance
+ * in v0.3.9 erased the background on real macOS/Zen. Paint a rounded,
+ * tinted host background AND a fallback-bearing part background so the
+ * menu remains visible even if a popup's custom properties fail to inherit.
+ * Suppress only the extra window shadow and CSS border/shadow.
+ * No item/ordering or compositor changes.
  * No menu ordering, item layout, browser compositing, video or JS changes. */
 @media (-moz-platform: macos) {
   @media (-moz-pref("widget.macos.native-context-menus", false)) {
@@ -881,7 +883,7 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup {
-        --panel-background-color: var(--zcth-context-menu-bg) !important;
+        --panel-background-color: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
         --panel-text-color: rgb(246, 246, 248) !important;
         --panel-border-color: transparent !important;
         --panel-box-shadow: none !important;
@@ -889,9 +891,10 @@
         --menuitem-hover-background-color: rgba(255, 255, 255, 0.14) !important;
         --menu-disabled-color: rgba(246, 246, 248, 0.54) !important;
         color-scheme: dark !important;
-        appearance: none !important;
-        -moz-default-appearance: none !important;
-        background-color: transparent !important;
+        /* Preserve native popup paint as a safety net. Never leave the
+           menu as a transparent click target if ::part cannot be painted. */
+        background-color: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
+        border-radius: var(--panel-border-radius, 12px) !important;
         -moz-window-shadow: none !important;
       }
 
@@ -907,7 +910,7 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup::part(content) {
-        background: var(--zcth-context-menu-bg) !important;
+        background: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
         background-clip: padding-box !important;
         border-color: transparent !important;
         box-shadow: none !important;

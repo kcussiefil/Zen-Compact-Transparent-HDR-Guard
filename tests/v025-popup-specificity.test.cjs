@@ -16,7 +16,7 @@ const ghost=':not(#zia-none):not(#zia-none-2):not(#zcth-popup-priority)';
 const occurs=(text,needle)=>text.split(needle).length-1;
 
 test('025 fixes 023 popup paint being overridden by Zia 2.118 high-specificity !important',()=>{
- assert.equal(theme.version,'0.3.9');
+ assert.equal(theme.version,'0.3.10');
  assert.equal(occurs(clean,ghost),3,'main pop-up and two contrast rules all win the cascade');
  assert.match(clean,new RegExp('#urlbar#urlbar:is\\(\\[breakout-extend\\]'));
  // Zia's own normal popup selector carries 2 ghost ID conditions and
