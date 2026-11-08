@@ -847,9 +847,14 @@
   }
 }
 
-/* v0.3.8 — opt-in macOS non-native context menu HG paint.
- * Native NSMenu and non-context popups stay untouched. A dark HG-tinted
- * translucent fallback is used when Firefox popup blur cannot composite. */
+/* v0.3.9 — HG styles Firefox-rendered context menus; Context Menu owns actions.
+ * Firefox's popup.css paints the shadow content with --panel-background-color
+ * and --panel-text-color; v0.3.8 set only unrelated/legacy variables.
+ * The macOS popup widget also draws a solid Menu background unless its
+ * native appearance is disabled. Set that on CONTEXT MENU popups only.
+ * The black corner outline on white pages is avoided by removing the
+ * opaque Menu underlay, native window shadow, CSS border and popup shadow.
+ * No menu ordering, item layout, browser compositing, video or JS changes. */
 @media (-moz-platform: macos) {
   @media (-moz-pref("widget.macos.native-context-menus", false)) {
     @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
@@ -864,6 +869,10 @@
           transparent var(--mod-compacttpr-transparentvalue, 15%)
         );
       }
+
+      /* The context menu's own popup and its nested submenus only. Use the
+         actual Mozilla popup.css properties, not --panel-background.
+         Rules with Context Menu MOD's --panel-background can coexist. */
       :root :is(
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
@@ -872,16 +881,24 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup {
-        --panel-background: var(--zcth-context-menu-bg) !important;
-        --panel-color: rgb(246, 246, 248) !important;
-        --menu-color: rgb(246, 246, 248) !important;
-        --menu-disabled-color: rgba(246, 246, 248, 0.54) !important;
-        --panel-border-color: rgba(255, 255, 255, 0.16) !important;
+        --panel-background-color: var(--zcth-context-menu-bg) !important;
+        --panel-text-color: rgb(246, 246, 248) !important;
+        --panel-border-color: transparent !important;
+        --panel-box-shadow: none !important;
+        --panel-box-shadow-margin: 0px !important;
         --menuitem-hover-background-color: rgba(255, 255, 255, 0.14) !important;
+        --menu-disabled-color: rgba(246, 246, 248, 0.54) !important;
         color-scheme: dark !important;
+        appearance: none !important;
+        -moz-default-appearance: none !important;
+        background-color: transparent !important;
+        -moz-window-shadow: none !important;
       }
-      /* Best-effort backdrop blur only on the popup surface, no webpage
-         layer promotion, no extra timers, no menu handler changes. */
+
+      /* Firefox menupopup's ::part(content) is the actual background painter.
+         The custom HG blur is applied on its FIRST frame, without animations.
+         On a compositor that cannot sample web content behind a popup,
+         translucent HG tint is the intentional and readable fallback. */
       :root :is(
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
@@ -890,6 +907,11 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup::part(content) {
+        background: var(--zcth-context-menu-bg) !important;
+        background-clip: padding-box !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        color: var(--panel-text-color) !important;
         backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
       }
     }

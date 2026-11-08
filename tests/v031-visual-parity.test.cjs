@@ -14,8 +14,8 @@ test('033 with unified theme OFF preserves exact v0.3.2 CSS, including 031 timin
  // Re-insert the v0.3.1 comment and the old hidden gate. The resulting
  // stylesheet MUST be byte-for-byte the prior release (Git blob SHA).
  const complete=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
- const contextMenu=complete.indexOf('/* v0.3.8 — opt-in macOS non-native context menu HG paint.');
- assert.ok(contextMenu>0,'v0.3.8 additive menu CSS must exist');
+ const contextMenu=complete.indexOf('/* v0.3.9 — HG styles Firefox-rendered context menus; Context Menu owns actions.');
+ assert.ok(contextMenu>0,'v0.3.9 additive menu CSS must exist');
  const withGeometry=complete.slice(0,contextMenu).replace(/\s*$/,'\n');
  const geo=withGeometry.indexOf('/* v0.3.7 — video-independent compact sidebar geometry.');
  const unifiedBegin=withGeometry.indexOf('/* v0.3.3 — opt-out unified HG theme.',geo);
