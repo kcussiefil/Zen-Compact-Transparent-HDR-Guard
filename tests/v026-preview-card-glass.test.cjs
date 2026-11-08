@@ -15,7 +15,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(base,'theme.json'),'utf8'));
 const count=(s,x)=>s.split(x).length-1;
 
 test('026 preview-card glass is independently toggleable and defaults off',()=>{
- assert.equal(manifest.version,'0.3.7');
+ assert.equal(manifest.version,'0.3.8');
  const pref=prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur');
  assert.ok(pref,'separate Sine setting');
  assert.equal(pref.type,'checkbox');
