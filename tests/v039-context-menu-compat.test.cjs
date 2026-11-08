@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path');
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const css=read('chrome.css'),prefs=JSON.parse(read('preferences.json'));
 const marker='/* v0.4.0 — macOS context-menu border-only correction.';
-const at=css.indexOf(marker),end=css.indexOf('/* v0.4.3 — opt-in background-tab compositor isolation for visible hover cards.'),rules=css.slice(at,end);
+const at=css.indexOf(marker),rules=css.slice(at);
 test("restore Zen Context Menu's original popup background and appearance",()=>{
  assert.ok(at>0);
  assert.doesNotMatch(rules,/background(?:-color)?\s*:/);

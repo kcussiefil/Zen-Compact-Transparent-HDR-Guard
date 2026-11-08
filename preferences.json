@@ -12,12 +12,6 @@
     "defaultValue": true
   },
   {
-    "property": "mod.compacttpr.previewcardstability",
-    "label": "macOS 預覽卡片穩定性測試（限制背景分頁合成；預設關閉）",
-    "type": "checkbox",
-    "defaultValue": false
-  },
-  {
     "property": "mod.compacttpr.contextmenuglass",
     "label": "macOS 右鍵選單黑色邊線修正（只調整邊框與陰影；保留 Context Menu 原本背景、模糊與排序；預設關閉）",
     "type": "checkbox",
@@ -84,12 +78,6 @@
   {
     "property": "mod.compacttpr.previewcardcustomblur",
     "label": "預覽卡片與選取分頁顏色視窗跟隨 HDR Guard 毛玻璃（需 Zia 卡片毛玻璃開啟，預設關閉）",
-    "type": "checkbox",
-    "defaultValue": false
-  },
-  {
-    "property": "mod.compacttpr.glanceglass",
-    "label": "Zen Glance 開啟時修正浮動側欄毛玻璃（預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },

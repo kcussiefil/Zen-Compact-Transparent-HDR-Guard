@@ -17,9 +17,7 @@
 | 舊模式 HDR 影片自訂毛玻璃 | 關閉，需 Zia *Blur over video*；統一 HG 模式另採可見介面合成 |
 | 舊模式網址列／搜尋彈出視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
 | 舊模式 Zia／Site Folders 預覽卡片及選色視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
-| **macOS 預覽卡片穩定性測試** | **關閉**；v0.4.3 撤銷失敗的卡片合成提示，改為預覽卡片可見時限制背景分頁合成；不動已選取或分割檢視分頁、模糊值、影片保護及 Glance；仍待實機驗證 |
 | **macOS 右鍵選單黑色邊線修正** | **關閉**；僅調整外框與陰影，保留 Zen Context Menu 原本的背景、模糊、圓角及排序 |
-| **Zen Glance 開啟時的浮動側欄毛玻璃修補** | **關閉**（避免預覽卡片合成衝突；關閉 Glance 後嘗試恢復合成層） |
 | Bilibili 全站立即套用自訂毛玻璃 | **開啟**；刻意略過 SDR／HDR 檢查 |
 
 所有實際設定名稱與預設值請以 [`preferences.json`](preferences.json) 為準。
@@ -34,13 +32,13 @@
 
 右鍵選單黑線修正（v0.4.1 單一變數測試）：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有排序、隱藏項目、圖示、漸層及主題色不用調整。此版只從 v0.4.0 移除 `-moz-window-shadow: none`，保留其餘邊框與 CSS 陰影規則，不接管背景、透明度、顏色、圓角或 `backdrop-filter`。在 Sine 啟用預設關閉的選項，確認一般右鍵選單背景是否恢復及白底四角黑線是否改變；實機尚未驗證，若仍透明請立即關閉此選項。Site Folders 群組選單尚未納入此輪測試。
 
-Glance 修補須另行在 Sine 開啟「Zen Glance 開啟時修正浮動側欄毛玻璃」。v0.3.0 已縮小 Glance 開啟時的合成處理，並在關閉後進行一次不涉及影片的合成重整；仍需 OLED 實機驗證。若 HDR 亮度或預覽卡片模糊異常，請關閉選項並完整重啟 Zen。
+v0.4.4 已移除兩個實機確認無效的選項：預覽卡片背景分頁合成測試、Glance 專用毛玻璃修補及其觀察腳本。既有的 Glance 安全排除條件保留。你目前的 Zia 設定中，將「A glance shows on its tab as a small picture of the page」維持關閉可避免已發現的毛玻璃異常。
 
-v0.3.3 不再為側欄、預覽卡片、網址／搜尋及新增分頁浮動網址列等待影片格式判定才套用 HG 外觀。macOS 必要的網頁合成僅在對應介面實際顯示期間啟用；不會因背景影片存在而持續提升合成層。Glance 保留獨立的處理方式。此版沒有更改 JavaScript、50ms／1000ms 輪詢或影片識別演算法。
+v0.3.3 不再為側欄、預覽卡片、網址／搜尋及新增分頁浮動網址列等待影片格式判定才套用 HG 外觀。macOS 必要的網頁合成僅在對應介面實際顯示期間啟用；不會因背景影片存在而持續提升合成層。Glance 保留原本的安全排除條件。此版沒有更改 JavaScript、50ms／1000ms 輪詢或影片識別演算法。
 
 v0.3.2 將 HG 的預覽卡片 CSS 提前適用於尚未顯示的 Zia 原生卡片，讓 Site Folders v0.7.6 開啟群組預覽時同步讀取到你設定的模糊值（例如 10px），減少先出現 Zia 24px 再轉為 HG 的視覺跳變。隱藏的卡片仍由 Zia／Site Folders 的 display:none 保護，不會額外進行 GPU 模糊；未新增 JavaScript、計時器、輪詢，也不改動 v0.3.1 的性能改善。此為以原始碼與模擬流程驗證的修補，macOS GPU 首畫格仍需實機確認。
 
-v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高度。切換已辨識分頁、影片狀態與 Sine 開關變動時即時更新 HG 外觀；主程式備援輪詢從每 50 ms 改為每 1000 ms，指定未知 SDR 網站仍用獨立 100 ms 計時器，無須等待輪詢。影片端每 180 ms 的原有檢查不變，以維持 HDR 安全。Glance 選項關閉時停用其 DOM 監聽。模擬實驗放在 [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs)，不能視為 macOS GPU 的實測加速。
+v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高度。切換已辨識分頁、影片狀態與 Sine 開關變動時即時更新 HG 外觀；主程式備援輪詢從每 50 ms 改為每 1000 ms，指定未知 SDR 網站仍用獨立 100 ms 計時器，無須等待輪詢。影片端每 180 ms 的原有檢查不變，以維持 HDR 安全。原本獨立的 Glance 修補實驗已於 v0.4.4 移除。模擬實驗放在 [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs)，不能視為 macOS GPU 的實測加速。
 
 切回先前已確認格式的影片分頁時，會優先使用該分頁快取，避免先清空毛玻璃狀態。重新載入、切換影片網址等仍會重新檢查；未知網站 SDR 備援從 350 ms 改為 100 ms。
 
@@ -58,7 +56,7 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.4.3**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.4**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

@@ -9,7 +9,7 @@ const blob=p=>{
  const bytes=fs.readFileSync(path.join(root,p));
  return crypto.createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
 };
-test('033 with unified theme OFF preserves exact v0.3.2 CSS, including 031 timing and first-frame preview fix',()=>{
+test('044 with unified OFF preserves the historical baseline aside from explicitly retired Glance CSS',()=>{
  // The sole v0.3.2 visual change is one selector gate removal.
  // Re-insert the v0.3.1 comment and the old hidden gate. The resulting
  // stylesheet MUST be byte-for-byte the prior release (Git blob SHA).
@@ -45,10 +45,10 @@ test('033 with unified theme OFF preserves exact v0.3.2 CSS, including 031 timin
  const bytes=Buffer.from(restored,'utf8');
  const checksum=crypto.createHash('sha1')
    .update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
- assert.equal(checksum,'50aae335b40c894f000149a4c51db02ee2c19489',
-   'no other CSS difference from v0.3.1 is permitted');
+ assert.equal(checksum,'aca2650a9e8ea7b79756cc29c4488f01a564ff39',
+   'only the explicitly retired Glance CSS differs from the previous v0.3.1-equivalent baseline');
 });
-test('033 preserves all prior Sine preferences and defaults when unified theme is OFF',()=>{
+test('044 preserves all remaining Sine preferences and defaults after retiring two failed experiments',()=>{
  const raw=fs.readFileSync(path.join(root,'preferences.json'),'utf8');
  const full=JSON.parse(raw);
  const unified=full.filter(p=>p.property==='mod.compacttpr.unifiedhg');
@@ -60,7 +60,7 @@ test('033 preserves all prior Sine preferences and defaults when unified theme i
  const prior=Buffer.from(raw.slice(0,from)+raw.slice(to));
  const oldSha=crypto.createHash('sha1')
   .update(Buffer.from('blob '+prior.length+'\0')).update(prior).digest('hex');
- assert.equal(oldSha,'75f1a798e592f05bb808fc3a1ad105c0cfdb7488');
+ assert.equal(oldSha,'7d9527db9e383852e48bed428a4bb2e7a5774b33');
 });
 test('031 video content actor remains on original 180ms to protect current-stream detection latency',()=>{
  assert.equal(blob('actors/ZcthUniversalChild.sys.mjs'),'0bf395f09d59dae8d530cecc0df4d74694600ddc');

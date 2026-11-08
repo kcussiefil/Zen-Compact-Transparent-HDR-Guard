@@ -55,7 +55,7 @@ test('033 both address/search and new-tab floating popups use HG on first open',
 });
 
 test('033 compositor is only requested for actually displayed sidebar/card/popup and never for a hidden preview',()=>{
- const v033Only=css.slice(start,css.indexOf('/* v0.3.4 — Opt-in Glance foreground',start));
+ const v033Only=css.slice(start,css.indexOf('/* v0.2.0 — Zia 2.118 native video compositor ownership.',start));
  const compositor=v033Only.slice(v033Only.lastIndexOf('@media (-moz-platform: macos)'));
  assert.ok(compositor.length>0);
  assert.match(compositor,/:has\(> :is\(#zia-tab-card, #zia-folder-card, #zia-tip-card,\s*#zsf-folder-hover-card\):not\(\[hidden\]\)\)/);
@@ -77,7 +77,6 @@ test('033 compositor is only requested for actually displayed sidebar/card/popup
 test('033 actor timing unchanged; 036 experimental URL marker retired',()=>{
  for(const [file,expected] of Object.entries({
   'sdr-glass.uc.js':'489b4b604741d18e717b767a5053463b55477e4f',
-  'glance-recovery.uc.js':'0493f4e612d474f6bbbdf21791f94dcb3b254c93',
   'video-page.uc.js':'698860f7b14e018811e6fb79ceed46a2c984c541',
   'actors/ZcthUniversalChild.sys.mjs':'0bf395f09d59dae8d530cecc0df4d74694600ddc'
  }))assert.equal(sha(file),expected,file);
