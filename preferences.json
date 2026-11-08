@@ -13,7 +13,7 @@
   },
   {
     "property": "mod.compacttpr.contextmenuglass",
-    "label": "右鍵選單使用 HG 毛玻璃（需手動設定 widget.macos.native-context-menus=false；預設關閉）",
+    "label": "右鍵選單背景使用 HG 毛玻璃（保留 Zen Context Menu 的排序；需啟用 Zen's own menus on macOS，預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },
