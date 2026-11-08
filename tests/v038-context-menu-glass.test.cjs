@@ -4,9 +4,9 @@ const fs=require('node:fs'),path=require('node:path');
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const css=read('chrome.css'),theme=JSON.parse(read('theme.json')),prefs=JSON.parse(read('preferences.json'));
 const tag='/* v0.4.0 — macOS context-menu border-only correction.';
-const i=css.indexOf(tag),rules=css.slice(i),pref=prefs.find(x=>x.property==='mod.compacttpr.contextmenuglass');
+const i=css.indexOf(tag),end=css.indexOf('/* v0.4.2 — opt-in card-only macOS backdrop compositing experiment.'),rules=css.slice(i,end),pref=prefs.find(x=>x.property==='mod.compacttpr.contextmenuglass');
 test('v0.4.1 isolated menu correction keeps a reversible default-off Sine toggle',()=>{
- assert.equal(theme.version,'0.4.1');assert.ok(i>0);
+ assert.equal(theme.version,'0.4.2');assert.ok(i>0);
  assert.equal(pref?.type,'checkbox');assert.equal(pref?.defaultValue,false);
  assert.match(pref.label,/黑色邊線/);
  assert.equal(prefs.filter(x=>x.property===pref.property).length,1);

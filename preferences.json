@@ -12,6 +12,12 @@
     "defaultValue": true
   },
   {
+    "property": "mod.compacttpr.previewcardstability",
+    "label": "macOS 預覽卡片毛玻璃穩定性測試（Zia／Site Folders，預設關閉）",
+    "type": "checkbox",
+    "defaultValue": false
+  },
+  {
     "property": "mod.compacttpr.contextmenuglass",
     "label": "macOS 右鍵選單黑色邊線修正（只調整邊框與陰影；保留 Context Menu 原本背景、模糊與排序；預設關閉）",
     "type": "checkbox",

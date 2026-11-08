@@ -15,6 +15,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. Its default-ON **Unified HG 
 - **Legacy mode only:** HDR video custom glass (off by default; requires Zia *Blur over video*).
 - **Legacy mode only:** individual URL/search popup custom glass switch (off by default).
 - **Legacy mode only:** individual Zia / Site Folders preview-card and selected-tab-color editor glass switch (off by default).
+- **Preview stability test** (default-OFF, macOS): opt-in compositor hint for visible Zia/Site Folders cards only; no blur or colour changes. Excludes protected video and Glance. Requires hardware verification.
 - **macOS context-menu black-outline experiment** (default-OFF): adjusts CSS borders/content shadows but deliberately **does not disable the macOS window shadow** in v0.4.1; its previous override may be responsible for the invisible menu background. Keeps Zen Context Menu's original glass, background, ordering and icons. Requires widget.macos.native-context-menus=false. Actual macOS verification is required.
 - **Zen Glance** floating-sidebar glass (default-OFF): avoids competing card compositing while a preview is visible and performs a bounded non-video recovery after Glance closes.
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
@@ -58,7 +59,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.4.1** ([`theme.json`](theme.json)) |
+| Current version | **v0.4.2** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
