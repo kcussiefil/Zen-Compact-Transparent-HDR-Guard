@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.4.2**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.4.3**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.4.3](releases/v0.4.3.md) | Retire failed card hint; opt-in, visible-card-only suppression of background-tab compositing. Hardware test pending. |
 | [v0.4.2](releases/v0.4.2.md) | Default-OFF experimental macOS visible-card backdrop-filter compositing hint; no sidebar/video/menus changed, hardware validation pending. |
 | [v0.4.1](releases/v0.4.1.md) | Single-variable macOS context-menu test: preserve the platform window shadow; all other v0.4.0 menu rules unchanged. Hardware acceptance pending. |
 | [v0.4.0](releases/v0.4.0.md) | macOS context-menu border/shadow-only correction; retain original menu background and ordering. |

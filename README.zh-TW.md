@@ -17,7 +17,7 @@
 | 舊模式 HDR 影片自訂毛玻璃 | 關閉，需 Zia *Blur over video*；統一 HG 模式另採可見介面合成 |
 | 舊模式網址列／搜尋彈出視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
 | 舊模式 Zia／Site Folders 預覽卡片及選色視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
-| **macOS 預覽卡片毛玻璃穩定性測試** | **關閉**；實驗性選項，僅針對可見的 Zia／Site Folders 卡片使用 GPU 合成提示，不覆寫模糊值、不處理有影片保護／Glance 的狀態 |
+| **macOS 預覽卡片穩定性測試** | **關閉**；v0.4.3 撤銷失敗的卡片合成提示，改為預覽卡片可見時限制背景分頁合成；不動已選取或分割檢視分頁、模糊值、影片保護及 Glance；仍待實機驗證 |
 | **macOS 右鍵選單黑色邊線修正** | **關閉**；僅調整外框與陰影，保留 Zen Context Menu 原本的背景、模糊、圓角及排序 |
 | **Zen Glance 開啟時的浮動側欄毛玻璃修補** | **關閉**（避免預覽卡片合成衝突；關閉 Glance 後嘗試恢復合成層） |
 | Bilibili 全站立即套用自訂毛玻璃 | **開啟**；刻意略過 SDR／HDR 檢查 |
@@ -58,7 +58,7 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.4.2**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.3**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

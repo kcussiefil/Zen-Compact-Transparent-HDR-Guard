@@ -883,13 +883,17 @@
   }
 }
 
-/* v0.4.2 — opt-in card-only macOS backdrop compositing experiment.
- * A background-tab load can invalidate the blur sampled by a visible Zia /
- * Site Folders hover card even when its computed backdrop-filter remains set.
- * Hint that the four existing card surfaces will keep their backdrop-filter
- * layer while visible. Do not promote background pages, alter card paint,
- * touch sidebar/popup/menu/video CSS or force blur on Zia-protected video.
- * This is a compositor hypothesis, not a verified macOS rendering fix. */
+/* v0.4.3 — opt-in background-tab compositor isolation for visible hover cards.
+ * v0.4.2's will-change: backdrop-filter hint on the cards failed on actual
+ * macOS hardware. Retire it entirely; do not stack more card paint rules.
+ *
+ * Zia's macOS card compositor promotes ALL .browserSidebarContainer elements,
+ * including newly created unselected tabs during background loads. When a
+ * preview card is visible, suppress this promotion ONLY for non-selected,
+ * non-split, non-Glance browser panels. The currently selected browser and
+ * all split-view panels still use Zia/HG's original promotion unchanged.
+ * This rule cannot guarantee macOS WebRender blur; hardware test required.
+ */
 @media (-moz-platform: macos) {
   @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
          (-moz-bool-pref: "mod.compacttpr.unifiedhg") and
@@ -897,9 +901,14 @@
     @media -moz-pref("zia.cards.blur") {
       :root:not([customizing], [inDOMFullscreen="true"], [zia-video]):not(:has(
         #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
-      )) > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
-              #zsf-folder-hover-card):not([hidden]) {
-        will-change: backdrop-filter !important;
+      )):has(> :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+                    #zsf-folder-hover-card):not([hidden]))
+        #tabbrowser-tabpanels > .browserSidebarContainer:not(
+          .deck-selected, [zen-split="true"],
+          .zen-glance-overlay, .zen-glance-background
+        ) {
+        will-change: auto !important;
+        backface-visibility: visible !important;
       }
     }
   }

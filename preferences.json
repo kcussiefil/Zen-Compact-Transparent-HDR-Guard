@@ -13,7 +13,7 @@
   },
   {
     "property": "mod.compacttpr.previewcardstability",
-    "label": "macOS 預覽卡片毛玻璃穩定性測試（Zia／Site Folders，預設關閉）",
+    "label": "macOS 預覽卡片穩定性測試（限制背景分頁合成；預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },
