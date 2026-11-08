@@ -18,7 +18,7 @@ const prefs = JSON.parse(fs.readFileSync(path.join(root, 'preferences.json'), 'u
 const manager = fs.readFileSync(path.join(root, 'sdr-glass.uc.js'), 'utf8');
 
 test('024 retains all 019 actor, stream classification and user settings', () => {
-  assert.equal(manifest.version,'0.3.10');
+  assert.equal(manifest.version,'0.4.0');
   assert.ok(manifest.scripts['video-page.uc.js']);
   assert.ok(manifest.scripts['sdr-glass.uc.js']);
   assert.equal(manifest.preferences, 'preferences.json');

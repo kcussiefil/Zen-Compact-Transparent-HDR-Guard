@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.3.10**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.4.0**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.4.0](releases/v0.4.0.md) | macOS context-menu border/shadow-only correction; retain original menu background and ordering. |
 | [v0.3.10](releases/v0.3.10.md) | Restore menu backplate after v0.3.9 transparency regression; provide visible host and popup-content fallbacks. |
 | [v0.3.9](releases/v0.3.9.md) | Fix macOS non-native menu paint tokens and opaque corner outlines while preserving Zen Context Menu ordering. |
 | [v0.3.8](releases/v0.3.8.md) | Opt-in, default-OFF macOS context menu HG paint; no menu action or video compositor changes. |

@@ -31,3 +31,8 @@ Do not change `theme.json`, `updatedAt`, Sine preferences, runtime scripts, CSS,
 - Run JavaScript syntax checks, **all Node regressions and the automated release-policy test** on the pull request. The publishing workflow independently repeats these checks **before** calling `gh release create`. Any failure blocks the release.
 - Documentation-only improvements update only README, CHANGELOG, or policy text; do not mutate `releases/**`, `theme.json`, runtime files or publish workflow for a documentation-only cleanup. This preserves Sine update behavior.
 
+
+## Version carry rule (future releases)
+
+- For all new releases, keep minor and patch components between 0 and 9, carrying to the next position after 9: `v0.3.9 → v0.4.0` and `v0.9.9 → v1.0.0`. Do not create future `v0.3.10`-style tags; major versions may grow beyond 9 when needed.
+- This convention applies prospectively to **all projects**. Preserve all already-published tags, SHAs, and existing project histories; do not rename old versions or silently modify unrelated repositories.
