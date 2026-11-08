@@ -12,7 +12,7 @@
 
 在 Sine 的自訂 GitHub MOD 安裝欄貼上：
 
-`kcussiefil/Zen-Compact-Transparent-HDR-Guard/tree/experiment/hover-card-no-fade-20261108/experiments/hover-card-no-fade`
+`kcussiefil/Zen-Compact-Transparent-HDR-Guard/tree/hover-card-no-fade-20261108/experiments/hover-card-no-fade`
 
 這是 GitHub 測試分支下的**獨立 MOD 子資料夾**。若 Sine 不接受這個路徑，不要改動正式 HG；回報錯誤訊息即可。
 
