@@ -847,34 +847,16 @@
   }
 }
 
-/* v0.3.9 — HG styles Firefox-rendered context menus; Context Menu owns actions.
- * Firefox's popup.css paints the shadow content with --panel-background-color
- * and --panel-text-color; v0.3.8 set only unrelated/legacy variables.
- * v0.3.10: retain the widget's popup appearance; disabling its appearance
- * in v0.3.9 erased the background on real macOS/Zen. Paint a rounded,
- * tinted host background AND a fallback-bearing part background so the
- * menu remains visible even if a popup's custom properties fail to inherit.
- * Suppress only the extra window shadow and CSS border/shadow.
- * No item/ordering or compositor changes.
- * No menu ordering, item layout, browser compositing, video or JS changes. */
+/* v0.4.0 — macOS context-menu border-only correction.
+ * Preserve Zen Context Menu backgrounds, translucency, native appearance,
+ * glass blur, colours, radius, items, ordering, icons and hover behavior.
+ * V0.3.9/V0.3.10 erased the background by changing popup paint: do not.
+ * Disable only the context menu's dark outline and outer shadow.
+ * Real-device visual confirmation remains required. */
 @media (-moz-platform: macos) {
   @media (-moz-pref("widget.macos.native-context-menus", false)) {
     @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
            (-moz-bool-pref: "mod.compacttpr.contextmenuglass") {
-      :root {
-        --zcth-context-menu-tint: color-mix(
-          in srgb, rgb(17, 18, 21) 70%,
-          var(--mod-compacttpr-customcolor-final, rgba(23, 23, 26, 1))
-        );
-        --zcth-context-menu-bg: color-mix(
-          in srgb, var(--zcth-context-menu-tint),
-          transparent var(--mod-compacttpr-transparentvalue, 15%)
-        );
-      }
-
-      /* The context menu's own popup and its nested submenus only. Use the
-         actual Mozilla popup.css properties, not --panel-background.
-         Rules with Context Menu MOD's --panel-background can coexist. */
       :root :is(
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
@@ -883,25 +865,10 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup {
-        --panel-background-color: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
-        --panel-text-color: rgb(246, 246, 248) !important;
         --panel-border-color: transparent !important;
         --panel-box-shadow: none !important;
-        --panel-box-shadow-margin: 0px !important;
-        --menuitem-hover-background-color: rgba(255, 255, 255, 0.14) !important;
-        --menu-disabled-color: rgba(246, 246, 248, 0.54) !important;
-        color-scheme: dark !important;
-        /* Preserve native popup paint as a safety net. Never leave the
-           menu as a transparent click target if ::part cannot be painted. */
-        background-color: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
-        border-radius: var(--panel-border-radius, 12px) !important;
         -moz-window-shadow: none !important;
       }
-
-      /* Firefox menupopup's ::part(content) is the actual background painter.
-         The custom HG blur is applied on its FIRST frame, without animations.
-         On a compositor that cannot sample web content behind a popup,
-         translucent HG tint is the intentional and readable fallback. */
       :root :is(
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
@@ -910,12 +877,8 @@
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,
         #placesContext, #zenWorkspaceMoreActions, .textbox-contextmenu
       ) menupopup::part(content) {
-        background: var(--zcth-context-menu-bg, rgba(28, 28, 31, 0.93)) !important;
-        background-clip: padding-box !important;
         border-color: transparent !important;
         box-shadow: none !important;
-        color: var(--panel-text-color) !important;
-        backdrop-filter: blur(var(--mod-compacttpr-customblur, 5px)) !important;
       }
     }
   }

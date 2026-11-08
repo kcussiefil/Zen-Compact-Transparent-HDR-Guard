@@ -13,7 +13,7 @@
   },
   {
     "property": "mod.compacttpr.contextmenuglass",
-    "label": "右鍵選單背景使用 HG 毛玻璃（保留 Zen Context Menu 的排序；需啟用 Zen's own menus on macOS，預設關閉）",
+    "label": "macOS 右鍵選單黑色邊線修正（只調整邊框與陰影；保留 Context Menu 原本背景、模糊與排序；預設關閉）",
     "type": "checkbox",
     "defaultValue": false
   },

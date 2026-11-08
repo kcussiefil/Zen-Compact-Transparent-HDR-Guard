@@ -17,7 +17,7 @@
 | 舊模式 HDR 影片自訂毛玻璃 | 關閉，需 Zia *Blur over video*；統一 HG 模式另採可見介面合成 |
 | 舊模式網址列／搜尋彈出視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
 | 舊模式 Zia／Site Folders 預覽卡片及選色視窗獨立開關 | 關閉；統一 HG 模式開啟時由主題接管 |
-| **macOS 右鍵選單 HG 毛玻璃** | **關閉**；保留 Zen Context Menu 的「Zen's own menus on macOS」及既有排序；由 HG 接管非原生選單背景、透明度、黑色角線與盡可能的模糊 |
+| **macOS 右鍵選單黑色邊線修正** | **關閉**；僅調整外框與陰影，保留 Zen Context Menu 原本的背景、模糊、圓角及排序 |
 | **Zen Glance 開啟時的浮動側欄毛玻璃修補** | **關閉**（避免預覽卡片合成衝突；關閉 Glance 後嘗試恢復合成層） |
 | Bilibili 全站立即套用自訂毛玻璃 | **開啟**；刻意略過 SDR／HDR 檢查 |
 
@@ -31,7 +31,7 @@
 4. 「統一 HG 主題」預設開啟。請確認 Zia 對應的側欄、卡片、網址列彈窗模糊選項已啟用，HG 才會接管各介面。
 5. 若 HDR 發灰過重或視窗文字難以閱讀，可直接在 Sine 關閉「統一 HG 主題」，恢復 v0.3.2 規則；舊有的 SDR、HDR、Popup 與預覽卡片個別開關仍可使用。
 
-右鍵選單整合：**保留 Zen Context Menu MOD**，其「Zen's own menus on macOS」維持開啟（`about:config` 的 `widget.macos.native-context-menus=false`），排序、隱藏項目及圖示照舊。若有啟用其「Apply Zen workspace gradient／Apply Zen accent color」，建議只關閉這兩項背景配色，讓 HG 專責選單背景。在 Sine 開啟 HG「右鍵選單背景使用 HG 毛玻璃」後，會使用 HG 顏色、透明度及自訂模糊（例如 10px），同時保留 Firefox 原生選單背景繪製機制，避免 v0.3.9 出現整個背景透明的問題；白底邊角實際外觀仍需實機驗證；Firefox/macOS 彈窗獨立合成可能無法顯示真正模糊，會以深色半透明背景備援。關閉 HG 該選項即可回復原有 Context Menu 外觀；不需停用 Context Menu，也不需變更其排序。
+右鍵選單黑線修正：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有的排序、隱藏項目、圖示、漸層及主題色不用調整；在 Sine 開啟 HG「macOS 右鍵選單黑色邊線修正」後，只移除非原生右鍵選單的邊框與視窗陰影，不再接管背景、透明度、顏色、圓角或 `backdrop-filter`。若出現異常，只需關閉 HG 此選項。白色頁面四角是否改善仍需 macOS 實機驗證。
 
 Glance 修補須另行在 Sine 開啟「Zen Glance 開啟時修正浮動側欄毛玻璃」。v0.3.0 已縮小 Glance 開啟時的合成處理，並在關閉後進行一次不涉及影片的合成重整；仍需 OLED 實機驗證。若 HDR 亮度或預覽卡片模糊異常，請關閉選項並完整重啟 Zen。
 
@@ -57,7 +57,7 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.3.10**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.0**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

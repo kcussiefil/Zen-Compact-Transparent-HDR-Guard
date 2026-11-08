@@ -17,7 +17,8 @@ const validationWorkflow=read('.github/workflows/validate.yml');
 const headings=['## Changes','## SDR/HDR and Zia compatibility','## Validation and hardware limitations','## Rollback'];
 
 test('release policy: public docs and manifest share one current version',()=>{
- assert.match(version,/^\d+\.\d+\.\d+$/);
+ assert.match(version,/^\d+\.[0-9]\.[0-9]$/,'new release minor and patch counters cannot exceed 9');
+ assert.match(policy,/## Version carry rule \(future releases\)/);
  assert.match(theme.updatedAt,/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/);
  assert.ok(!Number.isNaN(new Date(theme.updatedAt).getTime()));
  assert.ok(english.includes('Current version | **v'+version+'**'),

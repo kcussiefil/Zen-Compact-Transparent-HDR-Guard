@@ -15,7 +15,7 @@ HDR Guard is a standalone Sine mod for Zen Browser. Its default-ON **Unified HG 
 - **Legacy mode only:** HDR video custom glass (off by default; requires Zia *Blur over video*).
 - **Legacy mode only:** individual URL/search popup custom glass switch (off by default).
 - **Legacy mode only:** individual Zia / Site Folders preview-card and selected-tab-color editor glass switch (off by default).
-- **macOS context-menu glass** (default-OFF): keep Zen Context Menu installed for item ordering/icons. HG styles only the non-native popup background, text, transparent corners and best-effort blur using existing HG settings. Requires widget.macos.native-context-menus=false.
+- **macOS context-menu black-outline fix** (default-OFF): removes only dark popup border/window shadow. Keeps Zen Context Menu's original glass, background, ordering and icons. Requires widget.macos.native-context-menus=false.
 - **Zen Glance** floating-sidebar glass (default-OFF): avoids competing card compositing while a preview is visible and performs a bounded non-video recovery after Glance closes.
 - Bilibili site-wide immediate custom glass (on by default; deliberately bypasses SDR/HDR checking for `www.bilibili.com/*`).
 
@@ -27,7 +27,7 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 2. Disable the original **Zen Compact Transparent Mode** if installed, to avoid overlapping CSS.
 3. Install the Sine repository `kcussiefil/Zen-Compact-Transparent-HDR-Guard` and restart Zen.
 4. Unified HG is ON by default. Ensure Zia's corresponding sidebar, preview-card and URL-popup blur options are ON for the surfaces you want HG to style. The old individual HG toggles still apply when unified mode is OFF.
-5. For context-menu glass, **keep Zen Context Menu's `Zen's own menus on macOS` enabled** (which sets widget.macos.native-context-menus=false). Disable its optional `Apply Zen workspace gradient` and `Apply Zen accent color` background options if used; keep its sorting, hidden items and icons unchanged. Enable HG's default-OFF menu toggle. Firefox popup blur over flat white pages may remain visually imperceptible; the native popup appearance is retained to prevent an invisible menu, with an explicit HG-coloured background fallback. macOS corner shadows and real blur still require on-device verification.
+5. For menu outline correction, keep Zen Context Menu's `Zen's own menus on macOS` enabled and leave its existing gradient, accent, ordering, icons and glass settings as preferred. Enable only HG's default-OFF menu outline switch. No popup background, opacity or blur is overridden. Validate light/dark webpage corners on macOS.
 6. If HDR video becomes too dim or a popup becomes unreadable, disable the unified HG switch in Sine immediately to restore the v0.3.2 treatment. Zia's own *Blur over video* and HG's HDR option still apply to the legacy mode.
 
 Glance glass stays optional in Sine. In v0.3.1 its Glance DOM observer is disconnected while the option is OFF, and reconnects immediately when enabled. v0.3.0 narrows its compositor overrides during hover cards and adds a one-frame, video-excluded recovery after Glance closes. It still needs on-device macOS verification; disable the option and restart Zen to roll back an unstable GPU state.
@@ -58,7 +58,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.3.10** ([`theme.json`](theme.json)) |
+| Current version | **v0.4.0** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
