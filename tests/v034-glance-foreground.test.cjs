@@ -13,7 +13,7 @@ const block=css.slice(start,end);
 const rule=block.replace(/\/\*[\s\S]*?\*\//g,'');
 test('034 Glance opt-in defaults OFF and requires unified HG',()=>{
  assert.ok(start>0&&end>start);
- assert.equal(theme.version,'0.3.9');
+ assert.equal(theme.version,'0.3.10');
  assert.equal(prefs.find(p=>p.property==='mod.compacttpr.glanceglass')?.defaultValue,false);
  for(const p of ['mod.compacttpr.usecompacttransparent','mod.compacttpr.unifiedhg','mod.compacttpr.glanceglass'])
   assert.ok(block.includes('(-moz-bool-pref: "'+p+'")'),p);
