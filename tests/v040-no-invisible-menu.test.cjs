@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
 const css=fs.readFileSync(path.join(__dirname,'..','chrome.css'),'utf8');
 const marker='/* v0.4.0 — macOS context-menu border-only correction.';
-const at=css.indexOf(marker),end=css.indexOf('/* v0.4.2 — opt-in card-only macOS backdrop compositing experiment.'),p=css.slice(at,end);
+const at=css.indexOf(marker),end=css.indexOf('/* v0.4.3 — opt-in background-tab compositor isolation for visible hover cards.'),p=css.slice(at,end);
 test('0.4.1 keeps native macOS popup window shadow in place while isolating backplate rendering',()=>{
  assert.ok(at>0);
  for(const banned of ['background:','background-color:','background-image:','--panel-background:','--panel-background-color:','appearance:','-moz-default-appearance:','backdrop-filter:','border-radius:','color-mix(','--panel-text-color:'])assert.ok(!p.includes(banned),banned);
