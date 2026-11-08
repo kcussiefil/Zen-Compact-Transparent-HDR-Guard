@@ -882,3 +882,25 @@
     }
   }
 }
+
+/* v0.4.2 — opt-in card-only macOS backdrop compositing experiment.
+ * A background-tab load can invalidate the blur sampled by a visible Zia /
+ * Site Folders hover card even when its computed backdrop-filter remains set.
+ * Hint that the four existing card surfaces will keep their backdrop-filter
+ * layer while visible. Do not promote background pages, alter card paint,
+ * touch sidebar/popup/menu/video CSS or force blur on Zia-protected video.
+ * This is a compositor hypothesis, not a verified macOS rendering fix. */
+@media (-moz-platform: macos) {
+  @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
+         (-moz-bool-pref: "mod.compacttpr.unifiedhg") and
+         (-moz-bool-pref: "mod.compacttpr.previewcardstability") {
+    @media -moz-pref("zia.cards.blur") {
+      :root:not([customizing], [inDOMFullscreen="true"], [zia-video]):not(:has(
+        #tabbrowser-tabpanels > .browserSidebarContainer.zen-glance-overlay.deck-selected
+      )) > :is(#zia-tab-card, #zia-folder-card, #zia-tip-card,
+              #zsf-folder-hover-card):not([hidden]) {
+        will-change: backdrop-filter !important;
+      }
+    }
+  }
+}
