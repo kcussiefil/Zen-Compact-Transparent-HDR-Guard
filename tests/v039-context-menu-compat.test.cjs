@@ -5,7 +5,7 @@ const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const css=read('chrome.css'),prefs=JSON.parse(read('preferences.json'));
 const marker='/* v0.4.0 — macOS context-menu border-only correction.';
 const at=css.indexOf(marker),rules=css.slice(at);
-test('restore Zen Context Menu's original popup background and appearance',()=>{
+test("restore Zen Context Menu's original popup background and appearance",()=>{
  assert.ok(at>0);
  assert.doesNotMatch(rules,/background(?:-color)?\s*:/);
  assert.doesNotMatch(rules,/--panel-background(?:-[\w-]+)?\s*:/);
