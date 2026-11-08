@@ -848,11 +848,11 @@
 }
 
 /* v0.4.0 — macOS context-menu border-only correction.
- * Preserve Zen Context Menu backgrounds, translucency, native appearance,
- * glass blur, colours, radius, items, ordering, icons and hover behavior.
- * V0.3.9/V0.3.10 erased the background by changing popup paint: do not.
- * Disable only the context menu's dark outline and outer shadow.
- * Real-device visual confirmation remains required. */
+ * v0.4.1: remove ONLY the -moz-window-shadow override from the v0.4.0 rule.
+ * On macOS, native popup drawing may depend on the platform window shadow,
+ * so do not force it off while diagnosing lost backplates. Other context
+ * menu selectors and CSS declarations are identical to v0.4.0.
+ * Actual macOS appearance remains unverified by automated tests. */
 @media (-moz-platform: macos) {
   @media (-moz-pref("widget.macos.native-context-menus", false)) {
     @media (-moz-bool-pref: "mod.compacttpr.usecompacttransparent") and
@@ -867,7 +867,6 @@
       ) menupopup {
         --panel-border-color: transparent !important;
         --panel-box-shadow: none !important;
-        -moz-window-shadow: none !important;
       }
       :root :is(
         #contentAreaContextMenu, #tabContextMenu, #toolbar-context-menu,

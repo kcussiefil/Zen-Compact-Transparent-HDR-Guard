@@ -31,7 +31,7 @@
 4. 「統一 HG 主題」預設開啟。請確認 Zia 對應的側欄、卡片、網址列彈窗模糊選項已啟用，HG 才會接管各介面。
 5. 若 HDR 發灰過重或視窗文字難以閱讀，可直接在 Sine 關閉「統一 HG 主題」，恢復 v0.3.2 規則；舊有的 SDR、HDR、Popup 與預覽卡片個別開關仍可使用。
 
-右鍵選單黑線修正：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有的排序、隱藏項目、圖示、漸層及主題色不用調整；在 Sine 開啟 HG「macOS 右鍵選單黑色邊線修正」後，只移除非原生右鍵選單的邊框與視窗陰影，不再接管背景、透明度、顏色、圓角或 `backdrop-filter`。若出現異常，只需關閉 HG 此選項。白色頁面四角是否改善仍需 macOS 實機驗證。
+右鍵選單黑線修正（v0.4.1 單一變數測試）：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有排序、隱藏項目、圖示、漸層及主題色不用調整。此版只從 v0.4.0 移除 `-moz-window-shadow: none`，保留其餘邊框與 CSS 陰影規則，不接管背景、透明度、顏色、圓角或 `backdrop-filter`。在 Sine 啟用預設關閉的選項，確認一般右鍵選單背景是否恢復及白底四角黑線是否改變；實機尚未驗證，若仍透明請立即關閉此選項。Site Folders 群組選單尚未納入此輪測試。
 
 Glance 修補須另行在 Sine 開啟「Zen Glance 開啟時修正浮動側欄毛玻璃」。v0.3.0 已縮小 Glance 開啟時的合成處理，並在關閉後進行一次不涉及影片的合成重整；仍需 OLED 實機驗證。若 HDR 亮度或預覽卡片模糊異常，請關閉選項並完整重啟 Zen。
 
@@ -57,7 +57,7 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.4.0**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.1**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |

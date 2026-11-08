@@ -5,8 +5,8 @@ const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 const css=read('chrome.css'),theme=JSON.parse(read('theme.json')),prefs=JSON.parse(read('preferences.json'));
 const tag='/* v0.4.0 — macOS context-menu border-only correction.';
 const i=css.indexOf(tag),rules=css.slice(i),pref=prefs.find(x=>x.property==='mod.compacttpr.contextmenuglass');
-test('v0.4.0 menu correction keeps a reversible default-off Sine toggle',()=>{
- assert.equal(theme.version,'0.4.0');assert.ok(i>0);
+test('v0.4.1 isolated menu correction keeps a reversible default-off Sine toggle',()=>{
+ assert.equal(theme.version,'0.4.1');assert.ok(i>0);
  assert.equal(pref?.type,'checkbox');assert.equal(pref?.defaultValue,false);
  assert.match(pref.label,/黑色邊線/);
  assert.equal(prefs.filter(x=>x.property===pref.property).length,1);
@@ -17,7 +17,8 @@ test('menu styling is scoped to macOS nonnative context popups only',()=>{
  assert.doesNotMatch(rules,/#urlbar|#zia-tab-card|#zsf-folder-hover-card/);
 });
 test('menu correction touches border and shadow but NEVER popup paint or layout',()=>{
- for(const s of ['--panel-border-color: transparent !important;','--panel-box-shadow: none !important;','-moz-window-shadow: none !important;','border-color: transparent !important;','box-shadow: none !important;'])assert.ok(rules.includes(s),s);
+ for(const s of ['--panel-border-color: transparent !important;','--panel-box-shadow: none !important;','border-color: transparent !important;','box-shadow: none !important;'])assert.ok(rules.includes(s),s);
+ assert.doesNotMatch(rules,/-moz-window-shadow\s*:/, 'do not disable macOS window-shadow while testing native backplate');
  assert.doesNotMatch(rules,/(^|[;{}\s])(?:background(?:-[\w-]+)?|--panel-background(?:-[\w-]+)?|--panel-text-color|color-scheme|color|opacity|appearance|-moz-default-appearance|backdrop-filter|filter|border-radius|transform|display|order|transition|animation)\s*:/m);
  assert.doesNotMatch(rules,/color-mix\(|rgba?\(|will-change|backface-visibility|\.browserSidebarContainer|data-zcth-(?:sdr|hdr|video)|zia-video/);
 });

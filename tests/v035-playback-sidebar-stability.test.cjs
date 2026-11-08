@@ -17,7 +17,7 @@ const nativeVideo=unified.slice(videoStart,unified.indexOf('@media -moz-pref("zi
 const active=stable.replace(/\/\*[\s\S]*?\*\//g,'');
 const getProp=(s,p)=>s.match(new RegExp(p+'\\s*:\\s*([^;]+);'))?.[1]?.trim();
 test('035 stable underlay is only active in unified HG with matching Zia sidebar blur preference',()=>{
- assert.equal(theme.version,'0.4.0');
+ assert.equal(theme.version,'0.4.1');
  assert.ok(unifiedStart>0&&stableStart>0&&videoStart>stableStart);
  assert.match(unified,/@media \(-moz-bool-pref: "mod\.compacttpr\.usecompacttransparent"\) and\s+\(-moz-bool-pref: "mod\.compacttpr\.unifiedhg"\)/);
  assert.ok(unified.slice(0,stableStart).includes('@media -moz-pref("zia.compact.sidebar-blur")'));
