@@ -1,0 +1,17 @@
+/* HG/Zia Hover Card No-Fade Test v0.0.1 (macOS only).
+ * Zia 2.121.6: zia-tab-card-in 260ms animates opacity 0 -> 1 plus scale .7 -> 1.
+ * Site Folders 0.7.8: zsf-hover-in similarly animates opacity 0 -> 1.
+ * Keep their native animation and transform untouched. A CSS !important opacity
+ * during the OPEN state overrides only the animation's opacity contribution.
+ * Explicitly exclude CLOSING so native fade-out and closing scale remain intact.
+ * No new blur, background, will-change, video, sidebar or menu changes.
+ * Experimental: this addresses verified entry fade, not proven GPU blur failures.
+ */
+@media (-moz-platform: macos) {
+  :root:not([customizing], [inDOMFullscreen="true"])
+    > :is(#zia-tab-card, #zia-folder-card)[zia-open]:not([zia-closing], [hidden]),
+  :root:not([customizing], [inDOMFullscreen="true"])
+    > #zsf-folder-hover-card[data-open]:not([data-closing], [hidden]) {
+    opacity: 1 !important;
+  }
+}
