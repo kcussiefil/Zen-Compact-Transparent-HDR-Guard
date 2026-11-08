@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.3.7**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.3.8**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.3.8](releases/v0.3.8.md) | Opt-in, default-OFF macOS context menu HG paint; no menu action or video compositor changes. |
 | [v0.3.7](releases/v0.3.7.md) | Stabilize sidebar geometry independent of video classification; defer selected-page composition to Zia and retire ineffective 0.3.6 rule. |
 | [v0.3.6](releases/v0.3.6.md) | Limit unneeded offscreen browser compositor churn on YouTube playback; HG appearance and selected pane unchanged, hardware verification pending. |
 | [v0.3.5](releases/v0.3.5.md) | Keep the floating sidebar's Zia underlay styling constant when YouTube begins playback; no new timer, compositor promotion or other UI changes. |
