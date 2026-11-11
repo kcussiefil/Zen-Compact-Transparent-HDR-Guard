@@ -1,9 +1,10 @@
 # Changelog
 
-The current release is **v0.4.4**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
+The current release is **v0.4.5**. This is a compact index; see the individual files in [`releases/`](releases/) and [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) for complete notes, qualifications, and rollback points.
 
 | Version | Summary |
 | --- | --- |
+| [v0.4.5](releases/v0.4.5.md) | Independent tab-colour picker; settings retained. |
 | [v0.4.4](releases/v0.4.4.md) | Remove two failed preview/Glance compositor experiments; preserve normal video and menu paths. |
 | [v0.4.3](releases/v0.4.3.md) | Experimental background-pane override (retired in v0.4.4). |
 | [v0.4.2](releases/v0.4.2.md) | Experimental card-layer hint (retired in v0.4.3). |

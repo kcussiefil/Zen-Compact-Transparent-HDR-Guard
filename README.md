@@ -29,7 +29,7 @@ These settings live in Sine; the authoritative names and defaults are in [`prefe
 5. For the v0.4.1 menu shadow isolation test, keep Zen Context Menu's `Zen's own menus on macOS` enabled and leave its existing gradient, accent, ordering, icons and glass settings as preferred. Enable only HG's default-OFF menu outline switch. No popup background, opacity or blur is overridden; unlike v0.4.0, macOS window-shadow is preserved. Compare background visibility and dark corner outlines on light/dark webpages.
 6. If HDR video becomes too dim or a popup becomes unreadable, disable the unified HG switch in Sine immediately to restore the v0.3.2 treatment. Zia's own *Blur over video* and HG's HDR option still apply to the legacy mode.
 
-v0.4.4 removes two failed experimental switches: background-tab preview-card stability and the optional Zen Glance compositor recovery. The general Glance exclusions and Zia-owned composition remain intact. On the affected Zen/Zia setup, leave Zia's **“A glance shows on its tab as a small picture of the page”** disabled to preserve the glass effect.
+v0.4.4 removed two failed experimental switches: background-tab preview-card stability and the optional Zen Glance compositor recovery. The general Glance exclusions and Zia-owned composition remain intact. On the affected Zen/Zia setup, leave Zia's **“A glance shows on its tab as a small picture of the page”** disabled to preserve the glass effect.
 
 v0.3.3 unifies first-frame appearance for all listed overlays without waiting for SDR/HDR classification. On macOS, Zia-style compositor promotion is added only while the sidebar, a card, the Site Folders color editor, or the URL/new-tab popup is visible. This deliberately permits HDR to dim while an overlay is open; it does not permanently promote an idle video. Zia's matching blur option must be ON, and Glance retains its existing safety exclusions. No JavaScript, interval or video classifier was changed. Disabling Unified HG restores the v0.3.2 policy.
 
@@ -57,10 +57,12 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.4.4** ([`theme.json`](theme.json)) |
+| Current version | **v0.4.5** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
 | Release-writing convention | [`docs/RELEASE_POLICY.md`](docs/RELEASE_POLICY.md) |
 
 Documentation updates alone do not change the mod version or trigger a new release.
+
+HG v0.4.5 independently owns **selected-tab colour**. Right-click an ordinary tab → **變更選取分頁顏色** to open the existing 310px non-modal picker, adjust colour/alpha and save. Saved preferences from Site Folders are automatically reused (`zsf.selected-tab-color.v1`); Site Folders is no longer required. Neither video recognition nor normal glass behaviour changes.

@@ -11,7 +11,7 @@ const sha=file=>{const b=fs.readFileSync(path.join(root,file));return crypto.cre
 const keys=prefs.map(x=>x.property);
 
 test('044 retires both failed macOS compositor experiments at the preference, CSS and JS levels',()=>{
- assert.equal(theme.version,'0.4.4');
+ assert.equal(theme.version,'0.4.5');
  for(const retired of ['mod.compacttpr.previewcardstability','mod.compacttpr.glanceglass']){
    assert.ok(!keys.includes(retired),'old Sine preference survived: '+retired);
    assert.ok(!css.includes(retired),'old compositor CSS survived: '+retired);
@@ -50,7 +50,7 @@ test('044 HG 10px user-configurable glass, Zia cards and popup selectors are ret
 });
 
 test('044 video detection actors and existing Bilibili/SDR/HDR script bytes unchanged',()=>{
- assert.deepEqual(Object.keys(theme.scripts).sort(),['sdr-glass.uc.js','video-page.uc.js']);
+ assert.deepEqual(Object.keys(theme.scripts).sort(),['sdr-glass.uc.js','selected-color.uc.js','video-page.uc.js']);
  for(const [file,hash] of Object.entries({
    'sdr-glass.uc.js':'489b4b604741d18e717b767a5053463b55477e4f',
    'video-page.uc.js':'698860f7b14e018811e6fb79ceed46a2c984c541',

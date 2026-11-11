@@ -14,10 +14,11 @@ const parent=read('actors/ZcthUniversalParent.sys.mjs');
 
 test('v0.3.3 is an independent Sine MOD that retains both original scripts',()=>{
  assert.equal(theme.id,'zen-compact-transparent-hdr-guard');
- assert.equal(theme.version,'0.4.4');
+ assert.equal(theme.version,'0.4.5');
  assert.equal(theme.style.chrome,'chrome.css');
  assert.ok(theme.scripts['video-page.uc.js']);
  assert.ok(theme.scripts['sdr-glass.uc.js']);
+ assert.ok(theme.scripts['selected-color.uc.js']);
  assert.equal(theme.preferences,'preferences.json');
 });
 test('unified theme has a reversible master setting; legacy feature options keep their defaults',()=>{

@@ -8,11 +8,11 @@ const css=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
 const prefs=JSON.parse(fs.readFileSync(path.join(root,'preferences.json'),'utf8'));
 const theme=JSON.parse(fs.readFileSync(path.join(root,'theme.json'),'utf8'));
 const start=css.indexOf('/* v0.2.8 — Selected-color dialog compositor:');
-const rule=css.slice(start,css.indexOf('/* v0.4.0 — macOS context-menu border-only correction.'));
+const rule=css.slice(start,css.indexOf('/* v0.4.5 — HDR Guard owns the global selected-tab colour and editor. */'));
 const clean=rule.replace(/\/\*[\s\S]*?\*\//g,'');
 const count=(s,x)=>s.split(x).length-1;
 test('028 uses existing Sine opt-in with disabled-by-default rollback',()=>{
- assert.equal(theme.version,'0.4.4');
+ assert.equal(theme.version,'0.4.5');
  assert.ok(start>0);
  assert.equal(prefs.find(x=>x.property==='mod.compacttpr.previewcardcustomblur')?.defaultValue,false);
  assert.match(clean,/-moz-bool-pref: "mod\.compacttpr\.previewcardcustomblur"/);

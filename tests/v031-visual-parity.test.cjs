@@ -13,7 +13,8 @@ test('044 with unified OFF preserves the historical baseline aside from explicit
  // The sole v0.3.2 visual change is one selector gate removal.
  // Re-insert the v0.3.1 comment and the old hidden gate. The resulting
  // stylesheet MUST be byte-for-byte the prior release (Git blob SHA).
- const complete=fs.readFileSync(path.join(root,'chrome.css'),'utf8');
+ const complete=fs.readFileSync(path.join(root,'chrome.css'),'utf8')
+  .replace(/\/\* v0\.4\.5 — HDR Guard owns the global selected-tab colour and editor\. \*\/[\s\S]*?\/\* end v0\.4\.5 selected colour \*\/\n\n/, '');
  const contextMenu=complete.indexOf('/* v0.4.0 — macOS context-menu border-only correction.');
  assert.ok(contextMenu>0,'v0.4.0 additive menu CSS must exist');
  const withGeometry=complete.slice(0,contextMenu).replace(/\s*$/,'\n');
