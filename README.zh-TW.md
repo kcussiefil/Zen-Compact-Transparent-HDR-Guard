@@ -32,13 +32,13 @@
 
 右鍵選單黑線修正（v0.4.1 單一變數測試）：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有排序、隱藏項目、圖示、漸層及主題色不用調整。此版只從 v0.4.0 移除 `-moz-window-shadow: none`，保留其餘邊框與 CSS 陰影規則，不接管背景、透明度、顏色、圓角或 `backdrop-filter`。在 Sine 啟用預設關閉的選項，確認一般右鍵選單背景是否恢復及白底四角黑線是否改變；實機尚未驗證，若仍透明請立即關閉此選項。Site Folders 群組選單尚未納入此輪測試。
 
-v0.4.4 已移除兩個實機確認無效的選項：預覽卡片背景分頁合成測試、Glance 專用毛玻璃修補及其觀察腳本。既有的 Glance 安全排除條件保留。你目前的 Zia 設定中，將「A glance shows on its tab as a small picture of the page」維持關閉可避免已發現的毛玻璃異常。
+v0.4.5 已移除兩個實機確認無效的選項：預覽卡片背景分頁合成測試、Glance 專用毛玻璃修補及其觀察腳本。既有的 Glance 安全排除條件保留。你目前的 Zia 設定中，將「A glance shows on its tab as a small picture of the page」維持關閉可避免已發現的毛玻璃異常。
 
 v0.3.3 不再為側欄、預覽卡片、網址／搜尋及新增分頁浮動網址列等待影片格式判定才套用 HG 外觀。macOS 必要的網頁合成僅在對應介面實際顯示期間啟用；不會因背景影片存在而持續提升合成層。Glance 保留原本的安全排除條件。此版沒有更改 JavaScript、50ms／1000ms 輪詢或影片識別演算法。
 
 v0.3.2 將 HG 的預覽卡片 CSS 提前適用於尚未顯示的 Zia 原生卡片，讓 Site Folders v0.7.6 開啟群組預覽時同步讀取到你設定的模糊值（例如 10px），減少先出現 Zia 24px 再轉為 HG 的視覺跳變。隱藏的卡片仍由 Zia／Site Folders 的 display:none 保護，不會額外進行 GPU 模糊；未新增 JavaScript、計時器、輪詢，也不改動 v0.3.1 的性能改善。此為以原始碼與模擬流程驗證的修補，macOS GPU 首畫格仍需實機確認。
 
-v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高度。切換已辨識分頁、影片狀態與 Sine 開關變動時即時更新 HG 外觀；主程式備援輪詢從每 50 ms 改為每 1000 ms，指定未知 SDR 網站仍用獨立 100 ms 計時器，無須等待輪詢。影片端每 180 ms 的原有檢查不變，以維持 HDR 安全。原本獨立的 Glance 修補實驗已於 v0.4.4 移除。模擬實驗放在 [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs)，不能視為 macOS GPU 的實測加速。
+v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高度。切換已辨識分頁、影片狀態與 Sine 開關變動時即時更新 HG 外觀；主程式備援輪詢從每 50 ms 改為每 1000 ms，指定未知 SDR 網站仍用獨立 100 ms 計時器，無須等待輪詢。影片端每 180 ms 的原有檢查不變，以維持 HDR 安全。原本獨立的 Glance 修補實驗已於 v0.4.5 移除。模擬實驗放在 [`benchmarks/compare-v030-v031.cjs`](benchmarks/compare-v030-v031.cjs)，不能視為 macOS GPU 的實測加速。
 
 切回先前已確認格式的影片分頁時，會優先使用該分頁快取，避免先清空毛玻璃狀態。重新載入、切換影片網址等仍會重新檢查；未知網站 SDR 備援從 350 ms 改為 100 ms。
 
@@ -56,10 +56,12 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.4.4**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.5**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
 | 發布規範 | [`docs/RELEASE_POLICY.md`](docs/RELEASE_POLICY.md) |
 
 **整理文件不需要升版，也不會自行讓 Sine 更新 MOD。**
+
+**v0.4.5：選取分頁顏色已由 HG 獨立接管。** 在一般分頁右鍵選擇「變更選取分頁顏色」，可調整顏色、不透明度並即時預覽。既有 `zsf.selected-tab-color.v1` 設定直接沿用；即使移除 Site Folders，調色功能依然可使用。此修改不改動 HDR／SDR 偵測及既有毛玻璃邏輯。

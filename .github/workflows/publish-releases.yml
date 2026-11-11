@@ -29,6 +29,7 @@ jobs:
           set -euo pipefail
           node --check sdr-glass.uc.js
           node --check video-page.uc.js
+          node --check selected-color.uc.js
           node --check actors/ZcthUniversalParent.sys.mjs
           node --check actors/ZcthUniversalChild.sys.mjs
           node --test tests/*.test.*
