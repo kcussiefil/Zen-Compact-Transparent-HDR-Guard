@@ -32,7 +32,7 @@
 
 右鍵選單黑線修正（v0.4.1 單一變數測試）：**保留 Zen Context Menu MOD**，並保持「Zen's own menus on macOS」開啟（`widget.macos.native-context-menus=false`）。原有排序、隱藏項目、圖示、漸層及主題色不用調整。此版只從 v0.4.0 移除 `-moz-window-shadow: none`，保留其餘邊框與 CSS 陰影規則，不接管背景、透明度、顏色、圓角或 `backdrop-filter`。在 Sine 啟用預設關閉的選項，確認一般右鍵選單背景是否恢復及白底四角黑線是否改變；實機尚未驗證，若仍透明請立即關閉此選項。Site Folders 群組選單尚未納入此輪測試。
 
-v0.4.5 已移除兩個實機確認無效的選項：預覽卡片背景分頁合成測試、Glance 專用毛玻璃修補及其觀察腳本。既有的 Glance 安全排除條件保留。你目前的 Zia 設定中，將「A glance shows on its tab as a small picture of the page」維持關閉可避免已發現的毛玻璃異常。
+v0.4.4 已移除兩個實機確認無效的選項：預覽卡片背景分頁合成測試、Glance 專用毛玻璃修補及其觀察腳本。既有的 Glance 安全排除條件保留。你目前的 Zia 設定中，將「A glance shows on its tab as a small picture of the page」維持關閉可避免已發現的毛玻璃異常。
 
 v0.3.3 不再為側欄、預覽卡片、網址／搜尋及新增分頁浮動網址列等待影片格式判定才套用 HG 外觀。macOS 必要的網頁合成僅在對應介面實際顯示期間啟用；不會因背景影片存在而持續提升合成層。Glance 保留原本的安全排除條件。此版沒有更改 JavaScript、50ms／1000ms 輪詢或影片識別演算法。
 
