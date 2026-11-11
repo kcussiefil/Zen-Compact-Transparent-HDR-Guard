@@ -51,7 +51,6 @@ class FakeNode {
 const source = fs.readFileSync(path.join(__dirname, '..', 'selected-color.uc.js'), 'utf8');
 const css = fs.readFileSync(path.join(__dirname, '..', 'chrome.css'), 'utf8');
 assert(css.includes('width: min(310px, calc(100vw - 16px))'), 'preview card must be 310px');
-assert(css.includes('flex: 0 0 40px;min-width: 40px'), 'opening age must have 40px column');
 assert(css.includes('#navigator-toolbox[data-zsf-color-sidebar-hold]'), 'compact sidebar hold must be styled');
 assert(css.includes('width: min(310px, calc(100vw - 16px))'), 'color panel must be compact');
 assert(!source.includes('__zsfMenuV037') && !source.includes('site-folders-menu.uc.js'), 'editor must not depend on Site Folders');

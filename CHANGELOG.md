@@ -4,7 +4,7 @@ The current release is **v0.4.5**. This is a compact index; see the individual f
 
 | Version | Summary |
 | --- | --- |
-| [v0.4.5](releases/v0.4.5.md) | Selected-tab colour, context action and non-modal editor now run independently of Site Folders; old colour/alpha values preserved. |
+| [v0.4.5](releases/v0.4.5.md) | Independent selected-tab colour picker; existing settings retained. |
 | [v0.4.4](releases/v0.4.4.md) | Remove two failed preview/Glance compositor experiments; preserve normal video and menu paths. |
 | [v0.4.3](releases/v0.4.3.md) | Experimental background-pane override (retired in v0.4.4). |
 | [v0.4.2](releases/v0.4.2.md) | Experimental card-layer hint (retired in v0.4.3). |

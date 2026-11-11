@@ -6,7 +6,7 @@ const css=read('chrome.css'),theme=JSON.parse(read('theme.json')),prefs=JSON.par
 const tag='/* v0.4.0 — macOS context-menu border-only correction.';
 const i=css.indexOf(tag),rules=css.slice(i),pref=prefs.find(x=>x.property==='mod.compacttpr.contextmenuglass');
 test('v0.4.1 isolated menu correction keeps a reversible default-off Sine toggle',()=>{
- assert.equal(theme.version,'0.4.4');assert.ok(i>0);
+ assert.equal(theme.version,'0.4.5');assert.ok(i>0);
  assert.equal(pref?.type,'checkbox');assert.equal(pref?.defaultValue,false);
  assert.match(pref.label,/黑色邊線/);
  assert.equal(prefs.filter(x=>x.property===pref.property).length,1);
