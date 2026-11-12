@@ -1,0 +1,27 @@
+{
+  "id": "hg-preview-blur-diagnostic",
+  "name": "HG Preview Blur Trace",
+  "description": "Standalone, manual hover-card blur diagnostic; no CSS changes or telemetry.",
+  "author": "kcussiefil",
+  "version": "0.0.1",
+  "style": {
+    "chrome": "empty.css"
+  },
+  "scripts": {
+    "preview-trace.uc.js": {
+      "include": [
+        "chrome://browser/content/browser.xhtml"
+      ],
+      "loadOrder": 99
+    }
+  },
+  "tags": [
+    "zen",
+    "diagnostic",
+    "blur"
+  ],
+  "fork": [
+    "zen"
+  ],
+  "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard"
+}
