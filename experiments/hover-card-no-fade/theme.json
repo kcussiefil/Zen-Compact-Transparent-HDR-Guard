@@ -1,0 +1,21 @@
+{
+  "id": "hg-zia-hover-card-no-fade-test",
+  "name": "HG／Zia Hover Card No-Fade Test",
+  "description": "Experimental macOS hover-card entry opacity override only. Preserves Zia and Site Folders scale/spring, close animation, existing HG glass.",
+  "author": "kcussiefil",
+  "version": "0.0.1",
+  "style": {
+    "chrome": "chrome.css"
+  },
+  "tags": [
+    "zen",
+    "sine",
+    "zia",
+    "preview",
+    "experiment"
+  ],
+  "fork": [
+    "zen"
+  ],
+  "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard"
+}
