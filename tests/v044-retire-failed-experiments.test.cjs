@@ -11,7 +11,7 @@ const sha=file=>{const b=fs.readFileSync(path.join(root,file));return crypto.cre
 const keys=prefs.map(x=>x.property);
 
 test('044 retires both failed macOS compositor experiments at the preference, CSS and JS levels',()=>{
- assert.equal(theme.version,'0.4.5');
+ assert.equal(theme.version,'0.4.6');
  for(const retired of ['mod.compacttpr.previewcardstability','mod.compacttpr.glanceglass']){
    assert.ok(!keys.includes(retired),'old Sine preference survived: '+retired);
    assert.ok(!css.includes(retired),'old compositor CSS survived: '+retired);
