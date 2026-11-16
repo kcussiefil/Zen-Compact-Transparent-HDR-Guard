@@ -57,7 +57,7 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 | Item | Location |
 | --- | --- |
-| Current version | **v0.4.5** ([`theme.json`](theme.json)) |
+| Current version | **v0.4.6** ([`theme.json`](theme.json)) |
 | Sine settings | [`preferences.json`](preferences.json) |
 | Short changelog | [`CHANGELOG.md`](CHANGELOG.md) |
 | Full per-version notes | [`releases/`](releases/) / [GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
@@ -65,4 +65,4 @@ When switching back to a previously verified video tab, confirmed SDR/HDR stream
 
 Documentation updates alone do not change the mod version or trigger a new release.
 
-HG v0.4.5 independently owns **selected-tab colour**. Right-click an ordinary tab → **變更選取分頁顏色** to open the existing 310px non-modal picker, adjust colour/alpha and save. Saved preferences from Site Folders are automatically reused (`zsf.selected-tab-color.v1`); Site Folders is no longer required. Neither video recognition nor normal glass behaviour changes.
+HG v0.4.6 keeps the independent selected-tab color editor and its saved preference `zsf.selected-tab-color.v1`. The **變更選取分頁顏色** right-click entry now sits before Zen's **Change Icon**, beside Site Folders v1.0.9's **建立群組**, allowing Zen Calmer Context Menu to reorder them within the same native separator group. Color editing, HDR/SDR and blur logic are unchanged.

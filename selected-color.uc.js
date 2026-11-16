@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HDR Guard — independent selected-tab color editor
-// @version      0.4.5
+// @version      0.4.6
 // @description  Selected tab color and non-modal picker independent of Site Folders.
 // @include      chrome://browser/content/browser.xhtml
 // ==/UserScript==
@@ -149,9 +149,17 @@
     tabColorItem.id = 'zsf-change-selected-tab-color';
     tabColorItem.setAttribute('label', '變更選取分頁顏色');
     tabColorItem.hidden = true;
-    // Keep the native tab context menu and its normal commands intact.
-    const anchor = document.getElementById('context_duplicateTab');
-    popup.insertBefore(tabColorItem, anchor?.parentElement === popup ? anchor : null);
+    // Calmer Context Menu reorders only within a native separator
+    // segment. Share the same insertion anchor as Site Folders' 建立群組.
+    // Before Change Icon avoids disturbing Zen's adjacent-separator CSS.
+    const anchor = [
+      'context_zen-edit-tab-icon',
+      'context_bookmarkTab',
+      'context_bookmarkSelectedTabs',
+      'context_duplicateTab',
+    ].map(id => document.getElementById(id))
+      .find(node => node?.parentElement === popup);
+    popup.insertBefore(tabColorItem, anchor || null);
     bind(popup, 'popupshowing', event => {
       if (event.target === popup) tabColorItem.hidden = !ordinaryContextTab();
     });
@@ -183,7 +191,7 @@
     if (window[KEY] === api) delete window[KEY];
   }
   const api = {
-    version: '0.4.5',
+    version: '0.4.6',
     init, destroy, openSelectedColor: chooseSelectedColor,
     readColor, applySelectedColor, validColor
   };
