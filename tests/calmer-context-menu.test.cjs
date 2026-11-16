@@ -84,6 +84,24 @@ test('missing Change Icon uses Bookmark as a safe shared fallback',()=>{
   assert(!popup.children.some(x=>x.localName==='menuseparator'),
     'fallback must not inject an extra separator');
 });
+test('Calmer-style saved rank can swap both commands without crossing a separator',()=>{
+  const {popup,site,color}=arrange({siteFirst:true});
+  const groups=[[]];
+  for(const node of popup.children){
+    if(node.localName==='menuseparator')groups.push([]);
+    else groups.at(-1).push(node);
+  }
+  const segment=groups.find(g=>g.includes(site) && g.includes(color));
+  assert(segment,'both actions must occupy the same native segment');
+  const saved=['#zsf-change-selected-tab-color','#zsf-manual-create-group'];
+  const rank=new Map(saved.map((k,i)=>[k.slice(1),i]));
+  const sortable=segment.filter(item=>rank.has(item.id));
+  assert.equal(sortable.length,2);
+  const desired=[...sortable].sort((a,b)=>rank.get(a.id)-rank.get(b.id));
+  assert.deepEqual(desired.map(x=>x.id),[
+    'zsf-change-selected-tab-color','zsf-manual-create-group'],
+  'both can be swapped inside their existing slots without moving separators');
+});
 test('menu command and visibility continue to work in native popup',()=>{
   const {popup,color}=arrange();
   assert.equal(color.getAttribute('label'),'變更選取分頁顏色');
