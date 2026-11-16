@@ -56,12 +56,14 @@ v0.3.1 不更動任何 HG 毛玻璃色彩、透明度、模糊強度或側欄高
 
 | 項目 | 連結 |
 | --- | --- |
-| 目前版本 | **v0.4.5**，以 [`theme.json`](theme.json) 為準 |
+| 目前版本 | **v0.4.6**，以 [`theme.json`](theme.json) 為準 |
 | 設定清單 | [`preferences.json`](preferences.json) |
 | 各版重點 | [`CHANGELOG.md`](CHANGELOG.md) |
 | 完整版本說明 | [`releases/`](releases/)／[GitHub Releases](https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/releases) |
 | 發布規範 | [`docs/RELEASE_POLICY.md`](docs/RELEASE_POLICY.md) |
 
 **整理文件不需要升版，也不會自行讓 Sine 更新 MOD。**
+
+**v0.4.6：讓右鍵選色與建立群組可在 Calmer 同一分隔區塊內排序。** 將「變更選取分頁顏色」插入原生「變更圖示」之前，與 Site Folders v1.0.9 的「建立群組」共用插入位置；不調整原生分隔線、選色功能、儲存值或 HDR／SDR 行為。更新兩個 MOD、重啟 Zen 並讓 Calmer 重新讀取右鍵選單後即可在該區塊拖曳排序。
 
 **v0.4.5：選取分頁顏色已由 HG 獨立接管。** 在一般分頁右鍵選擇「變更選取分頁顏色」，可調整顏色、不透明度並即時預覽。既有 `zsf.selected-tab-color.v1` 設定直接沿用；即使移除 Site Folders，調色功能依然可使用。此修改不改動 HDR／SDR 偵測及既有毛玻璃邏輯。
