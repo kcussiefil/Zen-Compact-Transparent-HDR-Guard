@@ -1,0 +1,14 @@
+[
+  {
+    "property": "mod.zvp9.enabled",
+    "label": "啟用 VP09 SDR 側欄亮度補償",
+    "type": "checkbox",
+    "defaultValue": true
+  },
+  {
+    "property": "mod.zvp9.brightness",
+    "label": "側欄展開時的亮度倍數（1.00–1.25，預設 1.10）",
+    "type": "string",
+    "defaultValue": "1.10"
+  }
+]
