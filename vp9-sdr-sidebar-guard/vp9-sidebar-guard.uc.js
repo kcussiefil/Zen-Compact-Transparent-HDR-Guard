@@ -48,7 +48,8 @@
   }
 
   function snapshot() {
-    return { active: enabledPref() && sideIsVisible(), level: brightnessPref() };
+    const enabled = enabledPref();
+    return { enabled, active: enabled && sideIsVisible(), level: brightnessPref() };
   }
 
   function currentActor() {
@@ -67,7 +68,7 @@
     if (!alive) return;
     const state = snapshot();
     const actor = currentActor();
-    const key = [state.active, state.level, actor ? 'video' : 'other'].join(':');
+    const key = [state.enabled, state.active, state.level, actor ? 'video' : 'other'].join(':');
     if (!force && key === lastKey) return;
     lastKey = key;
     try { actor?.sendAsyncMessage('Zvp9:SidebarState', state); }
