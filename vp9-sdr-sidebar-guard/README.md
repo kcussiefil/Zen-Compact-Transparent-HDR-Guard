@@ -10,7 +10,7 @@ Zen Sine MOD：僅在 **Zen 緊湊模式側欄實際展開**且 YouTube `/watch`
 2. 如尚未開啟，允許從非官方來源安裝 JavaScript MOD。
 3. 在安裝未發布 MOD 的欄位貼入：
    
-   `kcussiefil/Zen-Compact-Transparent-HDR-Guard/vp9-sdr-sidebar-guard`
+   `kcussiefil/Zen-Compact-Transparent-HDR-Guard/tree/main/vp9-sdr-sidebar-guard`
 4. 點選安裝、確認 MOD 已啟用，重新啟動 Zen。
 
 ## 設定
