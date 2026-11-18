@@ -1,19 +1,31 @@
 {
   "id": "zen-vp9-sdr-sidebar-guard",
   "name": "Zen VP9 SDR Sidebar Guard",
-  "description": "Brightness compensation for confirmed YouTube VP09 8-bit SDR videos only while Zen's compact sidebar is open.",
+  "description": "Steady-layer VP09 SDR brightness compensation during Zen compact sidebar opening and until it fully closes.",
   "author": "kcussiefil",
-  "version": "0.1.0",
-  "style": {"chrome": "chrome.css"},
+  "version": "0.1.1",
+  "style": {
+    "chrome": "chrome.css"
+  },
   "scripts": {
     "vp9-sidebar-guard.uc.js": {
-      "include": ["chrome://browser/content/browser.xhtml"],
+      "include": [
+        "chrome://browser/content/browser.xhtml"
+      ],
       "loadOrder": 80
     }
   },
   "preferences": "preferences.json",
-  "tags": ["zen", "sine", "video", "sdr", "vp9"],
-  "fork": ["zen"],
+  "tags": [
+    "zen",
+    "sine",
+    "video",
+    "sdr",
+    "vp9"
+  ],
+  "fork": [
+    "zen"
+  ],
   "homepage": "https://github.com/kcussiefil/Zen-Compact-Transparent-HDR-Guard/tree/main/vp9-sdr-sidebar-guard",
-  "updatedAt": "2026-11-18T17:45:14Z"
+  "updatedAt": "2026-11-18T18:00:29.631Z"
 }
