@@ -1,6 +1,6 @@
-// Zen VP9 SDR Sidebar Guard v0.1.0
-// Chrome-process observer. Side-panel open state is sourced from Zen's own
-// navigator-toolbox markers and confirmed using its on-screen geometry.
+// Zen VP9 SDR Sidebar Guard v0.1.1
+// Chrome-process observer. Open intent is recognized immediately; closing
+// retains compensation until the sliding sidebar is physically hidden.
 (() => {
   'use strict';
   const KEY = '__zvp9SidebarGuardV010';
@@ -33,13 +33,18 @@
     if (ROOT.getAttribute('zen-compact-mode') !== 'true' ||
         ROOT.hasAttribute('inDOMFullscreen')) return false;
     const sidebar = document.getElementById('navigator-toolbox');
-    if (!sidebar || !MARKERS.some(name => sidebar.hasAttribute(name))) return false;
-    // Zen's collapsed compact sidebar leaves a small strip on-screen.
-    // Requiring >40 px visible avoids triggering on that residual strip.
+    if (!sidebar) return false;
+    // The previous (marker && width>40px) gate applied brightness too late on
+    // opening and removed it too early on closing, producing a double flash.
+    // On opening trust Zen's own intent immediately, before the slide begins.
+    const opening = MARKERS.some(name => sidebar.hasAttribute(name));
+    if (opening) return true;
+    // On closing retain compensation while Zen's sliding toolbox is still on
+    // screen. The collapsed compact strip is <40px and must not count.
     const rect = sidebar.getBoundingClientRect();
     const visibleWidth = Math.max(0,
       Math.min(window.innerWidth, rect.right) - Math.max(0, rect.left));
-    return rect.width > 0 && visibleWidth > Math.min(40, rect.width * 0.2);
+    return rect.width > 0 && visibleWidth > Math.max(40, Math.min(80, rect.width * 0.20));
   }
 
   function snapshot() {
